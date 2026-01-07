@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?><database>
+    <element db_object_id="ed2d8fae83a5f21071a1ba96feaad3b6" label="Course Prerequisites" max_length="40" name="x_1879300_learning_course_prerequisites" type="collection">
+        <element attributes="encode_utf8=false" display="true" label="Course" mandatory="true" max_length="32" name="course" reference="x_1879300_learning_courses" type="reference"/>
+        <element attributes="encode_utf8=false" label="Prerequisite Course" mandatory="true" max_length="32" name="prerequisite_course" reference="x_1879300_learning_courses" type="reference"/>
+        <index name="index">
+            <element name="course"/>
+        </index>
+        <index name="index2">
+            <element name="prerequisite_course"/>
+        </index>
+    </element>
+</database>

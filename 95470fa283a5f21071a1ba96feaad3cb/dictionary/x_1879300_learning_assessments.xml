@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?><database>
+    <element db_object_id="b73a8b2a83a5f21071a1ba96feaad3ee" label="Assessments" max_length="40" name="x_1879300_learning_assessments" type="collection">
+        <element attributes="encode_utf8=false" label="Lesson" max_length="32" name="lesson" reference="x_1879300_learning_lessons" type="reference"/>
+        <element default="3" label="Maximum Attempts" max_length="40" name="max_attempts" type="integer"/>
+        <element default="true" label="Active" max_length="40" name="active" type="boolean"/>
+        <element attributes="edge_encryption_enabled=true" display="true" label="Assessment Title" mandatory="true" max_length="255" name="title" type="string"/>
+        <element attributes="encode_utf8=false" label="Course" max_length="32" name="course" reference="x_1879300_learning_courses" type="reference"/>
+        <element default="true" label="Randomize Questions" max_length="40" name="randomize_questions" type="boolean"/>
+        <element attributes="encode_utf8=false" label="Created By" max_length="32" name="created_by" reference="sys_user" type="reference"/>
+        <element attributes="edge_encryption_enabled=true" label="Instructions" max_length="2000" name="instructions" type="string"/>
+        <element attributes="edge_encryption_enabled=true" label="Description" max_length="1000" name="description" type="string"/>
+        <element default="70" label="Passing Score (%)" max_length="40" name="passing_score" type="integer"/>
+        <element default="true" label="Show Results Immediately" max_length="40" name="show_results_immediately" type="boolean"/>
+        <element default="true" label="Allow Review After Completion" max_length="40" name="allow_review" type="boolean"/>
+        <element attributes="edge_encryption_enabled=true" choice="1" default="lesson_quiz" label="Assessment Type" max_length="20" name="assessment_type" type="string">
+            <choice>
+                <element inactive_on_update="false" label="Lesson Quiz" sequence="0" value="lesson_quiz"/>
+                <element inactive_on_update="false" label="Final Exam" sequence="1" value="final_exam"/>
+                <element inactive_on_update="false" label="Practice Quiz" sequence="2" value="practice_quiz"/>
+            </choice>
+        </element>
+        <element default="30" label="Time Limit (Minutes)" max_length="40" name="time_limit_minutes" type="integer"/>
+        <index name="index">
+            <element name="course"/>
+        </index>
+        <index name="index2">
+            <element name="created_by"/>
+        </index>
+        <index name="index3">
+            <element name="lesson"/>
+        </index>
+    </element>
+</database>

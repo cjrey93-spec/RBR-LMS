@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?><database>
+    <element db_object_id="192d4fae83a5f21071a1ba96feaad3f2" label="Notification Preferences" max_length="40" name="x_1879300_learning_notification_preferences" type="collection">
+        <element default="true" label="In-App: Instructor/TA responses" max_length="40" name="inapp_instructor_response" type="boolean"/>
+        <element default="true" label="Email: New courses from subscribed instructors" max_length="40" name="email_new_courses" type="boolean"/>
+        <element default="true" label="Email: Certificate available" max_length="40" name="email_certificate_available" type="boolean"/>
+        <element default="true" label="Email: Updates to completed tracks" max_length="40" name="email_track_updates" type="boolean"/>
+        <element default="true" label="In-App: New courses from subscribed instructors" max_length="40" name="inapp_new_courses" type="boolean"/>
+        <element label="In-App: Course completion reminders" max_length="40" name="inapp_course_reminders" type="boolean"/>
+        <element default="true" label="Email: Assignment graded" max_length="40" name="email_grade_received" type="boolean"/>
+        <element default="true" label="Email: Instructor/TA responses" max_length="40" name="email_instructor_response" type="boolean"/>
+        <element default="true" label="In-App: Updates to completed tracks" max_length="40" name="inapp_track_updates" type="boolean"/>
+        <element default="true" label="In-App: Certificate available" max_length="40" name="inapp_certificate_available" type="boolean"/>
+        <element attributes="encode_utf8=false" display="true" label="User" mandatory="true" max_length="32" name="user" reference="sys_user" type="reference"/>
+        <element default="true" label="Email: Course completion reminders" max_length="40" name="email_course_reminders" type="boolean"/>
+        <element default="true" label="In-App: Assignment graded" max_length="40" name="inapp_grade_received" type="boolean"/>
+        <index name="index">
+            <element name="user"/>
+        </index>
+    </element>
+</database>

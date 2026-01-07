@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sys_security_acl_role">
+    <sys_security_acl_role action="INSERT_OR_UPDATE">
+        <sys_class_name>sys_security_acl_role</sys_class_name>
+        <sys_created_by>admin</sys_created_by>
+        <sys_created_on>2025-12-08 18:29:47</sys_created_on>
+        <sys_id>be96d480833db21071a1ba96feaad301</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>x_1879300_learning_notification_preferences.x_1879300_learning.developer</sys_name>
+        <sys_package display_value="Learning Man" source="x_1879300_learning">95470fa283a5f21071a1ba96feaad3cb</sys_package>
+        <sys_policy/>
+        <sys_scope display_value="Learning Man">95470fa283a5f21071a1ba96feaad3cb</sys_scope>
+        <sys_security_acl display_value="x_1879300_learning_notification_preferences">8e961480833db21071a1ba96feaad35c</sys_security_acl>
+        <sys_update_name>sys_security_acl_role_be96d480833db21071a1ba96feaad301</sys_update_name>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2025-12-08 18:29:47</sys_updated_on>
+        <sys_user_role display_value="x_1879300_learning.developer" name="x_1879300_learning.developer">29989fea61214b71961e882711d8b0f8</sys_user_role>
+    </sys_security_acl_role>
+</record_update>

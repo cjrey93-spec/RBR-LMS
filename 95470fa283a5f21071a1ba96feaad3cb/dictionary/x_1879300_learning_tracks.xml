@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?><database>
+    <element db_object_id="052d4fae83a5f21071a1ba96feaad397" label="Learning Tracks" max_length="40" name="x_1879300_learning_tracks" type="collection">
+        <element attributes="edge_encryption_enabled=true" choice="1" default="beginner" label="Overall Difficulty Level" max_length="20" name="difficulty_level" type="string">
+            <choice>
+                <element inactive_on_update="false" label="Expert" sequence="3" value="expert"/>
+                <element inactive_on_update="false" label="Beginner" sequence="0" value="beginner"/>
+                <element inactive_on_update="false" label="Intermediate" sequence="1" value="intermediate"/>
+                <element inactive_on_update="false" label="Advanced" sequence="2" value="advanced"/>
+            </choice>
+        </element>
+        <element default="true" label="Sequential Completion Required" max_length="40" name="sequential_required" type="boolean"/>
+        <element attributes="edge_encryption_enabled=true" display="true" label="Track Title" mandatory="true" max_length="255" name="title" type="string"/>
+        <element attributes="edge_encryption_enabled=true" label="Description" max_length="2000" name="description" type="string"/>
+        <element label="Estimated Total Hours" max_length="40" name="estimated_total_hours" type="integer"/>
+        <element attributes="edge_encryption_enabled=true" label="Learning Objectives" max_length="2000" name="learning_objectives" type="string"/>
+        <element default="true" label="Certificate Available on Completion" max_length="40" name="certificate_available" type="boolean"/>
+        <element attributes="encode_utf8=false" label="Created By (Instructor)" mandatory="true" max_length="32" name="created_by" reference="sys_user" type="reference"/>
+        <element default="true" label="Active" max_length="40" name="active" type="boolean"/>
+        <element attributes="edge_encryption_enabled=true" label="Target Audience" max_length="1000" name="target_audience" type="string"/>
+        <element attributes="edge_encryption_enabled=true" choice="1" default="technical" label="Category" max_length="100" name="category" type="string">
+            <choice>
+                <element inactive_on_update="false" label="Business" sequence="1" value="business"/>
+                <element inactive_on_update="false" label="Certification Prep" sequence="5" value="certification"/>
+                <element inactive_on_update="false" label="Leadership" sequence="2" value="leadership"/>
+                <element inactive_on_update="false" label="Other" sequence="6" value="other"/>
+                <element inactive_on_update="false" label="Soft Skills" sequence="3" value="soft_skills"/>
+                <element inactive_on_update="false" label="Technical" sequence="0" value="technical"/>
+                <element inactive_on_update="false" label="Compliance" sequence="4" value="compliance"/>
+            </choice>
+        </element>
+        <element label="Published" max_length="40" name="published" type="boolean"/>
+        <index name="index">
+            <element name="created_by"/>
+        </index>
+    </element>
+</database>

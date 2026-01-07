@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?><database>
+    <element db_object_id="fb3acb2a83a5f21071a1ba96feaad35c" label="Courses" max_length="40" name="x_1879300_learning_courses" type="collection">
+        <element attributes="edge_encryption_enabled=true" choice="1" default="technical" label="Category" max_length="100" name="category" type="string">
+            <choice>
+                <element inactive_on_update="false" label="Business" sequence="1" value="business"/>
+                <element inactive_on_update="false" label="Other" sequence="5" value="other"/>
+                <element inactive_on_update="false" label="Leadership" sequence="2" value="leadership"/>
+                <element inactive_on_update="false" label="Soft Skills" sequence="3" value="soft_skills"/>
+                <element inactive_on_update="false" label="Compliance" sequence="4" value="compliance"/>
+                <element inactive_on_update="false" label="Technical" sequence="0" value="technical"/>
+            </choice>
+        </element>
+        <element label="Published" max_length="40" name="published" type="boolean"/>
+        <element attributes="edge_encryption_enabled=true" display="true" label="Course Title" mandatory="true" max_length="255" name="title" type="string"/>
+        <element attributes="edge_encryption_enabled=true" choice="1" default="beginner" label="Difficulty Level" max_length="20" name="difficulty_level" type="string">
+            <choice>
+                <element inactive_on_update="false" label="Intermediate" sequence="1" value="intermediate"/>
+                <element inactive_on_update="false" label="Advanced" sequence="2" value="advanced"/>
+                <element inactive_on_update="false" label="Expert" sequence="3" value="expert"/>
+                <element inactive_on_update="false" label="Beginner" sequence="0" value="beginner"/>
+            </choice>
+        </element>
+        <element attributes="edge_encryption_enabled=true" label="Published Date" max_length="40" name="published_date" type="glide_date_time"/>
+        <element attributes="edge_encryption_enabled=true" label="Tags (comma separated)" max_length="500" name="tags" type="string"/>
+        <element attributes="edge_encryption_enabled=true" label="Description" max_length="4000" name="description" type="string"/>
+        <element label="Estimated Duration (Hours)" max_length="40" name="estimated_duration_hours" type="integer"/>
+        <element default="true" label="Active" max_length="40" name="active" type="boolean"/>
+        <element attributes="encode_utf8=false" label="Created By" mandatory="true" max_length="32" name="created_by" reference="sys_user" type="reference"/>
+        <index name="index">
+            <element name="created_by"/>
+        </index>
+    </element>
+</database>

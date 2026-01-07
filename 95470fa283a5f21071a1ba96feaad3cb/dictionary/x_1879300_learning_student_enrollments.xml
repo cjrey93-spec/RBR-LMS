@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?><database>
+    <element db_object_id="252d8fae83a5f21071a1ba96feaad352" label="Student Enrollments" max_length="40" name="x_1879300_learning_student_enrollments" type="collection">
+        <element default="0" label="Lessons Completed" max_length="40" name="lessons_completed" read_only="true" type="integer"/>
+        <element label="Final Grade (%)" max_length="20" name="final_grade" read_only="true" type="decimal"/>
+        <element attributes="encode_utf8=false" label="Course" mandatory="true" max_length="32" name="course" reference="x_1879300_learning_courses" type="reference"/>
+        <element label="Auto Enrolled (from Track)" max_length="40" name="auto_enrolled" read_only="true" type="boolean"/>
+        <element attributes="edge_encryption_enabled=true" label="Completion Date" max_length="40" name="completion_date" type="glide_date_time"/>
+        <element attributes="edge_encryption_enabled=true" label="Due Date" max_length="40" name="due_date" type="glide_date_time"/>
+        <element default="0" label="Total Lessons" max_length="40" name="lessons_total" read_only="true" type="integer"/>
+        <element default="0" label="Time Spent (Hours)" max_length="20" name="time_spent_hours" read_only="true" type="decimal"/>
+        <element attributes="encode_utf8=false" label="Learning Track (if applicable)" max_length="32" name="learning_track" reference="x_1879300_learning_tracks" type="reference"/>
+        <element attributes="edge_encryption_enabled=true" label="Enrollment Date" mandatory="true" max_length="40" name="enrollment_date" type="glide_date_time"/>
+        <element attributes="edge_encryption_enabled=true" choice="1" default="enrolled" label="Enrollment Status" max_length="20" name="status" type="string">
+            <choice>
+                <element inactive_on_update="false" label="In Progress" sequence="1" value="in_progress"/>
+                <element inactive_on_update="false" label="Expired" sequence="5" value="expired"/>
+                <element inactive_on_update="false" label="Completed" sequence="2" value="completed"/>
+                <element inactive_on_update="false" label="Dropped" sequence="3" value="dropped"/>
+                <element inactive_on_update="false" label="Enrolled" sequence="0" value="enrolled"/>
+                <element inactive_on_update="false" label="Failed" sequence="4" value="failed"/>
+            </choice>
+        </element>
+        <element default="0" label="Assessments Completed" max_length="40" name="assessments_completed" read_only="true" type="integer"/>
+        <element attributes="edge_encryption_enabled=true" label="Last Accessed" max_length="40" name="last_accessed" type="glide_date_time"/>
+        <element attributes="encode_utf8=false" display="true" label="Student" mandatory="true" max_length="32" name="student" reference="sys_user" type="reference"/>
+        <element label="Certificate Issued" max_length="40" name="certificate_issued" read_only="true" type="boolean"/>
+        <element attributes="edge_encryption_enabled=true" label="Start Date" max_length="40" name="start_date" type="glide_date_time"/>
+        <element default="0" label="Progress Percentage" max_length="40" name="progress_percentage" read_only="true" type="integer"/>
+        <element default="0" label="Total Assessments" max_length="40" name="assessments_total" read_only="true" type="integer"/>
+        <index name="index">
+            <element name="course"/>
+        </index>
+        <index name="index2">
+            <element name="learning_track"/>
+        </index>
+        <index name="index3">
+            <element name="student"/>
+        </index>
+    </element>
+</database>

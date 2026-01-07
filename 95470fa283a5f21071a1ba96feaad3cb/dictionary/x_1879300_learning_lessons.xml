@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?><database>
+    <element db_object_id="173a4b2a83a5f21071a1ba96feaad3dc" label="Lessons" max_length="40" name="x_1879300_learning_lessons" type="collection">
+        <element attributes="edge_encryption_enabled=true" display="true" label="Lesson Title" mandatory="true" max_length="255" name="title" type="string"/>
+        <element label="Estimated Duration (Minutes)" max_length="40" name="estimated_duration_minutes" type="integer"/>
+        <element label="Video Duration (Minutes)" max_length="40" name="video_duration_minutes" type="integer"/>
+        <element attributes="encode_utf8=false" label="Author" max_length="32" name="author" reference="sys_user" type="reference"/>
+        <element attributes="edge_encryption_enabled=true" label="Description" max_length="1000" name="description" type="string"/>
+        <element attributes="edge_encryption_enabled=true" choice="1" default="text" label="Lesson Type" max_length="20" name="lesson_type" type="string">
+            <choice>
+                <element inactive_on_update="false" label="Text + Video" sequence="1" value="text_video"/>
+                <element inactive_on_update="false" label="Text + Materials" sequence="2" value="text_materials"/>
+                <element inactive_on_update="false" label="Text + Video + Materials" sequence="3" value="text_video_materials"/>
+                <element inactive_on_update="false" label="Text Only" sequence="0" value="text"/>
+            </choice>
+        </element>
+        <element attributes="edge_encryption_enabled=true" label="Video URL" max_length="500" name="video_url" type="string"/>
+        <element attributes="encode_utf8=false" label="Last Modified By" max_length="32" name="last_modified_by" reference="sys_user" type="reference"/>
+        <element attributes="edge_encryption_enabled=true" label="Lesson Content" max_length="8000" name="content" type="string"/>
+        <element default="1" label="Order Sequence" mandatory="true" max_length="40" name="order_sequence" type="integer"/>
+        <element attributes="edge_encryption_enabled=true" label="Video Title" max_length="255" name="video_title" type="string"/>
+        <element attributes="encode_utf8=false" label="Course" mandatory="true" max_length="32" name="course" reference="x_1879300_learning_courses" type="reference"/>
+        <index name="index">
+            <element name="author"/>
+        </index>
+        <index name="index2">
+            <element name="course"/>
+        </index>
+        <index name="index3">
+            <element name="last_modified_by"/>
+        </index>
+    </element>
+</database>

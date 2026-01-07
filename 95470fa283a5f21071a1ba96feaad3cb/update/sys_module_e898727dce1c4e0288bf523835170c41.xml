@@ -1,0 +1,300 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sys_module">
+    <sys_module action="INSERT_OR_UPDATE">
+        <content><![CDATA[import { gs, GlideRecord, GlideDateTime } from '@servicenow/glide'
+
+// Progress tracking and certificate generation utilities
+export function updateCourseProgress(enrollmentId) {
+    try {
+        const enrollmentGR = new GlideRecord('x_1879300_learning_student_enrollments');
+        if (!enrollmentGR.get(enrollmentId)) {
+            return { success: false, error: 'Enrollment not found' };
+        }
+        
+        const courseId = enrollmentGR.getValue('course');
+        const studentId = enrollmentGR.getValue('student');
+        
+        // Get total lessons in course
+        const lessonGR = new GlideRecord('x_1879300_learning_lessons');
+        lessonGR.addQuery('course', courseId);
+        lessonGR.query();
+        const totalLessons = lessonGR.getRowCount();
+        
+        // Get total assessments in course
+        const assessmentGR = new GlideRecord('x_1879300_learning_assessments');
+        assessmentGR.addQuery('course', courseId);
+        assessmentGR.addQuery('active', 'true');
+        assessmentGR.query();
+        const totalAssessments = assessmentGR.getRowCount();
+        
+        // Count completed assessments (passed)
+        let completedAssessments = 0;
+        const attemptGR = new GlideRecord('x_1879300_learning_assessment_attempts');
+        attemptGR.addQuery('user', studentId);
+        attemptGR.addQuery('status', 'graded');
+        attemptGR.addQuery('passed', 'true');
+        attemptGR.query();
+        
+        const completedAssessmentIds = new Set();
+        while (attemptGR.next()) {
+            const assessmentId = attemptGR.getValue('assessment');
+            const checkAssessment = new GlideRecord('x_1879300_learning_assessments');
+            if (checkAssessment.get(assessmentId) && checkAssessment.getValue('course') === courseId) {
+                completedAssessmentIds.add(assessmentId);
+            }
+        }
+        completedAssessments = completedAssessmentIds.size;
+        
+        // Calculate progress percentage
+        const totalItems = totalLessons + totalAssessments;
+        const completedItems = totalLessons + completedAssessments; // Assuming all lessons are "viewed"
+        const progressPercentage = totalItems > 0 ? Math.round((completedItems / totalItems) * 100) : 0;
+        
+        // Calculate average grade
+        let totalGradePoints = 0;
+        let gradeCount = 0;
+        attemptGR.initialize();
+        attemptGR.addQuery('user', studentId);
+        attemptGR.addQuery('status', 'graded');
+        attemptGR.query();
+        
+        while (attemptGR.next()) {
+            const assessmentId = attemptGR.getValue('assessment');
+            const checkAssessment = new GlideRecord('x_1879300_learning_assessments');
+            if (checkAssessment.get(assessmentId) && checkAssessment.getValue('course') === courseId) {
+                const percentage = parseFloat(attemptGR.getValue('percentage_score') || '0');
+                totalGradePoints += percentage;
+                gradeCount++;
+            }
+        }
+        
+        const finalGrade = gradeCount > 0 ? totalGradePoints / gradeCount : 0;
+        
+        // Determine completion status
+        let status = enrollmentGR.getValue('status');
+        if (progressPercentage >= 100 && completedAssessments >= totalAssessments) {
+            status = 'completed';
+            enrollmentGR.setValue('completion_date', new GlideDateTime().getDisplayValue());
+            
+            // Generate certificate if not already issued
+            if (enrollmentGR.getValue('certificate_issued') !== 'true') {
+                generateCourseCertificate(studentId, courseId, finalGrade);
+                enrollmentGR.setValue('certificate_issued', 'true');
+            }
+        } else if (progressPercentage > 0) {
+            status = 'in_progress';
+            if (!enrollmentGR.getValue('start_date')) {
+                enrollmentGR.setValue('start_date', new GlideDateTime().getDisplayValue());
+            }
+        }
+        
+        // Update enrollment record
+        enrollmentGR.setValue('status', status);
+        enrollmentGR.setValue('progress_percentage', progressPercentage);
+        enrollmentGR.setValue('lessons_completed', totalLessons);
+        enrollmentGR.setValue('lessons_total', totalLessons);
+        enrollmentGR.setValue('assessments_completed', completedAssessments);
+        enrollmentGR.setValue('assessments_total', totalAssessments);
+        enrollmentGR.setValue('final_grade', finalGrade);
+        enrollmentGR.setValue('last_accessed', new GlideDateTime().getDisplayValue());
+        enrollmentGR.update();
+        
+        return { success: true, progressPercentage, status, finalGrade };
+        
+    } catch (error) {
+        gs.error('Error updating course progress: ' + error.toString());
+        return { success: false, error: error.toString() };
+    }
+}
+
+export function generateCourseCertificate(studentId, courseId, finalGrade) {
+    try {
+        // Get student info
+        const studentGR = new GlideRecord('sys_user');
+        if (!studentGR.get(studentId)) {
+            throw new Error('Student not found');
+        }
+        
+        // Get course info
+        const courseGR = new GlideRecord('x_1879300_learning_courses');
+        if (!courseGR.get(courseId)) {
+            throw new Error('Course not found');
+        }
+        
+        // Get instructor info
+        const instructorGR = new GlideRecord('sys_user');
+        let instructorName = 'Learning Management System';
+        if (instructorGR.get(courseGR.getValue('created_by'))) {
+            instructorName = instructorGR.getValue('first_name') + ' ' + instructorGR.getValue('last_name');
+        }
+        
+        // Create certificate record
+        const certGR = new GlideRecord('x_1879300_learning_certificates');
+        certGR.initialize();
+        certGR.setValue('student', studentId);
+        certGR.setValue('course', courseId);
+        certGR.setValue('certificate_type', 'course_completion');
+        certGR.setValue('title', 'Certificate of Completion: ' + courseGR.getValue('title'));
+        certGR.setValue('student_name', studentGR.getValue('first_name') + ' ' + studentGR.getValue('last_name'));
+        certGR.setValue('completion_date', new GlideDateTime().getDisplayValue());
+        certGR.setValue('issue_date', new GlideDateTime().getDisplayValue());
+        certGR.setValue('final_grade', Math.round(finalGrade) + '%');
+        certGR.setValue('instructor_name', instructorName);
+        
+        // Generate certificate HTML content
+        const certificateHTML = generateCertificateHTML(
+            certGR.getValue('student_name'),
+            courseGR.getValue('title'),
+            new GlideDateTime().getDisplayValue(),
+            Math.round(finalGrade) + '%',
+            instructorName
+        );
+        certGR.setValue('certificate_content', certificateHTML);
+        
+        const certificateId = certGR.insert();
+        
+        // Send notification
+        sendCertificateNotification(studentId, courseGR.getValue('title'), 'course');
+        
+        return certificateId;
+        
+    } catch (error) {
+        gs.error('Error generating course certificate: ' + error.toString());
+        return null;
+    }
+}
+
+export function generateTrackCertificate(studentId, trackId) {
+    try {
+        // Get student info
+        const studentGR = new GlideRecord('sys_user');
+        if (!studentGR.get(studentId)) {
+            throw new Error('Student not found');
+        }
+        
+        // Get track info
+        const trackGR = new GlideRecord('x_1879300_learning_tracks');
+        if (!trackGR.get(trackId)) {
+            throw new Error('Learning track not found');
+        }
+        
+        // Get instructor info
+        const instructorGR = new GlideRecord('sys_user');
+        let instructorName = 'Learning Management System';
+        if (instructorGR.get(trackGR.getValue('created_by'))) {
+            instructorName = instructorGR.getValue('first_name') + ' ' + instructorGR.getValue('last_name');
+        }
+        
+        // Calculate track completion grade (average of all course grades)
+        const trackCourseGR = new GlideRecord('x_1879300_learning_track_courses');
+        trackCourseGR.addQuery('learning_track', trackId);
+        trackCourseGR.query();
+        
+        let totalGrade = 0;
+        let courseCount = 0;
+        
+        while (trackCourseGR.next()) {
+            const courseId = trackCourseGR.getValue('course');
+            const enrollmentGR = new GlideRecord('x_1879300_learning_student_enrollments');
+            enrollmentGR.addQuery('student', studentId);
+            enrollmentGR.addQuery('course', courseId);
+            enrollmentGR.addQuery('status', 'completed');
+            enrollmentGR.query();
+            
+            if (enrollmentGR.next()) {
+                const finalGrade = parseFloat(enrollmentGR.getValue('final_grade') || '0');
+                totalGrade += finalGrade;
+                courseCount++;
+            }
+        }
+        
+        const averageGrade = courseCount > 0 ? totalGrade / courseCount : 0;
+        
+        // Create certificate record
+        const certGR = new GlideRecord('x_1879300_learning_certificates');
+        certGR.initialize();
+        certGR.setValue('student', studentId);
+        certGR.setValue('learning_track', trackId);
+        certGR.setValue('certificate_type', 'track_completion');
+        certGR.setValue('title', 'Certificate of Completion: ' + trackGR.getValue('title'));
+        certGR.setValue('student_name', studentGR.getValue('first_name') + ' ' + studentGR.getValue('last_name'));
+        certGR.setValue('completion_date', new GlideDateTime().getDisplayValue());
+        certGR.setValue('issue_date', new GlideDateTime().getDisplayValue());
+        certGR.setValue('final_grade', Math.round(averageGrade) + '%');
+        certGR.setValue('instructor_name', instructorName);
+        
+        // Generate certificate HTML content
+        const certificateHTML = generateCertificateHTML(
+            certGR.getValue('student_name'),
+            trackGR.getValue('title') + ' Learning Track',
+            new GlideDateTime().getDisplayValue(),
+            Math.round(averageGrade) + '%',
+            instructorName
+        );
+        certGR.setValue('certificate_content', certificateHTML);
+        
+        const certificateId = certGR.insert();
+        
+        // Send notification
+        sendCertificateNotification(studentId, trackGR.getValue('title'), 'track');
+        
+        return certificateId;
+        
+    } catch (error) {
+        gs.error('Error generating track certificate: ' + error.toString());
+        return null;
+    }
+}
+
+function generateCertificateHTML(studentName, courseTitle, completionDate, grade, instructorName) {
+    return `
+    <div style="border: 8px solid #1f4e79; padding: 40px; font-family: 'Times New Roman', serif; text-align: center; background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);">
+        <div style="border: 3px solid #d4af37; padding: 30px; background: white;">
+            <h1 style="color: #1f4e79; font-size: 48px; margin: 0; text-shadow: 2px 2px 4px rgba(0,0,0,0.1);">Certificate of Completion</h1>
+            
+            <div style="margin: 30px 0;">
+                <p style="font-size: 18px; color: #666; margin: 5px 0;">This is to certify that</p>
+                <h2 style="color: #1f4e79; font-size: 36px; margin: 10px 0; border-bottom: 2px solid #d4af37; display: inline-block; padding-bottom: 5px;">${studentName}</h2>
+                <p style="font-size: 18px; color: #666; margin: 5px 0;">has successfully completed</p>
+                <h3 style="color: #1f4e79; font-size: 24px; margin: 15px 0; font-style: italic;">${courseTitle}</h3>
+            </div>
+            
+            <div style="margin: 30px 0;">
+                <p style="font-size: 16px; color: #666;">Final Grade: <strong style="color: #1f4e79; font-size: 18px;">${grade}</strong></p>
+                <p style="font-size: 16px; color: #666;">Date of Completion: <strong style="color: #1f4e79;">${completionDate}</strong></p>
+            </div>
+            
+            <div style="margin-top: 50px;">
+                <div style="border-top: 1px solid #ccc; width: 300px; margin: 0 auto; padding-top: 10px;">
+                    <p style="font-size: 14px; color: #666; margin: 0;">${instructorName}</p>
+                    <p style="font-size: 12px; color: #888; margin: 0;">Instructor</p>
+                </div>
+            </div>
+            
+            <div style="margin-top: 30px;">
+                <p style="font-size: 12px; color: #999;">Learning Management System • ${new GlideDateTime().getDisplayValue()}</p>
+            </div>
+        </div>
+    </div>`;
+}
+
+function sendCertificateNotification(studentId, title, type) {
+    // This would integrate with ServiceNow's notification system
+    // For now, we'll add an info message
+    gs.addInfoMessage(`Certificate generated for completion of ${title}`);
+}]]></content>
+        <external_source>false</external_source>
+        <path>x_1879300_learning/x-1879300-learning-man/1.0.0/src/server/progress-tracking.js</path>
+        <sys_class_name>sys_module</sys_class_name>
+        <sys_created_by>admin</sys_created_by>
+        <sys_created_on>2025-12-04 15:56:29</sys_created_on>
+        <sys_id>e898727dce1c4e0288bf523835170c41</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>x_1879300_learning/x-1879300-learning-man/1.0.0/src/server/progress-tracking.js</sys_name>
+        <sys_package display_value="Learning Man" source="x_1879300_learning">95470fa283a5f21071a1ba96feaad3cb</sys_package>
+        <sys_policy/>
+        <sys_scope display_value="Learning Man">95470fa283a5f21071a1ba96feaad3cb</sys_scope>
+        <sys_update_name>sys_module_e898727dce1c4e0288bf523835170c41</sys_update_name>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2025-12-04 15:56:29</sys_updated_on>
+    </sys_module>
+</record_update>
