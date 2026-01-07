@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?><database>
+    <element db_object_id="c04acb2a83a5f21071a1ba96feaad3f9" label="Questions" max_length="40" name="x_1879300_learning_questions" type="collection">
+        <element attributes="edge_encryption_enabled=true" choice="1" default="multiple_choice" label="Question Type" max_length="20" name="question_type" type="string">
+            <choice>
+                <element inactive_on_update="false" label="Essay" sequence="3" value="essay"/>
+                <element inactive_on_update="false" label="Multiple Choice" sequence="0" value="multiple_choice"/>
+                <element inactive_on_update="false" label="True/False" sequence="1" value="true_false"/>
+                <element inactive_on_update="false" label="Short Answer" sequence="2" value="short_answer"/>
+            </choice>
+        </element>
+        <element attributes="edge_encryption_enabled=true" label="Hint" max_length="500" name="hint" type="string"/>
+        <element attributes="edge_encryption_enabled=true" label="Correct Answer (Short Answer/Essay)" max_length="2000" name="correct_answer_text" type="string"/>
+        <element default="1.0" label="Points" max_length="20" name="points" type="decimal"/>
+        <element default="1" label="Order Sequence" mandatory="true" max_length="40" name="order_sequence" type="integer"/>
+        <element attributes="edge_encryption_enabled=true" label="Keywords for Partial Credit" max_length="500" name="keywords" type="string"/>
+        <element attributes="encode_utf8=false" label="Assessment" mandatory="true" max_length="32" name="assessment" reference="x_1879300_learning_assessments" type="reference"/>
+        <element attributes="edge_encryption_enabled=true" display="true" label="Question Text" mandatory="true" max_length="2000" name="question_text" type="string"/>
+        <element attributes="edge_encryption_enabled=true" label="Explanation" max_length="1000" name="explanation" type="string"/>
+        <index name="index">
+            <element name="assessment"/>
+        </index>
+    </element>
+</database>

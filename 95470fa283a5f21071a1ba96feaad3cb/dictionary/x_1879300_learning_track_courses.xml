@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?><database>
+    <element db_object_id="692d8fae83a5f21071a1ba96feaad3dd" label="Track Courses" max_length="40" name="x_1879300_learning_track_courses" type="collection">
+        <element attributes="encode_utf8=false" label="Course" mandatory="true" max_length="32" name="course" reference="x_1879300_learning_courses" type="reference"/>
+        <element default="1" label="Sequence Order" mandatory="true" max_length="40" name="sequence_order" type="integer"/>
+        <element default="true" label="Required Course" max_length="40" name="required" type="boolean"/>
+        <element attributes="encode_utf8=false" display="true" label="Learning Track" mandatory="true" max_length="32" name="learning_track" reference="x_1879300_learning_tracks" type="reference"/>
+        <element default="true" label="Unlock After Previous Course Completion" max_length="40" name="unlock_previous_completion" type="boolean"/>
+        <index name="index">
+            <element name="course"/>
+        </index>
+        <index name="index2">
+            <element name="learning_track"/>
+        </index>
+    </element>
+</database>

@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update sys_domain="global" table="sys_app_module">
+    <sys_app_module action="INSERT_OR_UPDATE">
+        <active>true</active>
+        <application display_value="Learning Management System">c2938df76999451aa3f7760250f90220</application>
+        <assessment/>
+        <device_type/>
+        <filter/>
+        <hint>Create and manage courses, lessons, and assessments</hint>
+        <homepage/>
+        <image/>
+        <link_type>DIRECT</link_type>
+        <map_page/>
+        <mobile_title/>
+        <mobile_view_name/>
+        <name/>
+        <order>150</order>
+        <override_menu_roles>false</override_menu_roles>
+        <query>x_1879300_learning_instructor_dashboard.do</query>
+        <report/>
+        <require_confirmation>false</require_confirmation>
+        <roles/>
+        <sys_class_name>sys_app_module</sys_class_name>
+        <sys_created_by>admin</sys_created_by>
+        <sys_created_on>2025-12-22 16:37:16</sys_created_on>
+        <sys_domain>global</sys_domain>
+        <sys_domain_path>/</sys_domain_path>
+        <sys_id>963e501acd0947ca9301a38c33e13028</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>👩‍🏫 Instructor Dashboard</sys_name>
+        <sys_overrides/>
+        <sys_package display_value="Learning Man" source="x_1879300_learning">95470fa283a5f21071a1ba96feaad3cb</sys_package>
+        <sys_policy/>
+        <sys_scope display_value="Learning Man">95470fa283a5f21071a1ba96feaad3cb</sys_scope>
+        <sys_update_name>sys_app_module_963e501acd0947ca9301a38c33e13028</sys_update_name>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2025-12-22 16:37:16</sys_updated_on>
+        <timeline_page/>
+        <title>👩‍🏫 Instructor Dashboard</title>
+        <uncancelable>false</uncancelable>
+        <view_name/>
+        <window_name/>
+    </sys_app_module>
+</record_update>

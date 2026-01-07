@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sys_module">
+    <sys_module action="INSERT_OR_UPDATE">
+        <content><![CDATA[import { gs, GlideRecord } from '@servicenow/glide'
+
+export function autoGradeAssessment(current, previous) {
+    // Only auto-grade when status changes to 'submitted'
+    if (current.getValue('status') !== 'submitted' || 
+        (previous && previous.getValue('status') === 'submitted')) {
+        return;
+    }
+
+    const attemptId = current.getUniqueValue();
+    const assessmentId = current.getValue('assessment');
+    
+    // Check if this assessment can be auto-graded (only MC and T/F questions)
+    if (!canAutoGrade(assessmentId)) {
+        gs.addInfoMessage('Assessment contains manual grading questions. Please grade manually.');
+        return;
+    }
+
+    // Auto-grade the assessment
+    const gradingResult = calculateScore(attemptId, assessmentId);
+    
+    if (gradingResult.success) {
+        // Update attempt with graded results
+        current.setValue('earned_points', gradingResult.earnedPoints);
+        current.setValue('total_points', gradingResult.totalPoints);
+        current.setValue('percentage_score', gradingResult.percentage);
+        current.setValue('passed', gradingResult.passed);
+        current.setValue('status', 'graded');
+        current.setValue('auto_graded', 'true');
+        current.setValue('graded_at', new gs.nowDateTime());
+        
+        gs.addInfoMessage(`Assessment auto-graded: ${gradingResult.percentage}% (${gradingResult.passed ? 'PASSED' : 'FAILED'})`);
+    } else {
+        gs.addErrorMessage('Auto-grading failed: ' + gradingResult.error);
+    }
+}
+
+function canAutoGrade(assessmentId) {
+    const questionGr = new GlideRecord('x_1879300_learning_questions');
+    questionGr.addQuery('assessment', assessmentId);
+    questionGr.addQuery('question_type', 'IN', 'short_answer,essay');
+    questionGr.query();
+    
+    // If there are any short answer or essay questions, cannot auto-grade
+    return !questionGr.hasNext();
+}
+
+function calculateScore(attemptId, assessmentId) {
+    try {
+        let totalPoints = 0;
+        let earnedPoints = 0;
+        
+        // Get all responses for this attempt
+        const responseGr = new GlideRecord('x_1879300_learning_question_responses');
+        responseGr.addQuery('attempt', attemptId);
+        responseGr.query();
+        
+        while (responseGr.next()) {
+            const questionId = responseGr.getValue('question');
+            const questionGr = new GlideRecord('x_1879300_learning_questions');
+            
+            if (questionGr.get(questionId)) {
+                const points = parseFloat(questionGr.getValue('points') || '1');
+                totalPoints += points;
+                
+                const questionType = questionGr.getValue('question_type');
+                let isCorrect = false;
+                
+                if (questionType === 'multiple_choice') {
+                    isCorrect = gradeMultipleChoice(responseGr, questionId);
+                } else if (questionType === 'true_false') {
+                    isCorrect = gradeTrueFalse(responseGr, questionId);
+                }
+                
+                if (isCorrect) {
+                    earnedPoints += points;
+                }
+                
+                // Update the response record
+                responseGr.setValue('is_correct', isCorrect);
+                responseGr.setValue('points_earned', isCorrect ? points : 0);
+                responseGr.setValue('points_possible', points);
+                responseGr.setValue('auto_graded', 'true');
+                responseGr.update();
+            }
+        }
+        
+        const percentage = totalPoints > 0 ? Math.round((earnedPoints / totalPoints) * 100) : 0;
+        
+        // Get passing score from assessment
+        const assessmentGr = new GlideRecord('x_1879300_learning_assessments');
+        const passingScore = assessmentGr.get(assessmentId) ? 
+            parseInt(assessmentGr.getValue('passing_score') || '70') : 70;
+        
+        return {
+            success: true,
+            earnedPoints: earnedPoints,
+            totalPoints: totalPoints,
+            percentage: percentage,
+            passed: percentage >= passingScore
+        };
+        
+    } catch (error) {
+        return {
+            success: false,
+            error: error.toString()
+        };
+    }
+}
+
+function gradeMultipleChoice(responseGr, questionId) {
+    const selectedChoiceId = responseGr.getValue('selected_choice');
+    if (!selectedChoiceId) return false;
+    
+    const choiceGr = new GlideRecord('x_1879300_learning_question_choices');
+    if (choiceGr.get(selectedChoiceId)) {
+        return choiceGr.getValue('is_correct') === 'true';
+    }
+    return false;
+}
+
+function gradeTrueFalse(responseGr, questionId) {
+    const answer = responseGr.getValue('true_false_answer');
+    if (!answer) return false;
+    
+    // For T/F questions, we need to check which choice is marked as correct
+    const choiceGr = new GlideRecord('x_1879300_learning_question_choices');
+    choiceGr.addQuery('question', questionId);
+    choiceGr.addQuery('is_correct', 'true');
+    choiceGr.query();
+    
+    if (choiceGr.next()) {
+        const correctChoiceText = choiceGr.getValue('choice_text').toLowerCase();
+        const userAnswer = answer.toLowerCase();
+        
+        // Check if user's answer matches the correct choice
+        return (correctChoiceText === 'true' && userAnswer === 'true') ||
+               (correctChoiceText === 'false' && userAnswer === 'false');
+    }
+    
+    return false;
+}]]></content>
+        <external_source>false</external_source>
+        <path>x_1879300_learning/x-1879300-learning-man/1.0.0/src/server/assessment-grading.js</path>
+        <sys_class_name>sys_module</sys_class_name>
+        <sys_created_by>admin</sys_created_by>
+        <sys_created_on>2025-12-04 15:43:48</sys_created_on>
+        <sys_id>dd1f1a881c6f492184e6073236202823</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>x_1879300_learning/x-1879300-learning-man/1.0.0/src/server/assessment-grading.js</sys_name>
+        <sys_package display_value="Learning Man" source="x_1879300_learning">95470fa283a5f21071a1ba96feaad3cb</sys_package>
+        <sys_policy/>
+        <sys_scope display_value="Learning Man">95470fa283a5f21071a1ba96feaad3cb</sys_scope>
+        <sys_update_name>sys_module_dd1f1a881c6f492184e6073236202823</sys_update_name>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2025-12-04 15:43:48</sys_updated_on>
+    </sys_module>
+</record_update>

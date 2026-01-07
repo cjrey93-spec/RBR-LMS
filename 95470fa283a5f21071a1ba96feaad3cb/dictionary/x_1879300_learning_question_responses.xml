@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?><database>
+    <element db_object_id="404acb2a83a5f21071a1ba96feaad3a0" label="Question Responses" max_length="40" name="x_1879300_learning_question_responses" type="collection">
+        <element attributes="encode_utf8=false" label="Assessment Attempt" mandatory="true" max_length="32" name="attempt" reference="x_1879300_learning_assessment_attempts" type="reference"/>
+        <element attributes="edge_encryption_enabled=true" choice="1" label="True/False Answer" max_length="10" name="true_false_answer" type="string">
+            <choice>
+                <element inactive_on_update="false" label="True" sequence="0" value="true"/>
+                <element inactive_on_update="false" label="False" sequence="1" value="false"/>
+            </choice>
+        </element>
+        <element label="Auto Graded" max_length="40" name="auto_graded" read_only="true" type="boolean"/>
+        <element attributes="encode_utf8=false" display="true" label="Question" mandatory="true" max_length="32" name="question" reference="x_1879300_learning_questions" type="reference"/>
+        <element label="Is Correct" max_length="40" name="is_correct" read_only="true" type="boolean"/>
+        <element attributes="edge_encryption_enabled=true" label="Instructor Feedback" max_length="1000" name="instructor_feedback" type="string"/>
+        <element label="Response Order" max_length="40" name="response_order" type="integer"/>
+        <element attributes="encode_utf8=false" label="Selected Choice" max_length="32" name="selected_choice" reference="x_1879300_learning_question_choices" type="reference"/>
+        <element default="0" label="Points Earned" max_length="20" name="points_earned" read_only="true" type="decimal"/>
+        <element label="Points Possible" max_length="20" name="points_possible" read_only="true" type="decimal"/>
+        <element attributes="edge_encryption_enabled=true" label="Text Answer (Short Answer/Essay)" max_length="4000" name="text_answer" type="string"/>
+        <index name="index">
+            <element name="attempt"/>
+        </index>
+        <index name="index2">
+            <element name="question"/>
+        </index>
+        <index name="index3">
+            <element name="selected_choice"/>
+        </index>
+    </element>
+</database>

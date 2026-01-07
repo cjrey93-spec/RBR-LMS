@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sys_user_role_contains">
+    <sys_user_role_contains action="INSERT_OR_UPDATE">
+        <contains display_value="x_1879300_learning.developer" name="x_1879300_learning.developer">29989fea61214b71961e882711d8b0f8</contains>
+        <role display_value="x_1879300_learning.admin" name="x_1879300_learning.admin">7d360fa8cedb447d88de7509f8ee29f7</role>
+        <sys_class_name>sys_user_role_contains</sys_class_name>
+        <sys_created_by>admin</sys_created_by>
+        <sys_created_on>2025-12-04 15:49:50</sys_created_on>
+        <sys_id>3ad802a1615547e39fe86a981b0ba282</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>x_1879300_learning.developer.x_1879300_learning.admin</sys_name>
+        <sys_package display_value="Learning Man" source="x_1879300_learning">95470fa283a5f21071a1ba96feaad3cb</sys_package>
+        <sys_policy/>
+        <sys_scope display_value="Learning Man">95470fa283a5f21071a1ba96feaad3cb</sys_scope>
+        <sys_update_name>sys_user_role_contains_3ad802a1615547e39fe86a981b0ba282</sys_update_name>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2025-12-04 15:49:50</sys_updated_on>
+    </sys_user_role_contains>
+</record_update>
