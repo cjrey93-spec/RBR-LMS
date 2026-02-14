@@ -5,8 +5,7 @@
         <description>Student learning dashboard showing progress, certificates, and available courses</description>
         <direct>true</direct>
         <endpoint>x_1879300_learning_student_dashboard.do</endpoint>
-        <html><![CDATA[
-<!-- @fluent-import-html WARNING: This file was imported from the output of a static build. Modifications of any kind are likely to result in unintended behavior. In most cases, you should edit the source file of the HTML imported below. If you are absolutely certain you want to take control of this HTML, you can remove this comment to prevent the SDK from regenerating it. However, you will then be responsible for the management of this HTML in your Fluent file. -->
+        <html><![CDATA[<!-- @fluent-import-html WARNING: This file was imported from the output of a static build. Modifications of any kind are likely to result in unintended behavior. In most cases, you should edit the source file of the HTML imported below. If you are absolutely certain you want to take control of this HTML, you can remove this comment to prevent the SDK from regenerating it. However, you will then be responsible for the management of this HTML in your Fluent file. -->
 <html>
   <head>
     <title>Student Dashboard - Learning Management System</title>
@@ -47,13 +46,13 @@ window.g_ck = "$[gs.getSession().getSessionToken() || gs.getSessionToken()]";</s
         <sys_created_by>admin</sys_created_by>
         <sys_created_on>2025-12-15 20:06:12</sys_created_on>
         <sys_id>0ff0bad747a24d538d5b98a1de3d5004</sys_id>
-        <sys_mod_count>0</sys_mod_count>
+        <sys_mod_count>1</sys_mod_count>
         <sys_name>student_dashboard</sys_name>
         <sys_package display_value="Learning Man" source="x_1879300_learning">95470fa283a5f21071a1ba96feaad3cb</sys_package>
         <sys_policy/>
         <sys_scope display_value="Learning Man">95470fa283a5f21071a1ba96feaad3cb</sys_scope>
         <sys_update_name>sys_ui_page_0ff0bad747a24d538d5b98a1de3d5004</sys_update_name>
         <sys_updated_by>admin</sys_updated_by>
-        <sys_updated_on>2025-12-15 20:06:12</sys_updated_on>
+        <sys_updated_on>2026-02-14 18:28:46</sys_updated_on>
     </sys_ui_page>
 </record_update>

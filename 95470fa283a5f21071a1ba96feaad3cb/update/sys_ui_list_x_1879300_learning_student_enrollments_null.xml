@@ -3,107 +3,107 @@
         <sys_ui_list_element action="INSERT_OR_UPDATE">
             <average_value>false</average_value>
             <element>student</element>
-            <list_id display_value="x_1879300_learning_student_enrollments" element="NULL" name="x_1879300_learning_student_enrollments" parent="NULL" relationship="NULL" sys_domain="global" view="Default view">f7a96dd126ca4469a266b3a139d0cb19</list_id>
+            <list_id display_value="x_1879300_learning_student_enrollments" element="NULL" name="x_1879300_learning_student_enrollments" parent="NULL" relationship="NULL" sys_domain="global" view="Default view">315266f58387721071a1ba96feaad3dd</list_id>
             <max_value>false</max_value>
             <min_value>false</min_value>
             <position>0</position>
             <sum>false</sum>
             <sys_created_by>admin</sys_created_by>
-            <sys_created_on>2026-01-01 18:52:54</sys_created_on>
-            <sys_id>bd9336d1ad534a109d6db489bd5095a3</sys_id>
+            <sys_created_on>2026-02-14 18:28:08</sys_created_on>
+            <sys_id>715266f58387721071a1ba96feaad3de</sys_id>
             <sys_mod_count>0</sys_mod_count>
             <sys_updated_by>admin</sys_updated_by>
-            <sys_updated_on>2026-01-01 18:52:54</sys_updated_on>
+            <sys_updated_on>2026-02-14 18:28:08</sys_updated_on>
         </sys_ui_list_element>
         <sys_ui_list_element action="INSERT_OR_UPDATE">
             <average_value>false</average_value>
             <element>course</element>
-            <list_id display_value="x_1879300_learning_student_enrollments" element="NULL" name="x_1879300_learning_student_enrollments" parent="NULL" relationship="NULL" sys_domain="global" view="Default view">f7a96dd126ca4469a266b3a139d0cb19</list_id>
+            <list_id display_value="x_1879300_learning_student_enrollments" element="NULL" name="x_1879300_learning_student_enrollments" parent="NULL" relationship="NULL" sys_domain="global" view="Default view">315266f58387721071a1ba96feaad3dd</list_id>
             <max_value>false</max_value>
             <min_value>false</min_value>
             <position>1</position>
             <sum>false</sum>
             <sys_created_by>admin</sys_created_by>
-            <sys_created_on>2026-01-01 18:52:54</sys_created_on>
-            <sys_id>7c2c4ce6ff88432aabad1bc68fd23efd</sys_id>
+            <sys_created_on>2026-02-14 18:28:08</sys_created_on>
+            <sys_id>f55266f58387721071a1ba96feaad3de</sys_id>
             <sys_mod_count>0</sys_mod_count>
             <sys_updated_by>admin</sys_updated_by>
-            <sys_updated_on>2026-01-01 18:52:54</sys_updated_on>
+            <sys_updated_on>2026-02-14 18:28:08</sys_updated_on>
         </sys_ui_list_element>
         <sys_ui_list_element action="INSERT_OR_UPDATE">
             <average_value>false</average_value>
             <element>learning_track</element>
-            <list_id display_value="x_1879300_learning_student_enrollments" element="NULL" name="x_1879300_learning_student_enrollments" parent="NULL" relationship="NULL" sys_domain="global" view="Default view">f7a96dd126ca4469a266b3a139d0cb19</list_id>
+            <list_id display_value="x_1879300_learning_student_enrollments" element="NULL" name="x_1879300_learning_student_enrollments" parent="NULL" relationship="NULL" sys_domain="global" view="Default view">315266f58387721071a1ba96feaad3dd</list_id>
             <max_value>false</max_value>
             <min_value>false</min_value>
             <position>2</position>
             <sum>false</sum>
             <sys_created_by>admin</sys_created_by>
-            <sys_created_on>2026-01-01 18:52:54</sys_created_on>
-            <sys_id>48f4c1586ff54c809d626a7310de9e84</sys_id>
+            <sys_created_on>2026-02-14 18:28:08</sys_created_on>
+            <sys_id>7d5266f58387721071a1ba96feaad3de</sys_id>
             <sys_mod_count>0</sys_mod_count>
             <sys_updated_by>admin</sys_updated_by>
-            <sys_updated_on>2026-01-01 18:52:54</sys_updated_on>
+            <sys_updated_on>2026-02-14 18:28:08</sys_updated_on>
         </sys_ui_list_element>
         <sys_ui_list_element action="INSERT_OR_UPDATE">
             <average_value>false</average_value>
             <element>status</element>
-            <list_id display_value="x_1879300_learning_student_enrollments" element="NULL" name="x_1879300_learning_student_enrollments" parent="NULL" relationship="NULL" sys_domain="global" view="Default view">f7a96dd126ca4469a266b3a139d0cb19</list_id>
+            <list_id display_value="x_1879300_learning_student_enrollments" element="NULL" name="x_1879300_learning_student_enrollments" parent="NULL" relationship="NULL" sys_domain="global" view="Default view">315266f58387721071a1ba96feaad3dd</list_id>
             <max_value>false</max_value>
             <min_value>false</min_value>
             <position>3</position>
             <sum>false</sum>
             <sys_created_by>admin</sys_created_by>
-            <sys_created_on>2026-01-01 18:52:54</sys_created_on>
-            <sys_id>ffbad57425f34cd38b1a9558b6dc194e</sys_id>
+            <sys_created_on>2026-02-14 18:28:08</sys_created_on>
+            <sys_id>f15266f58387721071a1ba96feaad3df</sys_id>
             <sys_mod_count>0</sys_mod_count>
             <sys_updated_by>admin</sys_updated_by>
-            <sys_updated_on>2026-01-01 18:52:54</sys_updated_on>
+            <sys_updated_on>2026-02-14 18:28:08</sys_updated_on>
         </sys_ui_list_element>
         <sys_ui_list_element action="INSERT_OR_UPDATE">
             <average_value>false</average_value>
             <element>progress_percentage</element>
-            <list_id display_value="x_1879300_learning_student_enrollments" element="NULL" name="x_1879300_learning_student_enrollments" parent="NULL" relationship="NULL" sys_domain="global" view="Default view">f7a96dd126ca4469a266b3a139d0cb19</list_id>
+            <list_id display_value="x_1879300_learning_student_enrollments" element="NULL" name="x_1879300_learning_student_enrollments" parent="NULL" relationship="NULL" sys_domain="global" view="Default view">315266f58387721071a1ba96feaad3dd</list_id>
             <max_value>false</max_value>
             <min_value>false</min_value>
             <position>4</position>
             <sum>false</sum>
             <sys_created_by>admin</sys_created_by>
-            <sys_created_on>2026-01-01 18:52:54</sys_created_on>
-            <sys_id>8fad5c4b62934a6f99f226e983eff137</sys_id>
+            <sys_created_on>2026-02-14 18:28:08</sys_created_on>
+            <sys_id>795266f58387721071a1ba96feaad3df</sys_id>
             <sys_mod_count>0</sys_mod_count>
             <sys_updated_by>admin</sys_updated_by>
-            <sys_updated_on>2026-01-01 18:52:54</sys_updated_on>
+            <sys_updated_on>2026-02-14 18:28:08</sys_updated_on>
         </sys_ui_list_element>
         <sys_ui_list_element action="INSERT_OR_UPDATE">
             <average_value>false</average_value>
             <element>final_grade</element>
-            <list_id display_value="x_1879300_learning_student_enrollments" element="NULL" name="x_1879300_learning_student_enrollments" parent="NULL" relationship="NULL" sys_domain="global" view="Default view">f7a96dd126ca4469a266b3a139d0cb19</list_id>
+            <list_id display_value="x_1879300_learning_student_enrollments" element="NULL" name="x_1879300_learning_student_enrollments" parent="NULL" relationship="NULL" sys_domain="global" view="Default view">315266f58387721071a1ba96feaad3dd</list_id>
             <max_value>false</max_value>
             <min_value>false</min_value>
             <position>5</position>
             <sum>false</sum>
             <sys_created_by>admin</sys_created_by>
-            <sys_created_on>2026-01-01 18:52:54</sys_created_on>
-            <sys_id>c553d03a53064d43bd4354208bf9e985</sys_id>
+            <sys_created_on>2026-02-14 18:28:08</sys_created_on>
+            <sys_id>fd5266f58387721071a1ba96feaad3df</sys_id>
             <sys_mod_count>0</sys_mod_count>
             <sys_updated_by>admin</sys_updated_by>
-            <sys_updated_on>2026-01-01 18:52:54</sys_updated_on>
+            <sys_updated_on>2026-02-14 18:28:08</sys_updated_on>
         </sys_ui_list_element>
         <sys_ui_list_element action="INSERT_OR_UPDATE">
             <average_value>false</average_value>
             <element>enrollment_date</element>
-            <list_id display_value="x_1879300_learning_student_enrollments" element="NULL" name="x_1879300_learning_student_enrollments" parent="NULL" relationship="NULL" sys_domain="global" view="Default view">f7a96dd126ca4469a266b3a139d0cb19</list_id>
+            <list_id display_value="x_1879300_learning_student_enrollments" element="NULL" name="x_1879300_learning_student_enrollments" parent="NULL" relationship="NULL" sys_domain="global" view="Default view">315266f58387721071a1ba96feaad3dd</list_id>
             <max_value>false</max_value>
             <min_value>false</min_value>
             <position>6</position>
             <sum>false</sum>
             <sys_created_by>admin</sys_created_by>
-            <sys_created_on>2026-01-01 18:52:54</sys_created_on>
-            <sys_id>e6edc9cad3d64bcf9db993d444c7251f</sys_id>
+            <sys_created_on>2026-02-14 18:28:08</sys_created_on>
+            <sys_id>755266f58387721071a1ba96feaad3e0</sys_id>
             <sys_mod_count>0</sys_mod_count>
             <sys_updated_by>admin</sys_updated_by>
-            <sys_updated_on>2026-01-01 18:52:54</sys_updated_on>
+            <sys_updated_on>2026-02-14 18:28:08</sys_updated_on>
         </sys_ui_list_element>
         <sys_ui_list action="INSERT_OR_UPDATE">
             <average_value>false</average_value>
@@ -117,10 +117,10 @@
             <sum>false</sum>
             <sys_class_name>sys_ui_list</sys_class_name>
             <sys_created_by>admin</sys_created_by>
-            <sys_created_on>2026-01-01 18:52:54</sys_created_on>
+            <sys_created_on>2026-02-14 18:28:08</sys_created_on>
             <sys_domain>global</sys_domain>
             <sys_domain_path>/</sys_domain_path>
-            <sys_id>f7a96dd126ca4469a266b3a139d0cb19</sys_id>
+            <sys_id>315266f58387721071a1ba96feaad3dd</sys_id>
             <sys_mod_count>0</sys_mod_count>
             <sys_name>x_1879300_learning_student_enrollments</sys_name>
             <sys_package display_value="Learning Man" source="x_1879300_learning">95470fa283a5f21071a1ba96feaad3cb</sys_package>
@@ -128,7 +128,7 @@
             <sys_scope display_value="Learning Man">95470fa283a5f21071a1ba96feaad3cb</sys_scope>
             <sys_update_name>sys_ui_list_x_1879300_learning_student_enrollments_null</sys_update_name>
             <sys_updated_by>admin</sys_updated_by>
-            <sys_updated_on>2026-01-01 18:52:54</sys_updated_on>
+            <sys_updated_on>2026-02-14 18:28:08</sys_updated_on>
             <sys_user/>
             <view display_value="Default view" name="NULL">Default view</view>
             <view_name/>
