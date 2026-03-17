@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update sys_domain="global" table="sys_app_module">
+    <sys_app_module action="DELETE">
+        <active>true</active>
+        <application display_value="Needed for Position">727cd9a983e3721071a1ba96feaad32a</application>
+        <assessment/>
+        <device_type/>
+        <filter/>
+        <hint/>
+        <homepage/>
+        <image/>
+        <link_type>LIST</link_type>
+        <map_page/>
+        <mobile_title>Needed for Positions</mobile_title>
+        <mobile_view_name>Mobile</mobile_view_name>
+        <name>x_1879300_learning_needed_for_position</name>
+        <order/>
+        <override_menu_roles>false</override_menu_roles>
+        <query/>
+        <report/>
+        <require_confirmation>true</require_confirmation>
+        <roles>x_1879300_learning.needed_for_position_user</roles>
+        <sys_class_name>sys_app_module</sys_class_name>
+        <sys_created_by>admin</sys_created_by>
+        <sys_created_on>2026-03-10 15:15:51</sys_created_on>
+        <sys_domain>global</sys_domain>
+        <sys_domain_path>/</sys_domain_path>
+        <sys_id>767cd9a983e3721071a1ba96feaad332</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>Needed for Positions</sys_name>
+        <sys_overrides/>
+        <sys_package display_value="Learning Man" source="x_1879300_learning">95470fa283a5f21071a1ba96feaad3cb</sys_package>
+        <sys_policy/>
+        <sys_scope display_value="Learning Man">95470fa283a5f21071a1ba96feaad3cb</sys_scope>
+        <sys_update_name>sys_app_module_767cd9a983e3721071a1ba96feaad332</sys_update_name>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2026-03-10 15:15:51</sys_updated_on>
+        <timeline_page/>
+        <title>Needed for Positions</title>
+        <uncancelable>false</uncancelable>
+        <view_name/>
+        <window_name/>
+    </sys_app_module>
+    <sys_update_version action="INSERT_OR_UPDATE">
+        <action>DELETE</action>
+        <application display_value="Learning Man">95470fa283a5f21071a1ba96feaad3cb</application>
+        <file_path/>
+        <instance_id>6b7c8dc51b823d98699443f4bd4bcb40</instance_id>
+        <instance_name>dev191656</instance_name>
+        <name>sys_app_module_767cd9a983e3721071a1ba96feaad332</name>
+        <payload><![CDATA[<?xml version="1.0" encoding="UTF-8"?><record_update sys_domain="global" table="sys_app_module"><sys_app_module action="INSERT_OR_UPDATE"><active>true</active><application display_value="Needed for Position">727cd9a983e3721071a1ba96feaad32a</application><assessment/><device_type/><filter/><hint/><homepage/><image/><link_type>LIST</link_type><map_page/><mobile_title>Needed for Positions</mobile_title><mobile_view_name>Mobile</mobile_view_name><name>x_1879300_learning_needed_for_position</name><order/><override_menu_roles>false</override_menu_roles><query/><report/><require_confirmation>true</require_confirmation><roles>x_1879300_learning.needed_for_position_user</roles><sys_class_name>sys_app_module</sys_class_name><sys_created_by>admin</sys_created_by><sys_created_on>2026-03-10 15:15:51</sys_created_on><sys_domain>global</sys_domain><sys_domain_path>/</sys_domain_path><sys_id>767cd9a983e3721071a1ba96feaad332</sys_id><sys_mod_count>0</sys_mod_count><sys_name>Needed for Positions</sys_name><sys_overrides/><sys_package display_value="Learning Man" source="x_1879300_learning">95470fa283a5f21071a1ba96feaad3cb</sys_package><sys_policy/><sys_scope display_value="Learning Man">95470fa283a5f21071a1ba96feaad3cb</sys_scope><sys_update_name>sys_app_module_767cd9a983e3721071a1ba96feaad332</sys_update_name><sys_updated_by>admin</sys_updated_by><sys_updated_on>2026-03-10 15:15:51</sys_updated_on><timeline_page/><title>Needed for Positions</title><uncancelable>false</uncancelable><view_name/><window_name/></sys_app_module></record_update>]]></payload>
+        <payload_hash>-1868233000</payload_hash>
+        <record_name>Needed for Positions</record_name>
+        <reverted_from/>
+        <source>fd7cffe58383321071a1ba96feaad335</source>
+        <source_table>sys_update_set</source_table>
+        <state>previous</state>
+        <sys_created_by>admin</sys_created_by>
+        <sys_created_on>2026-03-10 15:15:51</sys_created_on>
+        <sys_id>fa7cd9a983e3721071a1ba96feaad339</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_recorded_at>19cd85196fa0000001</sys_recorded_at>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2026-03-10 15:15:51</sys_updated_on>
+        <type>Module</type>
+        <update_guid>7a7cd9a914e372100bede45f653c5138</update_guid>
+        <update_guid_history>7a7cd9a914e372100bede45f653c5138:-1868233000</update_guid_history>
+    </sys_update_version>
+    <sys_metadata_delete action="INSERT_OR_UPDATE">
+        <sys_audit_delete display_value="Needed for Positions">44a7723f8323321071a1ba96feaad36b</sys_audit_delete>
+        <sys_class_name>sys_metadata_delete</sys_class_name>
+        <sys_created_by>admin</sys_created_by>
+        <sys_created_on>2026-03-17 21:40:23</sys_created_on>
+        <sys_db_object display_value="" name="sys_app_module">sys_app_module</sys_db_object>
+        <sys_id>a659f213432f4029826f3f767ba75df9</sys_id>
+        <sys_metadata>767cd9a983e3721071a1ba96feaad332</sys_metadata>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>Needed for Positions</sys_name>
+        <sys_package display_value="Learning Man" source="x_1879300_learning">95470fa283a5f21071a1ba96feaad3cb</sys_package>
+        <sys_parent/>
+        <sys_policy/>
+        <sys_scope display_value="Learning Man">95470fa283a5f21071a1ba96feaad3cb</sys_scope>
+        <sys_scope_delete display_value="">59844fb1c47f42549ff8d66a22f7c090</sys_scope_delete>
+        <sys_update_name>sys_app_module_767cd9a983e3721071a1ba96feaad332</sys_update_name>
+        <sys_update_version display_value="sys_app_module_767cd9a983e3721071a1ba96feaad332">fa7cd9a983e3721071a1ba96feaad339</sys_update_version>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2026-03-17 21:40:23</sys_updated_on>
+    </sys_metadata_delete>
+</record_update>

@@ -1,6 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?><database>
-    <element db_object_id="784c1d6983e3721071a1ba96feaad341" label="Needed for Position" max_length="40" name="x_1879300_learning_needed_for_position" type="collection">
-        <element label="Position" max_length="40" name="position" type="string"/>
-        <element label="Course Number" max_length="40" name="course_number" type="string"/>
-    </element>
-</database>
