@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update sys_domain="global" table="sys_app_module">
+    <sys_app_module action="DELETE">
+        <active>true</active>
+        <application display_value="Project Groups">03ed4f568300031071a1ba96feaad385</application>
+        <assessment/>
+        <device_type/>
+        <filter/>
+        <hint/>
+        <homepage/>
+        <image/>
+        <link_type>LIST</link_type>
+        <map_page/>
+        <mobile_title>Project Groups</mobile_title>
+        <mobile_view_name>Mobile</mobile_view_name>
+        <name>x_1879300_learning_project_groups</name>
+        <order/>
+        <override_menu_roles>false</override_menu_roles>
+        <query/>
+        <report/>
+        <require_confirmation>true</require_confirmation>
+        <roles>x_1879300_learning.project_groups_user</roles>
+        <sys_class_name>sys_app_module</sys_class_name>
+        <sys_created_by>admin</sys_created_by>
+        <sys_created_on>2026-04-07 03:58:18</sys_created_on>
+        <sys_domain>global</sys_domain>
+        <sys_domain_path>/</sys_domain_path>
+        <sys_id>83ed4f568300031071a1ba96feaad38d</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>Project Groups</sys_name>
+        <sys_overrides/>
+        <sys_package display_value="Learning Man" source="x_1879300_learning">95470fa283a5f21071a1ba96feaad3cb</sys_package>
+        <sys_policy/>
+        <sys_scope display_value="Learning Man">95470fa283a5f21071a1ba96feaad3cb</sys_scope>
+        <sys_update_name>sys_app_module_83ed4f568300031071a1ba96feaad38d</sys_update_name>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2026-04-07 03:58:18</sys_updated_on>
+        <timeline_page/>
+        <title>Project Groups</title>
+        <uncancelable>false</uncancelable>
+        <view_name/>
+        <window_name/>
+    </sys_app_module>
+    <sys_update_version action="INSERT_OR_UPDATE">
+        <action>DELETE</action>
+        <application display_value="Learning Man">95470fa283a5f21071a1ba96feaad3cb</application>
+        <file_path/>
+        <instance_id>6b7c8dc51b823d98699443f4bd4bcb40</instance_id>
+        <instance_name>dev191656</instance_name>
+        <name>sys_app_module_83ed4f568300031071a1ba96feaad38d</name>
+        <payload><![CDATA[<?xml version="1.0" encoding="UTF-8"?><record_update sys_domain="global" table="sys_app_module"><sys_app_module action="INSERT_OR_UPDATE"><active>true</active><application display_value="Project Groups">03ed4f568300031071a1ba96feaad385</application><assessment/><device_type/><filter/><hint/><homepage/><image/><link_type>LIST</link_type><map_page/><mobile_title>Project Groups</mobile_title><mobile_view_name>Mobile</mobile_view_name><name>x_1879300_learning_project_groups</name><order/><override_menu_roles>false</override_menu_roles><query/><report/><require_confirmation>true</require_confirmation><roles>x_1879300_learning.project_groups_user</roles><sys_class_name>sys_app_module</sys_class_name><sys_created_by>admin</sys_created_by><sys_created_on>2026-04-07 03:58:18</sys_created_on><sys_domain>global</sys_domain><sys_domain_path>/</sys_domain_path><sys_id>83ed4f568300031071a1ba96feaad38d</sys_id><sys_mod_count>0</sys_mod_count><sys_name>Project Groups</sys_name><sys_overrides/><sys_package display_value="Learning Man" source="x_1879300_learning">95470fa283a5f21071a1ba96feaad3cb</sys_package><sys_policy/><sys_scope display_value="Learning Man">95470fa283a5f21071a1ba96feaad3cb</sys_scope><sys_update_name>sys_app_module_83ed4f568300031071a1ba96feaad38d</sys_update_name><sys_updated_by>admin</sys_updated_by><sys_updated_on>2026-04-07 03:58:18</sys_updated_on><timeline_page/><title>Project Groups</title><uncancelable>false</uncancelable><view_name/><window_name/></sys_app_module></record_update>]]></payload>
+        <payload_hash>1117593178</payload_hash>
+        <record_name>Project Groups</record_name>
+        <reverted_from/>
+        <source>fd7cffe58383321071a1ba96feaad335</source>
+        <source_table>sys_update_set</source_table>
+        <state>previous</state>
+        <sys_created_by>admin</sys_created_by>
+        <sys_created_on>2026-04-07 03:58:18</sys_created_on>
+        <sys_id>87ed4f568300031071a1ba96feaad394</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_recorded_at>19d661757330000001</sys_recorded_at>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2026-04-07 03:58:18</sys_updated_on>
+        <type>Module</type>
+        <update_guid>07ed4f5634000310d0ef6ca820fd8793</update_guid>
+        <update_guid_history>07ed4f5634000310d0ef6ca820fd8793:1117593178</update_guid_history>
+    </sys_update_version>
+    <sys_metadata_delete action="INSERT_OR_UPDATE">
+        <sys_audit_delete display_value="Project Groups">45f9a0488310031071a1ba96feaad38d</sys_audit_delete>
+        <sys_class_name>sys_metadata_delete</sys_class_name>
+        <sys_created_by>admin</sys_created_by>
+        <sys_created_on>2026-04-12 02:31:18</sys_created_on>
+        <sys_db_object display_value="" name="sys_app_module">sys_app_module</sys_db_object>
+        <sys_id>4f9971ca992a4ddfa7df03912a1e6689</sys_id>
+        <sys_metadata>83ed4f568300031071a1ba96feaad38d</sys_metadata>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>Project Groups</sys_name>
+        <sys_package display_value="Learning Man" source="x_1879300_learning">95470fa283a5f21071a1ba96feaad3cb</sys_package>
+        <sys_parent/>
+        <sys_policy/>
+        <sys_scope display_value="Learning Man">95470fa283a5f21071a1ba96feaad3cb</sys_scope>
+        <sys_scope_delete display_value="">59844fb1c47f42549ff8d66a22f7c090</sys_scope_delete>
+        <sys_update_name>sys_app_module_83ed4f568300031071a1ba96feaad38d</sys_update_name>
+        <sys_update_version display_value="sys_app_module_83ed4f568300031071a1ba96feaad38d">87ed4f568300031071a1ba96feaad394</sys_update_version>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2026-04-12 02:31:18</sys_updated_on>
+    </sys_metadata_delete>
+</record_update>

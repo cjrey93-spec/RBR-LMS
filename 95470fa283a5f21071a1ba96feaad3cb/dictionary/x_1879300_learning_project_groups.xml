@@ -1,5 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?><database>
-    <element db_object_id="82ad07568300031071a1ba96feaad3bf" label="Project Groups" max_length="40" name="x_1879300_learning_project_groups" type="collection">
-        <element label="NumberMembers" max_length="40" name="numbermembers" type="string"/>
-    </element>
-</database>
