@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?><database>
+    <element db_object_id="4a86fca48320031071a1ba96feaad371" label="Reup_table" max_length="40" name="x_1879300_learning_reup_table" type="collection">
+        <element label="reup" max_length="40" name="reup" type="string"/>
+    </element>
+</database>
