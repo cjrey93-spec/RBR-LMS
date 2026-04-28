@@ -2,43 +2,485 @@
     <sys_ui_page action="INSERT_OR_UPDATE">
         <category>general</category>
         <client_script/>
-        <description>Learning Management System - Course and lesson viewer with quiz functionality</description>
+        <description>Lesson viewer with content, video, materials, comments, and student submissions</description>
         <direct>true</direct>
         <endpoint>x_1879300_learning_lms.do</endpoint>
-        <html><![CDATA[<!-- @fluent-import-html WARNING: This file was imported from the output of a static build. Modifications of any kind are likely to result in unintended behavior. In most cases, you should edit the source file of the HTML imported below. If you are absolutely certain you want to take control of this HTML, you can remove this comment to prevent the SDK from regenerating it. However, you will then be responsible for the management of this HTML in your Fluent file. -->
-<html>
-  <head>
-    <title>Learning Management System</title>
-    <meta charset="utf-8"></meta>
-    <meta name="viewport" content="width=device-width, initial-scale=1"></meta>
-    <!-- Initialize ServiceNow globals -->
-    <!-- @sdk:now-ux-globals -->
-    <!-- Resolved from sdk:now-ux-globals tag at NowSDK build time to support earlier Glide releases -->
-    <script>window.NOW = {};
-window.NOW.user = {};
-window.NOW.batch_glide_ajax_requests = false;
-window.NOW.isUsingPolaris = true;
-window.NOW.exclude_dark_theme = "false";
-window.g_ck = "$[gs.getSession().getSessionToken() || gs.getSessionToken()]";</script>
-    <!-- Include ServiceNow's required scripts -->
-    <g:requires name="scripts/doctype/functions_bootstrap14.js"></g:requires>
-    <g:requires name="scripts/lib/prototype.js"></g:requires>
-    <g:requires name="scripts/classes/ajax/GlideURL.js"></g:requires>
-    <g:requires name="scripts/doctype/CustomEventManager.js"></g:requires>
-    <g:requires name="scripts/classes/ajax/GlideAjax.js"></g:requires>
-    <g:requires name="scripts/classes/GlideUser.js"></g:requires>
-    <g2:client_script type="user"></g2:client_script>
-    <link rel="preload" href="/uxasset/set-cache-buster/$[UxFrameworkScriptables.getFlushTimestamp()].js" as="script"></link>
-    <g:requires name="scripts/polaris_theme_refresh_observer.js"></g:requires>
-    <link data-source-id="glide-theme" id="polarisberg_theme_variables" rel="stylesheet" href="/$uxappimmutables.do?sysparm_request_type=ux_theme$[AMP]sysparm_app_sys_id=c86a62e2c7022010099a308dc7c26022$[AMP]uxpcb=$[sn_ui.PolarisUI.getThemeVariableCssCacheKey()]"></link>
-    <script type="module" src="/uxasset/externals/@devsnc/library-uxf/index.jsdbx"></script>
-    <!-- @sdk:now-ux-globals -->
-    <!-- Include React entry point -->
-    <script src="/uxasset/externals/x_1879300_learning/main.jsdbx?uxpcb=$[UxFrameworkScriptables.getFlushTimestamp()]" type="module"></script>
-  </head>
-  <body>
-    <div id="root"></div>
-  </body>
+        <html><![CDATA[<html>
+<head>
+  <title>Lesson Viewer - LMS</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <script>window.NOW={};window.NOW.user={};window.NOW.batch_glide_ajax_requests=false;window.NOW.isUsingPolaris=true;window.g_ck="$[gs.getSession().getSessionToken() || gs.getSessionToken()]";</script>
+  <g:requires name="scripts/doctype/functions_bootstrap14.js" />
+  <g:requires name="scripts/lib/prototype.js" />
+  <g:requires name="scripts/classes/ajax/GlideURL.js" />
+  <g:requires name="scripts/doctype/CustomEventManager.js" />
+  <g:requires name="scripts/classes/ajax/GlideAjax.js" />
+  <g:requires name="scripts/classes/GlideUser.js" />
+  <g2:client_script type="user" />
+  <style>
+    *{margin:0;padding:0;box-sizing:border-box}
+    body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:#f0f2f8;min-height:100vh}
+    .topbar{background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);padding:14px 24px;display:flex;justify-content:space-between;align-items:center}
+    .topbar-left{display:flex;align-items:center;gap:16px}
+    .topbar-brand{color:#fff;font-weight:700;font-size:1rem}
+    .topbar-course{color:rgba(255,255,255,.8);font-size:.9rem}
+    .topbar-nav{display:flex;gap:10px}
+    .topbar-nav a{color:rgba(255,255,255,.8);text-decoration:none;font-size:.8rem;padding:5px 12px;border-radius:20px;border:1px solid rgba(255,255,255,.3)}
+    .topbar-nav a:hover{background:rgba(255,255,255,.15)}
+    .layout{display:grid;grid-template-columns:280px 1fr;min-height:calc(100vh - 50px)}
+    .sidebar{background:#fff;border-right:1px solid #e2e8f0;overflow-y:auto;position:sticky;top:0;height:calc(100vh - 50px)}
+    .sidebar-header{padding:16px 20px;background:#f7fafc;border-bottom:1px solid #e2e8f0}
+    .sidebar-title{font-size:.9rem;font-weight:700;color:#2d3748;margin-bottom:4px}
+    .sidebar-progress{font-size:.75rem;color:#718096}
+    .progress-bar-wrap{background:#e2e8f0;border-radius:99px;height:4px;margin-top:8px;overflow:hidden}
+    .progress-bar{height:100%;border-radius:99px;background:linear-gradient(90deg,#667eea,#764ba2)}
+    .lesson-list{list-style:none;padding:8px 0}
+    .lesson-item{padding:12px 20px;cursor:pointer;border-left:3px solid transparent;transition:all .15s;display:flex;align-items:center;gap:10px}
+    .lesson-item:hover{background:#f7fafc;border-left-color:#cbd5e0}
+    .lesson-item.active{background:#ebf4ff;border-left-color:#667eea}
+    .lesson-item.completed{opacity:.7}
+    .lesson-item-num{font-size:.75rem;color:#a0aec0;min-width:20px}
+    .lesson-item-info{flex:1;min-width:0}
+    .lesson-item-title{font-size:.85rem;font-weight:600;color:#2d3748;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .lesson-item-type{font-size:.7rem;color:#a0aec0}
+    .lesson-item-check{color:#48bb78;font-size:.9rem;flex-shrink:0}
+    .main{overflow-y:auto;padding:28px 32px;max-width:900px}
+    .lesson-header{margin-bottom:24px;padding-bottom:20px;border-bottom:2px solid #e2e8f0}
+    .lesson-type-badge{display:inline-block;padding:4px 12px;border-radius:20px;font-size:.75rem;font-weight:700;margin-bottom:10px}
+    .badge-video{background:#e9d8fd;color:#553c9a}
+    .badge-text{background:#bee3f8;color:#2b6cb0}
+    .badge-quiz{background:#fbb6ce;color:#97266d}
+    .badge-assignment{background:#fbd38d;color:#c05621}
+    .lesson-title{font-size:1.8rem;font-weight:800;color:#2d3748;margin-bottom:8px}
+    .lesson-desc{color:#718096;font-size:.95rem;line-height:1.6}
+    .section-card{background:#fff;border-radius:12px;padding:24px;margin-bottom:20px;box-shadow:0 2px 8px rgba(0,0,0,.06)}
+    .section-card h3{font-size:1rem;font-weight:700;color:#2d3748;margin-bottom:16px;display:flex;align-items:center;gap:8px}
+    .lesson-content{font-size:.95rem;line-height:1.8;color:#2d3748}
+    .lesson-content p{margin-bottom:12px}
+    .lesson-content h1,.lesson-content h2,.lesson-content h3{margin:20px 0 10px;color:#1a202c}
+    .lesson-content code{background:#f7fafc;padding:2px 6px;border-radius:4px;font-family:monospace;font-size:.9em}
+    .lesson-content pre{background:#1a202c;color:#e2e8f0;padding:16px;border-radius:8px;overflow-x:auto;margin:12px 0}
+    .video-wrap{position:relative;padding-bottom:56.25%;height:0;overflow:hidden;border-radius:10px;background:#000}
+    .video-wrap iframe{position:absolute;top:0;left:0;width:100%;height:100%;border:0}
+    .material-item{display:flex;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid #f0f0f0}
+    .material-item:last-child{border-bottom:none}
+    .material-icon{width:36px;height:36px;border-radius:8px;background:#ebf4ff;display:flex;align-items:center;justify-content:center;font-size:1.1rem;flex-shrink:0}
+    .material-info{flex:1}
+    .material-title{font-size:.9rem;font-weight:600;color:#2d3748}
+    .material-meta{font-size:.75rem;color:#a0aec0}
+    .btn{padding:10px 20px;border:none;border-radius:8px;cursor:pointer;font-size:.9rem;font-weight:600;transition:all .2s;display:inline-flex;align-items:center;gap:6px}
+    .btn-primary{background:linear-gradient(135deg,#667eea,#764ba2);color:#fff}
+    .btn-primary:hover{transform:translateY(-1px);box-shadow:0 4px 12px rgba(102,126,234,.4)}
+    .btn-secondary{background:#f7fafc;color:#4a5568;border:2px solid #e2e8f0}
+    .btn-success{background:#c6f6d5;color:#22543d;border:2px solid #9ae6b4}
+    .btn-sm{padding:6px 12px;font-size:.8rem}
+    .form-group{margin-bottom:14px}
+    .form-group label{display:block;margin-bottom:4px;font-weight:600;color:#4a5568;font-size:.85rem}
+    .form-group input,.form-group textarea,.form-group select{width:100%;padding:10px 12px;border:2px solid #e2e8f0;border-radius:8px;font-size:.9rem;font-family:inherit}
+    .form-group input:focus,.form-group textarea:focus{outline:none;border-color:#667eea}
+    .alert{padding:12px 16px;border-radius:8px;margin-bottom:14px;font-size:.9rem}
+    .alert-success{background:#c6f6d5;color:#22543d}
+    .alert-error{background:#fed7d7;color:#c53030}
+    .alert-info{background:#bee3f8;color:#2b6cb0}
+    .hidden{display:none!important}
+    .loading{text-align:center;padding:32px;color:#718096}
+    .spinner{border:3px solid #e2e8f0;border-top:3px solid #667eea;border-radius:50%;width:28px;height:28px;animation:spin .8s linear infinite;margin:0 auto 10px}
+    @keyframes spin{to{transform:rotate(360deg)}}
+    .comment{padding:14px 0;border-bottom:1px solid #f0f0f0}
+    .comment:last-child{border-bottom:none}
+    .comment-header{display:flex;align-items:center;gap:10px;margin-bottom:8px}
+    .comment-avatar{width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,#667eea,#764ba2);display:flex;align-items:center;justify-content:center;color:#fff;font-size:.85rem;font-weight:700;flex-shrink:0}
+    .comment-author{font-weight:700;font-size:.9rem;color:#2d3748}
+    .comment-time{font-size:.75rem;color:#a0aec0}
+    .comment-type{font-size:.7rem;padding:2px 8px;border-radius:10px;font-weight:700}
+    .ct-question{background:#fef3c7;color:#c05621}
+    .ct-announcement{background:#bee3f8;color:#2b6cb0}
+    .ct-comment{background:#f0f0f0;color:#718096}
+    .comment-text{font-size:.9rem;color:#4a5568;line-height:1.6}
+    .comment-reply{font-size:.8rem;color:#667eea;cursor:pointer;margin-top:6px}
+    .pinned-indicator{color:#f6ad55;font-size:.8rem;margin-left:4px}
+    .sub-comment{margin-left:42px;border-left:2px solid #e2e8f0;padding-left:12px;margin-top:10px}
+    .nav-buttons{display:flex;justify-content:space-between;align-items:center;margin-top:28px;padding-top:20px;border-top:2px solid #e2e8f0}
+    .complete-check{display:flex;align-items:center;gap:8px;font-size:.9rem;color:#4a5568}
+  </style>
+</head>
+<body>
+<div class="topbar">
+  <div class="topbar-left">
+    <div class="topbar-brand">LMS</div>
+    <div class="topbar-course" id="topbar-course-name">Loading course...</div>
+  </div>
+  <div class="topbar-nav">
+    <a href="x_1879300_learning_student_dashboard.do">My Dashboard</a>
+    <a href="x_1879300_learning_catalog.do">Catalog</a>
+  </div>
+</div>
+
+<div class="layout">
+  <!-- Sidebar -->
+  <div class="sidebar">
+    <div class="sidebar-header">
+      <div class="sidebar-title" id="sidebar-course-title">Course</div>
+      <div class="sidebar-progress" id="sidebar-progress-text">0% complete</div>
+      <div class="progress-bar-wrap"><div class="progress-bar" id="sidebar-progress-bar" style="width:0%"></div></div>
+    </div>
+    <ul class="lesson-list" id="lesson-list">
+      <li style="padding:20px;color:#a0aec0;text-align:center">Loading lessons...</li>
+    </ul>
+  </div>
+
+  <!-- Main -->
+  <div class="main" id="main-content">
+    <div class="loading"><div class="spinner"></div>Loading lesson...</div>
+  </div>
+</div>
+
+<script>
+var API = '/api/now/table';
+var SCOPE = 'x_1879300_learning';
+var currentUser = '';
+var courseId = '';
+var enrollmentId = '';
+var lessons = [];
+var currentLesson = null;
+var lessonProgress = {};
+
+function hdrs() {
+  return { 'Accept': 'application/json', 'Content-Type': 'application/json', 'X-UserToken': window.g_ck };
+}
+
+function getVal(obj, field) {
+  if (!obj) return '';
+  var v = obj[field];
+  if (v && typeof v === 'object') return v.display_value || v.value || '';
+  return v || '';
+}
+
+function getRawVal(obj, field) {
+  if (!obj) return '';
+  var v = obj[field];
+  if (v && typeof v === 'object') return v.value || '';
+  return v || '';
+}
+
+function getParams() {
+  var params = {};
+  window.location.search.substring(1).split('&').forEach(function(p) {
+    var kv = p.split('=');
+    if (kv[0]) params[decodeURIComponent(kv[0])] = decodeURIComponent(kv[1] || '');
+  });
+  return params;
+}
+
+function init() {
+  currentUser = window.g_user ? window.g_user.userID : '';
+  var params = getParams();
+  courseId = params.course || '';
+  enrollmentId = params.enrollment || '';
+  var lessonId = params.lesson || '';
+
+  if (!courseId) {
+    document.getElementById('main-content').innerHTML = '<div style="padding:40px;color:#718096;text-align:center"><h2>No course selected</h2><a href="x_1879300_learning_student_dashboard.do" style="color:#667eea">Go to Dashboard</a></div>';
+    return;
+  }
+
+  loadCourse().then(function() {
+    return loadLessons();
+  }).then(function() {
+    return loadProgress();
+  }).then(function() {
+    updateSidebar();
+    var startLesson = lessonId ? lessons.find(function(l){ return getRawVal(l,'sys_id') === lessonId || getVal(l,'sys_id') === lessonId; }) : null;
+    openLesson(startLesson || lessons[0]);
+  });
+}
+
+function loadCourse() {
+  return fetch(API + '/' + SCOPE + '_courses/' + courseId + '?sysparm_display_value=all', { headers: hdrs() })
+    .then(function(r){ return r.json(); })
+    .then(function(data) {
+      var course = data.result;
+      var title = getVal(course,'title');
+      document.getElementById('topbar-course-name').textContent = title;
+      document.getElementById('sidebar-course-title').textContent = title;
+    });
+}
+
+function loadLessons() {
+  return fetch(API + '/' + SCOPE + '_lessons?sysparm_query=course=' + courseId + '^ORDERBYorder_sequence&sysparm_display_value=all&sysparm_limit=100', { headers: hdrs() })
+    .then(function(r){ return r.json(); })
+    .then(function(data) { lessons = data.result || []; });
+}
+
+function loadProgress() {
+  if (!enrollmentId) return Promise.resolve();
+  return fetch(API + '/' + SCOPE + '_lesson_progress?sysparm_query=enrollment=' + enrollmentId + '&sysparm_display_value=all&sysparm_limit=200', { headers: hdrs() })
+    .then(function(r){ return r.json(); })
+    .then(function(data) {
+      (data.result || []).forEach(function(p) {
+        var lid = getRawVal(p,'lesson');
+        lessonProgress[lid] = getVal(p,'status');
+      });
+    })
+    .catch(function(){});
+}
+
+function updateSidebar() {
+  var completed = Object.values(lessonProgress).filter(function(s){ return s === 'completed'; }).length;
+  var total = lessons.length;
+  var pct = total ? Math.round(completed / total * 100) : 0;
+  document.getElementById('sidebar-progress-text').textContent = pct + '% complete (' + completed + '/' + total + ')';
+  document.getElementById('sidebar-progress-bar').style.width = pct + '%';
+
+  var ul = document.getElementById('lesson-list');
+  ul.innerHTML = '';
+  lessons.forEach(function(l, i) {
+    var lid = getRawVal(l,'sys_id') || getVal(l,'sys_id');
+    var st = lessonProgress[lid] || 'not_started';
+    var isActive = currentLesson && (getRawVal(currentLesson,'sys_id') === lid || getVal(currentLesson,'sys_id') === lid);
+    var li = document.createElement('li');
+    li.className = 'lesson-item' + (isActive ? ' active' : '') + (st === 'completed' ? ' completed' : '');
+    li.innerHTML =
+      '<span class="lesson-item-num">' + (i+1) + '</span>' +
+      '<div class="lesson-item-info"><div class="lesson-item-title">' + getVal(l,'title') + '</div><div class="lesson-item-type">' + getVal(l,'lesson_type') + '</div></div>' +
+      (st === 'completed' ? '<span class="lesson-item-check">&#10003;</span>' : '');
+    li.addEventListener('click', function(){ openLesson(l); });
+    ul.appendChild(li);
+  });
+}
+
+function openLesson(lesson) {
+  if (!lesson) return;
+  currentLesson = lesson;
+  updateSidebar();
+  var lid = getRawVal(lesson,'sys_id') || getVal(lesson,'sys_id');
+  var ltype = getVal(lesson,'lesson_type');
+
+  markInProgress(lid);
+
+  var typeBadge = '<span class="lesson-type-badge badge-' + ltype + '">' + ltype + '</span>';
+  var html = '<div class="lesson-header">' + typeBadge +
+    '<div class="lesson-title">' + getVal(lesson,'title') + '</div>' +
+    '<div class="lesson-desc">' + (getVal(lesson,'description') || '') + '</div>' +
+    '</div>';
+
+  // Video
+  if (ltype === 'video' && getVal(lesson,'video_url')) {
+    html += renderVideoSection(getVal(lesson,'video_url'));
+  }
+
+  // Content
+  if (getVal(lesson,'content')) {
+    html += '<div class="section-card"><h3>&#128196; Content</h3><div class="lesson-content">' + getVal(lesson,'content') + '</div></div>';
+  }
+
+  html += '<div id="materials-section"><div class="loading"><div class="spinner"></div></div></div>';
+  html += '<div id="submission-section"></div>';
+  html += '<div id="comments-section"></div>';
+
+  // Navigation
+  var lessonIdx = lessons.indexOf(lesson);
+  var prevLesson = lessonIdx > 0 ? lessons[lessonIdx - 1] : null;
+  var nextLesson = lessonIdx < lessons.length - 1 ? lessons[lessonIdx + 1] : null;
+  html += '<div class="nav-buttons">' +
+    (prevLesson ? '<button class="btn btn-secondary" onclick="openLesson(lessons[' + (lessonIdx-1) + '])">&#8592; Previous</button>' : '<span></span>') +
+    '<button class="btn btn-success" id="complete-btn" onclick="markComplete(\'' + lid + '\')">Mark Complete &#10003;</button>' +
+    (nextLesson ? '<button class="btn btn-primary" onclick="openLesson(lessons[' + (lessonIdx+1) + '])">Next &#8594;</button>' : '<span></span>') +
+    '</div>';
+
+  document.getElementById('main-content').innerHTML = html;
+
+  // Load async sections
+  loadMaterials(lid);
+  if (ltype === 'assignment') loadSubmission(lid);
+  loadComments(lid);
+
+  if (lessonProgress[lid] === 'completed') {
+    var btn = document.getElementById('complete-btn');
+    if (btn) { btn.textContent = 'Completed'; btn.className = 'btn btn-success'; btn.disabled = true; }
+  }
+}
+
+function renderVideoSection(url) {
+  var embedUrl = '';
+  var ytMatch = url.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/)([^&\s]+)/);
+  var vimeoMatch = url.match(/vimeo\.com\/(\d+)/);
+  if (ytMatch) embedUrl = 'https://www.youtube.com/embed/' + ytMatch[1];
+  else if (vimeoMatch) embedUrl = 'https://player.vimeo.com/video/' + vimeoMatch[1];
+
+  if (embedUrl) {
+    return '<div class="section-card"><h3>&#127909; Video</h3><div class="video-wrap"><iframe src="' + embedUrl + '" allowfullscreen></iframe></div></div>';
+  }
+  return '<div class="section-card"><h3>&#127909; Video</h3><p><a href="' + url + '" target="_blank" style="color:#667eea">' + url + '</a></p></div>';
+}
+
+function loadMaterials(lid) {
+  fetch(API + '/' + SCOPE + '_materials?sysparm_query=lesson=' + lid + '^ORDERBYorder_sequence&sysparm_display_value=all&sysparm_limit=20', { headers: hdrs() })
+    .then(function(r){ return r.json(); })
+    .then(function(data) {
+      var mats = data.result || [];
+      var el = document.getElementById('materials-section');
+      if (!el) return;
+      if (!mats.length) { el.innerHTML = ''; return; }
+      var html = '<div class="section-card"><h3>&#128196; Supporting Materials</h3>';
+      mats.forEach(function(m) {
+        var mtype = getVal(m,'material_type');
+        var icons = { pdf: '&#128196;', video: '&#127909;', link: '&#128279;', document: '&#128196;', image: '&#128247;' };
+        var icon = icons[mtype] || '&#128196;';
+        var url = getVal(m,'url') || '';
+        html += '<div class="material-item"><div class="material-icon">' + icon + '</div><div class="material-info"><div class="material-title">' + getVal(m,'title') + '</div><div class="material-meta">' + mtype + (getVal(m,'file_size_kb') ? ' | ' + getVal(m,'file_size_kb') + ' KB' : '') + '</div></div>' +
+          (url ? '<a href="' + url + '" target="_blank" class="btn btn-secondary btn-sm">Download</a>' : '') + '</div>';
+      });
+      el.innerHTML = html + '</div>';
+    });
+}
+
+function loadSubmission(lid) {
+  var el = document.getElementById('submission-section');
+  if (!el) return;
+  fetch(API + '/' + SCOPE + '_student_submission?sysparm_query=student=' + currentUser + '^lesson=' + lid + '&sysparm_display_value=all&sysparm_limit=1', { headers: hdrs() })
+    .then(function(r){ return r.json(); })
+    .then(function(data) {
+      var subs = data.result || [];
+      var existing = subs[0];
+      var st = existing ? getVal(existing,'status') : null;
+      var html = '<div class="section-card"><h3>&#128196; Your Submission</h3>';
+      if (existing && st === 'graded') {
+        html += '<div class="alert alert-success">Graded: <strong>' + getVal(existing,'grade') + '/100</strong></div>';
+        if (getVal(existing,'instructor_feedback')) html += '<p style="color:#4a5568">' + getVal(existing,'instructor_feedback') + '</p>';
+      } else if (existing) {
+        html += '<div class="alert alert-info">Status: <strong>' + st + '</strong></div>';
+      }
+      html += '<div id="sub-msg"></div>' +
+        '<div class="form-group"><label>Notes / Write-up</label><textarea id="sub-notes" rows="4" placeholder="Add your notes or answer...">' + (existing ? getVal(existing,'student_notes') : '') + '</textarea></div>' +
+        '<div class="form-group"><label>File Name (reference)</label><input type="text" id="sub-file" placeholder="e.g. assignment1.pdf" value="' + (existing ? getVal(existing,'file_name') : '') + '" /></div>' +
+        '<button class="btn btn-primary" onclick="submitWork(\'' + lid + '\',\'' + (existing ? getRawVal(existing,'sys_id') || getVal(existing,'sys_id') : '') + '\')">' + (existing ? 'Update Submission' : 'Submit') + '</button>';
+      el.innerHTML = html + '</div>';
+    });
+}
+
+function submitWork(lid, existingId) {
+  var notes = document.getElementById('sub-notes').value;
+  var fname = document.getElementById('sub-file').value;
+  var body = { student: currentUser, lesson: lid, enrollment: enrollmentId, student_notes: notes, file_name: fname, status: 'submitted', submitted_at: new Date().toISOString().replace('T',' ').split('.')[0] };
+  var url = existingId ? API + '/' + SCOPE + '_student_submission/' + existingId : API + '/' + SCOPE + '_student_submission';
+  var method = existingId ? 'PATCH' : 'POST';
+  fetch(url, { method: method, headers: hdrs(), body: JSON.stringify(body) })
+    .then(function(r){ if (!r.ok) throw new Error(); document.getElementById('sub-msg').innerHTML = '<div class="alert alert-success">Submitted!</div>'; })
+    .catch(function(){ document.getElementById('sub-msg').innerHTML = '<div class="alert alert-error">Failed to submit.</div>'; });
+}
+
+function loadComments(lid) {
+  var el = document.getElementById('comments-section');
+  if (!el) return;
+  fetch(API + '/' + SCOPE + '_lesson_comment?sysparm_query=lesson=' + lid + '^parent_commentISEMPTY^ORDERBYposted_at&sysparm_display_value=all&sysparm_limit=50', { headers: hdrs() })
+    .then(function(r){ return r.json(); })
+    .then(function(data) {
+      var comments = data.result || [];
+      var html = '<div class="section-card"><h3>&#128172; Discussion</h3><div id="comment-msg"></div>';
+
+      html += '<div class="form-group"><label>Add Comment</label><textarea id="new-comment" rows="3" placeholder="Ask a question or leave a comment..."></textarea></div>' +
+        '<div style="display:flex;gap:10px;margin-bottom:20px">' +
+        '<select id="comment-type" style="padding:8px 12px;border:2px solid #e2e8f0;border-radius:8px"><option value="comment">Comment</option><option value="question">Question</option></select>' +
+        '<button class="btn btn-primary btn-sm" onclick="postComment(\'' + lid + '\')">Post</button></div>';
+
+      if (comments.length) {
+        html += '<div id="comments-list">';
+        comments.forEach(function(c) { html += renderComment(c, false); });
+        html += '</div>';
+      } else {
+        html += '<div id="comments-list" style="color:#a0aec0;text-align:center;padding:20px">No comments yet. Be the first!</div>';
+      }
+
+      el.innerHTML = html + '</div>';
+    });
+}
+
+function renderComment(c, isSub) {
+  var author = getVal(c,'author');
+  var initial = author.charAt(0).toUpperCase() || '?';
+  var ctype = getVal(c,'comment_type') || 'comment';
+  var pinned = c.pinned === true || c.pinned === 'true';
+  var cid = getRawVal(c,'sys_id') || getVal(c,'sys_id');
+  var html = '<div class="comment' + (isSub ? ' sub-comment' : '') + '">' +
+    '<div class="comment-header">' +
+    '<div class="comment-avatar">' + initial + '</div>' +
+    '<div class="comment-author">' + author + (pinned ? '<span class="pinned-indicator">&#128204;</span>' : '') + '</div>' +
+    '<div class="comment-time">' + (getVal(c,'posted_at') || '').split(' ')[0] + '</div>' +
+    '<span class="comment-type ct-' + ctype + '">' + ctype + '</span>' +
+    '</div>' +
+    '<div class="comment-text">' + (getVal(c,'comment_text') || '') + '</div>' +
+    (!isSub ? '<div class="comment-reply" onclick="showReply(\'' + cid + '\')">Reply</div>' +
+    '<div id="reply-form-' + cid + '" style="display:none;margin-top:10px">' +
+    '<textarea id="reply-text-' + cid + '" rows="2" style="width:100%;padding:8px;border:2px solid #e2e8f0;border-radius:8px;font-family:inherit" placeholder="Write a reply..."></textarea>' +
+    '<button class="btn btn-secondary btn-sm" style="margin-top:6px" onclick="postReply(\'' + getVal(currentLesson,\'sys_id\') + '\',\'' + cid + '\')">Reply</button>' +
+    '</div>' : '') +
+    '</div>';
+  return html;
+}
+
+function showReply(cid) {
+  var f = document.getElementById('reply-form-' + cid);
+  if (f) f.style.display = f.style.display === 'none' ? 'block' : 'none';
+}
+
+function postComment(lid) {
+  var text = document.getElementById('new-comment').value.trim();
+  if (!text) return;
+  var ctype = document.getElementById('comment-type').value;
+  var body = { lesson: lid, enrollment: enrollmentId, author: currentUser, comment_text: text, comment_type: ctype, posted_at: new Date().toISOString().replace('T',' ').split('.')[0] };
+  fetch(API + '/' + SCOPE + '_lesson_comment', { method: 'POST', headers: hdrs(), body: JSON.stringify(body) })
+    .then(function(r){ if (!r.ok) throw new Error(); document.getElementById('new-comment').value = ''; loadComments(lid); })
+    .catch(function(){ document.getElementById('comment-msg').innerHTML = '<div class="alert alert-error">Failed to post comment.</div>'; });
+}
+
+function postReply(lid, parentId) {
+  var text = document.getElementById('reply-text-' + parentId).value.trim();
+  if (!text) return;
+  var body = { lesson: lid, enrollment: enrollmentId, author: currentUser, comment_text: text, comment_type: 'comment', parent_comment: parentId, posted_at: new Date().toISOString().replace('T',' ').split('.')[0] };
+  fetch(API + '/' + SCOPE + '_lesson_comment', { method: 'POST', headers: hdrs(), body: JSON.stringify(body) })
+    .then(function(r){ if (!r.ok) throw new Error(); loadComments(lid); })
+    .catch(function(){});
+}
+
+function markInProgress(lid) {
+  if (!enrollmentId || lessonProgress[lid] === 'completed') return;
+  var existing = lessonProgress[lid];
+  if (existing === 'in_progress') return;
+  var body = { student: currentUser, lesson: lid, enrollment: enrollmentId, status: 'in_progress', started_at: new Date().toISOString().replace('T',' ').split('.')[0] };
+  fetch(API + '/' + SCOPE + '_lesson_progress', { method: 'POST', headers: hdrs(), body: JSON.stringify(body) })
+    .then(function(){ lessonProgress[lid] = 'in_progress'; })
+    .catch(function(){});
+}
+
+function markComplete(lid) {
+  if (!enrollmentId) return;
+  var body = { student: currentUser, lesson: lid, enrollment: enrollmentId, status: 'completed', completed_at: new Date().toISOString().replace('T',' ').split('.')[0] };
+  fetch(API + '/' + SCOPE + '_lesson_progress', { method: 'POST', headers: hdrs(), body: JSON.stringify(body) })
+    .then(function(){
+      lessonProgress[lid] = 'completed';
+      var btn = document.getElementById('complete-btn');
+      if (btn) { btn.textContent = 'Completed'; btn.disabled = true; }
+      updateSidebar();
+      updateEnrollmentProgress();
+    })
+    .catch(function(){});
+}
+
+function updateEnrollmentProgress() {
+  if (!enrollmentId) return;
+  var total = lessons.length;
+  var done = Object.values(lessonProgress).filter(function(s){ return s === 'completed'; }).length;
+  var pct = total ? Math.round(done / total * 100) : 0;
+  var body = { progress_percentage: pct };
+  if (pct === 100) body.status = 'completed';
+  fetch(API + '/' + SCOPE + '_student_enrollments/' + enrollmentId, { method: 'PATCH', headers: hdrs(), body: JSON.stringify(body) }).catch(function(){});
+}
+
+document.addEventListener('DOMContentLoaded', init);
+</script>
+</body>
 </html>]]></html>
         <name>lms</name>
         <processing_script/>
@@ -46,13 +488,13 @@ window.g_ck = "$[gs.getSession().getSessionToken() || gs.getSessionToken()]";</s
         <sys_created_by>admin</sys_created_by>
         <sys_created_on>2025-12-04 15:43:49</sys_created_on>
         <sys_id>c2999e8e560641dc994730d1b07729f4</sys_id>
-        <sys_mod_count>1</sys_mod_count>
+        <sys_mod_count>2</sys_mod_count>
         <sys_name>lms</sys_name>
         <sys_package display_value="Learning Man" source="x_1879300_learning">95470fa283a5f21071a1ba96feaad3cb</sys_package>
         <sys_policy/>
         <sys_scope display_value="Learning Man">95470fa283a5f21071a1ba96feaad3cb</sys_scope>
         <sys_update_name>sys_ui_page_c2999e8e560641dc994730d1b07729f4</sys_update_name>
         <sys_updated_by>admin</sys_updated_by>
-        <sys_updated_on>2026-02-14 18:28:35</sys_updated_on>
+        <sys_updated_on>2026-04-28 00:00:00</sys_updated_on>
     </sys_ui_page>
 </record_update>

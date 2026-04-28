@@ -1,0 +1,511 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sys_ui_page">
+    <sys_ui_page action="INSERT_OR_UPDATE">
+        <category>general</category>
+        <client_script/>
+        <description>Assessment page with questions, timer, and scoring for students</description>
+        <direct>true</direct>
+        <endpoint>x_1879300_learning_assessment.do</endpoint>
+        <html><![CDATA[<html>
+<head>
+  <title>Assessment - LMS</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <script>window.NOW={};window.NOW.user={};window.NOW.batch_glide_ajax_requests=false;window.NOW.isUsingPolaris=true;window.g_ck="$[gs.getSession().getSessionToken() || gs.getSessionToken()]";</script>
+  <g:requires name="scripts/doctype/functions_bootstrap14.js" />
+  <g:requires name="scripts/lib/prototype.js" />
+  <g:requires name="scripts/classes/ajax/GlideURL.js" />
+  <g:requires name="scripts/doctype/CustomEventManager.js" />
+  <g:requires name="scripts/classes/ajax/GlideAjax.js" />
+  <g:requires name="scripts/classes/GlideUser.js" />
+  <g2:client_script type="user" />
+  <style>
+    *{margin:0;padding:0;box-sizing:border-box}
+    body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:#f0f2f8;min-height:100vh}
+    .topbar{background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);padding:14px 24px;display:flex;justify-content:space-between;align-items:center}
+    .topbar-title{color:#fff;font-weight:700;font-size:1rem}
+    .timer-box{background:rgba(255,255,255,.15);border-radius:8px;padding:6px 16px;color:#fff;font-size:1rem;font-weight:700;font-variant-numeric:tabular-nums}
+    .timer-box.warning{background:rgba(255,100,100,.4);animation:pulse 1s infinite}
+    @keyframes pulse{0%,100%{opacity:1}50%{opacity:.7}}
+    .wrap{max-width:800px;margin:32px auto;padding:0 24px 60px}
+    .assessment-header{background:#fff;border-radius:14px;padding:24px 28px;margin-bottom:24px;box-shadow:0 2px 8px rgba(0,0,0,.06)}
+    .assessment-title{font-size:1.8rem;font-weight:800;color:#2d3748;margin-bottom:8px}
+    .assessment-meta{display:flex;gap:20px;flex-wrap:wrap;color:#718096;font-size:.9rem;margin-bottom:16px}
+    .assessment-meta span{display:flex;align-items:center;gap:6px}
+    .progress-row{display:flex;justify-content:space-between;font-size:.85rem;color:#718096;margin-bottom:6px}
+    .progress-bar-wrap{background:#e2e8f0;border-radius:99px;height:6px;overflow:hidden}
+    .progress-bar{height:100%;border-radius:99px;background:linear-gradient(90deg,#667eea,#764ba2);transition:width .3s}
+    .question-card{background:#fff;border-radius:14px;padding:24px 28px;margin-bottom:16px;box-shadow:0 2px 8px rgba(0,0,0,.06);border:2px solid transparent;transition:border-color .2s}
+    .question-card.answered{border-color:#c6f6d5}
+    .question-num{font-size:.8rem;font-weight:700;color:#667eea;text-transform:uppercase;letter-spacing:.05em;margin-bottom:8px}
+    .question-text{font-size:1.05rem;color:#2d3748;line-height:1.6;margin-bottom:16px;font-weight:600}
+    .question-points{font-size:.8rem;color:#a0aec0;margin-bottom:14px}
+    .hint-link{font-size:.8rem;color:#667eea;cursor:pointer;margin-bottom:10px;display:inline-block}
+    .hint-box{background:#fef3c7;border-radius:8px;padding:10px 14px;font-size:.85rem;color:#c05621;margin-bottom:12px}
+    .choices{display:flex;flex-direction:column;gap:10px}
+    .choice-label{display:flex;align-items:flex-start;gap:12px;padding:12px 16px;border:2px solid #e2e8f0;border-radius:10px;cursor:pointer;transition:all .2s;user-select:none}
+    .choice-label:hover{border-color:#667eea;background:#f7f9ff}
+    .choice-label.selected{border-color:#667eea;background:#ebf4ff}
+    .choice-label.correct{border-color:#48bb78;background:#f0fff4}
+    .choice-label.incorrect{border-color:#fc8181;background:#fff5f5}
+    .choice-label input{margin-top:2px;flex-shrink:0;accent-color:#667eea}
+    .choice-text-val{font-size:.95rem;color:#2d3748}
+    .choice-letter{font-weight:700;color:#667eea;min-width:20px}
+    .text-answer{width:100%;padding:12px;border:2px solid #e2e8f0;border-radius:8px;font-size:.95rem;font-family:inherit;resize:vertical}
+    .text-answer:focus{outline:none;border-color:#667eea}
+    .tf-choices{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+    .tf-btn{padding:14px;border:2px solid #e2e8f0;border-radius:10px;cursor:pointer;background:#fff;font-size:1rem;font-weight:600;transition:all .2s}
+    .tf-btn:hover{border-color:#667eea}
+    .tf-btn.selected{border-color:#667eea;background:#ebf4ff;color:#553c9a}
+    .tf-btn.correct{border-color:#48bb78;background:#f0fff4;color:#22543d}
+    .tf-btn.incorrect{border-color:#fc8181;background:#fff5f5;color:#c53030}
+    .submit-bar{position:fixed;bottom:0;left:0;right:0;background:#fff;border-top:2px solid #e2e8f0;padding:16px 24px;display:flex;justify-content:space-between;align-items:center;box-shadow:0 -4px 16px rgba(0,0,0,.08)}
+    .submit-status{font-size:.9rem;color:#718096}
+    .btn{padding:12px 28px;border:none;border-radius:8px;cursor:pointer;font-size:.95rem;font-weight:700;transition:all .2s}
+    .btn-primary{background:linear-gradient(135deg,#667eea,#764ba2);color:#fff}
+    .btn-primary:hover{transform:translateY(-1px);box-shadow:0 4px 14px rgba(102,126,234,.4)}
+    .btn-primary:disabled{opacity:.5;cursor:not-allowed;transform:none}
+    .btn-secondary{background:#f7fafc;color:#4a5568;border:2px solid #e2e8f0}
+    .loading{text-align:center;padding:60px;color:#718096}
+    .spinner{border:3px solid #e2e8f0;border-top:3px solid #667eea;border-radius:50%;width:36px;height:36px;animation:spin .8s linear infinite;margin:0 auto 14px}
+    @keyframes spin{to{transform:rotate(360deg)}}
+    .results-card{background:#fff;border-radius:16px;padding:36px;text-align:center;box-shadow:0 4px 20px rgba(0,0,0,.1);margin-bottom:24px}
+    .results-score{font-size:4rem;font-weight:900;margin-bottom:8px}
+    .results-score.pass{color:#38a169}
+    .results-score.fail{color:#e53e3e}
+    .results-label{font-size:1.1rem;color:#718096;margin-bottom:20px}
+    .results-detail{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:24px}
+    .result-box{background:#f7fafc;border-radius:10px;padding:16px;text-align:center}
+    .result-box-num{font-size:1.8rem;font-weight:800;color:#2d3748}
+    .result-box-label{font-size:.8rem;color:#718096}
+    .result-passed{border-top:4px solid #48bb78}
+    .result-failed{border-top:4px solid #fc8181}
+    .answers-review{text-align:left}
+    .answer-item{background:#fff;border-radius:10px;padding:16px;margin-bottom:12px;border-left:4px solid #e2e8f0}
+    .answer-item.correct{border-left-color:#48bb78}
+    .answer-item.incorrect{border-left-color:#fc8181}
+    .alert{padding:12px 16px;border-radius:8px;margin-bottom:16px;font-size:.9rem}
+    .alert-error{background:#fed7d7;color:#c53030}
+    .hidden{display:none}
+  </style>
+</head>
+<body>
+<div class="topbar">
+  <div class="topbar-title" id="topbar-title">Assessment</div>
+  <div class="timer-box hidden" id="timer-display">00:00</div>
+</div>
+
+<div class="wrap" id="main-wrap">
+  <div class="loading"><div class="spinner"></div>Loading assessment...</div>
+</div>
+
+<div class="submit-bar hidden" id="submit-bar">
+  <div class="submit-status" id="submit-status">0 of 0 answered</div>
+  <button class="btn btn-primary" id="submit-btn" onclick="submitAssessment()">Submit Assessment</button>
+</div>
+
+<script>
+var API = '/api/now/table';
+var SCOPE = 'x_1879300_learning';
+var currentUser = '';
+var assessmentId = '';
+var enrollmentId = '';
+var assessment = null;
+var questions = [];
+var choices = {};
+var answers = {};
+var attemptId = null;
+var timerInterval = null;
+var timeLeft = 0;
+var submitted = false;
+
+function hdrs() {
+  return { 'Accept': 'application/json', 'Content-Type': 'application/json', 'X-UserToken': window.g_ck };
+}
+
+function getVal(obj, field) {
+  if (!obj) return '';
+  var v = obj[field];
+  if (v && typeof v === 'object') return v.display_value || v.value || '';
+  return v || '';
+}
+
+function getRawVal(obj, field) {
+  if (!obj) return '';
+  var v = obj[field];
+  if (v && typeof v === 'object') return v.value || '';
+  return v || '';
+}
+
+function getParams() {
+  var params = {};
+  window.location.search.substring(1).split('&').forEach(function(p) {
+    var kv = p.split('=');
+    if (kv[0]) params[decodeURIComponent(kv[0])] = decodeURIComponent(kv[1] || '');
+  });
+  return params;
+}
+
+function init() {
+  currentUser = window.g_user ? window.g_user.userID : '';
+  var params = getParams();
+  assessmentId = params.assessment || '';
+  enrollmentId = params.enrollment || '';
+
+  if (!assessmentId) {
+    document.getElementById('main-wrap').innerHTML = '<div class="alert alert-error">No assessment specified. <a href="x_1879300_learning_student_dashboard.do" style="color:#c53030">Back to Dashboard</a></div>';
+    return;
+  }
+
+  loadAssessment();
+}
+
+function loadAssessment() {
+  fetch(API + '/' + SCOPE + '_assessments/' + assessmentId + '?sysparm_display_value=all', { headers: hdrs() })
+    .then(function(r){ return r.json(); })
+    .then(function(data) {
+      assessment = data.result;
+      document.getElementById('topbar-title').textContent = getVal(assessment,'title');
+      return checkAttempts();
+    })
+    .then(function(canAttempt) {
+      if (!canAttempt) return;
+      return loadQuestions();
+    })
+    .then(function() {
+      if (questions.length) startAttempt();
+    })
+    .catch(function() {
+      document.getElementById('main-wrap').innerHTML = '<div class="alert alert-error">Failed to load assessment.</div>';
+    });
+}
+
+function checkAttempts() {
+  var maxAttempts = parseInt(getVal(assessment,'max_attempts')) || 0;
+  if (maxAttempts === 0) return Promise.resolve(true);
+  return fetch(API + '/' + SCOPE + '_assessment_attempts?sysparm_query=user=' + currentUser + '^assessment=' + assessmentId + '^status=submitted^ORstatus=graded&sysparm_limit=100', { headers: hdrs() })
+    .then(function(r){ return r.json(); })
+    .then(function(data) {
+      var count = (data.result || []).length;
+      if (count >= maxAttempts) {
+        showTooManyAttempts(count, maxAttempts, data.result);
+        return false;
+      }
+      return true;
+    });
+}
+
+function showTooManyAttempts(count, max, attempts) {
+  var best = attempts.reduce(function(b, a) {
+    return (parseFloat(getVal(a,'percentage_score')) || 0) > (parseFloat(getVal(b,'percentage_score')) || 0) ? a : b;
+  }, attempts[0] || {});
+  var pct = best ? (parseFloat(getVal(best,'percentage_score')) || 0) : 0;
+  document.getElementById('main-wrap').innerHTML =
+    '<div class="results-card">' +
+    '<div class="results-score ' + (parseFloat(getVal(best,'passed')) ? 'pass' : 'fail') + '">' + Math.round(pct) + '%</div>' +
+    '<div class="results-label">Your best score (max ' + max + ' attempt' + (max>1?'s':'')+' used)</div>' +
+    '<a href="x_1879300_learning_student_dashboard.do" class="btn btn-secondary">Back to Dashboard</a>' +
+    '</div>';
+}
+
+function loadQuestions() {
+  return fetch(API + '/' + SCOPE + '_questions?sysparm_query=assessment=' + assessmentId + '^ORDERBYorder_sequence&sysparm_display_value=all&sysparm_limit=100', { headers: hdrs() })
+    .then(function(r){ return r.json(); })
+    .then(function(data) {
+      questions = data.result || [];
+      var mcIds = questions.filter(function(q){ return getVal(q,'question_type') === 'multiple_choice'; }).map(function(q){ return getRawVal(q,'sys_id') || getVal(q,'sys_id'); });
+      if (!mcIds.length) return;
+      return fetch(API + '/' + SCOPE + '_question_choices?sysparm_query=questionIN' + mcIds.join(',') + '^ORDERBYorder_sequence&sysparm_display_value=all&sysparm_limit=500', { headers: hdrs() })
+        .then(function(r){ return r.json(); })
+        .then(function(data) {
+          (data.result || []).forEach(function(c) {
+            var qid = getRawVal(c,'question') || getVal(c,'question');
+            if (!choices[qid]) choices[qid] = [];
+            choices[qid].push(c);
+          });
+        });
+    });
+}
+
+function startAttempt() {
+  var attemptNum = 1;
+  var body = { user: currentUser, assessment: assessmentId, attempt_number: attemptNum, status: 'in_progress', started_at: new Date().toISOString().replace('T',' ').split('.')[0] };
+  fetch(API + '/' + SCOPE + '_assessment_attempts', { method: 'POST', headers: hdrs(), body: JSON.stringify(body) })
+    .then(function(r){ return r.json(); })
+    .then(function(data) {
+      attemptId = getRawVal(data.result,'sys_id') || getVal(data.result,'sys_id');
+      var timeLimitMin = parseInt(getVal(assessment,'time_limit_minutes')) || 0;
+      if (timeLimitMin > 0) {
+        timeLeft = timeLimitMin * 60;
+        startTimer();
+      }
+      renderAssessment();
+    });
+}
+
+function startTimer() {
+  var timerEl = document.getElementById('timer-display');
+  timerEl.classList.remove('hidden');
+  timerInterval = setInterval(function() {
+    timeLeft--;
+    var m = Math.floor(timeLeft / 60);
+    var s = timeLeft % 60;
+    timerEl.textContent = (m < 10 ? '0' : '') + m + ':' + (s < 10 ? '0' : '') + s;
+    if (timeLeft <= 60) timerEl.classList.add('warning');
+    if (timeLeft <= 0) { clearInterval(timerInterval); submitAssessment(); }
+  }, 1000);
+}
+
+function renderAssessment() {
+  var title = getVal(assessment,'title');
+  var atype = getVal(assessment,'assessment_type');
+  var passing = getVal(assessment,'passing_score');
+  var timeLim = getVal(assessment,'time_limit_minutes');
+  var total = questions.reduce(function(s,q){ return s + (parseInt(getVal(q,'points')) || 1); }, 0);
+
+  var html = '<div class="assessment-header">' +
+    '<div class="assessment-title">' + title + '</div>' +
+    '<div class="assessment-meta">' +
+    '<span>&#128203; ' + atype + '</span>' +
+    '<span>&#10003; Passing: ' + passing + '%</span>' +
+    '<span>&#127919; ' + questions.length + ' questions</span>' +
+    '<span>&#9733; ' + total + ' points</span>' +
+    (timeLim && timeLim !== '0' ? '<span>&#9200; ' + timeLim + ' min</span>' : '') +
+    '</div>' +
+    '<div class="progress-row"><span id="answered-count">0 answered</span><span>' + questions.length + ' questions</span></div>' +
+    '<div class="progress-bar-wrap"><div class="progress-bar" id="progress-bar" style="width:0%"></div></div>' +
+    '</div>';
+
+  questions.forEach(function(q, i) {
+    var qid = getRawVal(q,'sys_id') || getVal(q,'sys_id');
+    var qtype = getVal(q,'question_type');
+    var pts = parseInt(getVal(q,'points')) || 1;
+    var hint = getVal(q,'hint');
+
+    html += '<div class="question-card" id="qcard-' + qid + '">' +
+      '<div class="question-num">Question ' + (i+1) + ' of ' + questions.length + '</div>' +
+      '<div class="question-text">' + getVal(q,'question_text') + '</div>' +
+      '<div class="question-points">' + pts + ' point' + (pts>1?'s':'') + '</div>';
+
+    if (hint) {
+      html += '<div class="hint-link" onclick="toggleHint(\'' + qid + '\')">Show hint</div>' +
+        '<div class="hint-box hidden" id="hint-' + qid + '">' + hint + '</div>';
+    }
+
+    if (qtype === 'multiple_choice') {
+      html += '<div class="choices">';
+      var qChoices = choices[qid] || [];
+      var labels = ['A','B','C','D','E','F'];
+      qChoices.forEach(function(c, ci) {
+        var cid = getRawVal(c,'sys_id') || getVal(c,'sys_id');
+        html += '<label class="choice-label" id="choice-' + cid + '" onclick="selectChoice(\'' + qid + '\',\'' + cid + '\')">' +
+          '<input type="radio" name="q-' + qid + '" value="' + cid + '" onclick="event.stopPropagation()" style="display:none" />' +
+          '<span class="choice-letter">' + (labels[ci] || ci) + '.</span>' +
+          '<span class="choice-text-val">' + getVal(c,'choice_text') + '</span>' +
+          '</label>';
+      });
+      html += '</div>';
+    } else if (qtype === 'true_false') {
+      html += '<div class="tf-choices">' +
+        '<button class="tf-btn" id="tf-' + qid + '-true" onclick="selectTF(\'' + qid + '\',\'true\')">True</button>' +
+        '<button class="tf-btn" id="tf-' + qid + '-false" onclick="selectTF(\'' + qid + '\',\'false\')">False</button>' +
+        '</div>';
+    } else {
+      var ph = qtype === 'essay' ? 'Write your essay response here...' : 'Enter your answer here...';
+      var rows = qtype === 'essay' ? 6 : 3;
+      html += '<textarea class="text-answer" id="ta-' + qid + '" rows="' + rows + '" placeholder="' + ph + '" oninput="recordText(\'' + qid + '\',this.value)"></textarea>';
+    }
+
+    html += '</div>';
+  });
+
+  document.getElementById('main-wrap').innerHTML = html;
+  document.getElementById('submit-bar').classList.remove('hidden');
+  updateProgress();
+}
+
+function toggleHint(qid) {
+  var el = document.getElementById('hint-' + qid);
+  if (el) el.classList.toggle('hidden');
+}
+
+function selectChoice(qid, choiceId) {
+  var qChoices = choices[qid] || [];
+  qChoices.forEach(function(c) {
+    var cid = getRawVal(c,'sys_id') || getVal(c,'sys_id');
+    var el = document.getElementById('choice-' + cid);
+    if (el) el.classList.remove('selected');
+  });
+  var chosen = document.getElementById('choice-' + choiceId);
+  if (chosen) { chosen.classList.add('selected'); var inp = chosen.querySelector('input'); if (inp) inp.checked = true; }
+  answers[qid] = { type: 'multiple_choice', choiceId: choiceId };
+  document.getElementById('qcard-' + qid).classList.add('answered');
+  updateProgress();
+}
+
+function selectTF(qid, val) {
+  ['true','false'].forEach(function(v) {
+    var btn = document.getElementById('tf-' + qid + '-' + v);
+    if (btn) { btn.classList.remove('selected'); }
+  });
+  var chosen = document.getElementById('tf-' + qid + '-' + val);
+  if (chosen) chosen.classList.add('selected');
+  answers[qid] = { type: 'true_false', value: val };
+  document.getElementById('qcard-' + qid).classList.add('answered');
+  updateProgress();
+}
+
+function recordText(qid, val) {
+  answers[qid] = { type: 'text', value: val };
+  if (val.trim()) document.getElementById('qcard-' + qid).classList.add('answered');
+  else document.getElementById('qcard-' + qid).classList.remove('answered');
+  updateProgress();
+}
+
+function updateProgress() {
+  var answered = Object.keys(answers).length;
+  var total = questions.length;
+  var pct = total ? Math.round(answered / total * 100) : 0;
+  var pb = document.getElementById('progress-bar');
+  var ac = document.getElementById('answered-count');
+  var ss = document.getElementById('submit-status');
+  if (pb) pb.style.width = pct + '%';
+  if (ac) ac.textContent = answered + ' answered';
+  if (ss) ss.textContent = answered + ' of ' + total + ' answered';
+}
+
+function submitAssessment() {
+  if (submitted) return;
+  var unanswered = questions.length - Object.keys(answers).length;
+  if (unanswered > 0 && !confirm(unanswered + ' question(s) unanswered. Submit anyway?')) return;
+  submitted = true;
+  if (timerInterval) clearInterval(timerInterval);
+  document.getElementById('submit-btn').disabled = true;
+  document.getElementById('submit-btn').textContent = 'Submitting...';
+
+  var now = new Date().toISOString().replace('T',' ').split('.')[0];
+  var savePromises = questions.map(function(q) {
+    var qid = getRawVal(q,'sys_id') || getVal(q,'sys_id');
+    var ans = answers[qid];
+    var body = { attempt: attemptId, question: qid };
+    if (ans) {
+      if (ans.type === 'multiple_choice') body.selected_choice = ans.choiceId;
+      else if (ans.type === 'true_false') body.true_false_answer = ans.value;
+      else body.text_answer = ans.value || '';
+    }
+    return fetch(API + '/' + SCOPE + '_question_responses', { method: 'POST', headers: hdrs(), body: JSON.stringify(body) }).catch(function(){});
+  });
+
+  Promise.all(savePromises).then(function() {
+    return fetch(API + '/' + SCOPE + '_assessment_attempts/' + attemptId, { method: 'PATCH', headers: hdrs(), body: JSON.stringify({ status: 'submitted', submitted_at: now }) });
+  }).then(function() {
+    var showResults = getVal(assessment,'show_results_immediately') === 'true' || assessment.show_results_immediately === true;
+    if (showResults) {
+      return gradeAndShow();
+    } else {
+      showSubmittedMessage();
+    }
+  }).catch(function() {
+    document.getElementById('submit-btn').disabled = false;
+    document.getElementById('submit-btn').textContent = 'Submit Assessment';
+    submitted = false;
+  });
+}
+
+function gradeAndShow() {
+  return fetch(API + '/' + SCOPE + '_assessment_attempts/' + attemptId + '?sysparm_display_value=all', { headers: hdrs() })
+    .then(function(r){ return r.json(); })
+    .then(function(data) {
+      var attempt = data.result;
+      var earned = parseFloat(getVal(attempt,'earned_points')) || 0;
+      var total = parseFloat(getVal(attempt,'total_points')) || 0;
+      var pct = parseFloat(getVal(attempt,'percentage_score')) || (total > 0 ? Math.round(earned / total * 100) : 0);
+      var passed = attempt.passed === true || attempt.passed === 'true' || pct >= parseFloat(getVal(assessment,'passing_score'));
+      showResults(earned, total, pct, passed);
+    });
+}
+
+function showResults(earned, total, pct, passed) {
+  document.getElementById('submit-bar').classList.add('hidden');
+  document.getElementById('timer-display').classList.add('hidden');
+
+  var roundedPct = Math.round(pct);
+  var html = '<div class="results-card">' +
+    '<div class="results-score ' + (passed ? 'pass' : 'fail') + '">' + roundedPct + '%</div>' +
+    '<div class="results-label">' + (passed ? 'Congratulations! You passed!' : 'Not quite. Better luck next time!') + '</div>' +
+    '<div class="results-detail">' +
+    '<div class="result-box ' + (passed ? 'result-passed' : 'result-failed') + '"><div class="result-box-num">' + roundedPct + '%</div><div class="result-box-label">Score</div></div>' +
+    '<div class="result-box"><div class="result-box-num">' + earned + '/' + total + '</div><div class="result-box-label">Points</div></div>' +
+    '<div class="result-box"><div class="result-box-num">' + getVal(assessment,'passing_score') + '%</div><div class="result-box-label">Required to Pass</div></div>' +
+    '</div>' +
+    '<div style="display:flex;gap:12px;justify-content:center">' +
+    '<a href="x_1879300_learning_student_dashboard.do" class="btn btn-secondary">Dashboard</a>' +
+    (passed ? '' : '<button class="btn btn-primary" onclick="location.reload()">Retry</button>') +
+    '</div></div>';
+
+  if (questions.length) {
+    html += '<div class="answers-review"><h3 style="margin-bottom:16px;color:#2d3748">Your Answers</h3>';
+    questions.forEach(function(q, i) {
+      var qid = getRawVal(q,'sys_id') || getVal(q,'sys_id');
+      var ans = answers[qid];
+      var qtype = getVal(q,'question_type');
+      var correct = getVal(q,'correct_answer_text');
+      var isCorrect = false;
+      var yourAnswer = 'Not answered';
+
+      if (ans && qtype === 'multiple_choice') {
+        var qChoices = choices[qid] || [];
+        var selectedChoice = qChoices.find(function(c){ return getRawVal(c,'sys_id') === ans.choiceId || getVal(c,'sys_id') === ans.choiceId; });
+        if (selectedChoice) {
+          yourAnswer = getVal(selectedChoice,'choice_text');
+          isCorrect = selectedChoice.is_correct === true || selectedChoice.is_correct === 'true';
+        }
+      } else if (ans && qtype === 'true_false') {
+        yourAnswer = ans.value;
+        isCorrect = correct && ans.value === correct;
+      } else if (ans) {
+        yourAnswer = ans.value || '';
+      }
+
+      html += '<div class="answer-item ' + (isCorrect ? 'correct' : 'incorrect') + '">' +
+        '<strong>Q' + (i+1) + ':</strong> ' + getVal(q,'question_text') + '<br/>' +
+        '<span style="font-size:.85rem;color:' + (isCorrect ? '#22543d' : '#c53030') + '">Your answer: ' + yourAnswer + '</span>' +
+        (qtype === 'multiple_choice' || qtype === 'true_false' ? '' : (correct ? '<br/><span style="font-size:.85rem;color:#718096">Reference: ' + correct + '</span>' : '')) +
+        '</div>';
+    });
+    html += '</div>';
+  }
+
+  document.getElementById('main-wrap').innerHTML = html;
+}
+
+function showSubmittedMessage() {
+  document.getElementById('submit-bar').classList.add('hidden');
+  document.getElementById('main-wrap').innerHTML =
+    '<div class="results-card">' +
+    '<div style="font-size:3rem;margin-bottom:16px">&#128203;</div>' +
+    '<div class="assessment-title" style="margin-bottom:10px">Assessment Submitted!</div>' +
+    '<div class="results-label" style="margin-bottom:24px">Your instructor will review and grade your submission.</div>' +
+    '<a href="x_1879300_learning_student_dashboard.do" class="btn btn-secondary">Back to Dashboard</a>' +
+    '</div>';
+}
+
+document.addEventListener('DOMContentLoaded', init);
+</script>
+</body>
+</html>]]></html>
+        <name>assessment</name>
+        <processing_script/>
+        <sys_class_name>sys_ui_page</sys_class_name>
+        <sys_created_by>admin</sys_created_by>
+        <sys_created_on>2026-04-28 00:00:00</sys_created_on>
+        <sys_id>f3a4b5c6d7e80901abcdef1234567890</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>assessment</sys_name>
+        <sys_package display_value="Learning Man" source="x_1879300_learning">95470fa283a5f21071a1ba96feaad3cb</sys_package>
+        <sys_policy/>
+        <sys_scope display_value="Learning Man">95470fa283a5f21071a1ba96feaad3cb</sys_scope>
+        <sys_update_name>sys_ui_page_f3a4b5c6d7e80901abcdef1234567890</sys_update_name>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2026-04-28 00:00:00</sys_updated_on>
+    </sys_ui_page>
+</record_update>

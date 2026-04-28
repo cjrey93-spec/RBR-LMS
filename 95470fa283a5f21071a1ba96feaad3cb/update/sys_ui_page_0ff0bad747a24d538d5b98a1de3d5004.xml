@@ -2,43 +2,310 @@
     <sys_ui_page action="INSERT_OR_UPDATE">
         <category>general</category>
         <client_script/>
-        <description>Student learning dashboard showing progress, certificates, and available courses</description>
+        <description>Student learning dashboard showing progress, certificates, enrolled courses, and recommendations</description>
         <direct>true</direct>
         <endpoint>x_1879300_learning_student_dashboard.do</endpoint>
-        <html><![CDATA[<!-- @fluent-import-html WARNING: This file was imported from the output of a static build. Modifications of any kind are likely to result in unintended behavior. In most cases, you should edit the source file of the HTML imported below. If you are absolutely certain you want to take control of this HTML, you can remove this comment to prevent the SDK from regenerating it. However, you will then be responsible for the management of this HTML in your Fluent file. -->
-<html>
-  <head>
-    <title>Student Dashboard - Learning Management System</title>
-    <meta charset="UTF-8"></meta>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"></meta>
-    <!-- ServiceNow globals and scripts -->
-    <!-- @sdk:now-ux-globals -->
-    <!-- Resolved from sdk:now-ux-globals tag at NowSDK build time to support earlier Glide releases -->
-    <script>window.NOW = {};
-window.NOW.user = {};
-window.NOW.batch_glide_ajax_requests = false;
-window.NOW.isUsingPolaris = true;
-window.NOW.exclude_dark_theme = "false";
-window.g_ck = "$[gs.getSession().getSessionToken() || gs.getSessionToken()]";</script>
-    <!-- Include ServiceNow's required scripts -->
-    <g:requires name="scripts/doctype/functions_bootstrap14.js"></g:requires>
-    <g:requires name="scripts/lib/prototype.js"></g:requires>
-    <g:requires name="scripts/classes/ajax/GlideURL.js"></g:requires>
-    <g:requires name="scripts/doctype/CustomEventManager.js"></g:requires>
-    <g:requires name="scripts/classes/ajax/GlideAjax.js"></g:requires>
-    <g:requires name="scripts/classes/GlideUser.js"></g:requires>
-    <g2:client_script type="user"></g2:client_script>
-    <link rel="preload" href="/uxasset/set-cache-buster/$[UxFrameworkScriptables.getFlushTimestamp()].js" as="script"></link>
-    <g:requires name="scripts/polaris_theme_refresh_observer.js"></g:requires>
-    <link data-source-id="glide-theme" id="polarisberg_theme_variables" rel="stylesheet" href="/$uxappimmutables.do?sysparm_request_type=ux_theme$[AMP]sysparm_app_sys_id=c86a62e2c7022010099a308dc7c26022$[AMP]uxpcb=$[sn_ui.PolarisUI.getThemeVariableCssCacheKey()]"></link>
-    <script type="module" src="/uxasset/externals/@devsnc/library-uxf/index.jsdbx"></script>
-    <!-- @sdk:now-ux-globals -->
-    <!-- Main React entry point -->
-    <script src="/uxasset/externals/x_1879300_learning/dashboard-main.jsdbx?uxpcb=$[UxFrameworkScriptables.getFlushTimestamp()]" type="module"></script>
-  </head>
-  <body>
-    <div id="dashboard-root"></div>
-  </body>
+        <html><![CDATA[<html>
+<head>
+  <title>Student Dashboard - LMS</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <script>window.NOW={};window.NOW.user={};window.NOW.batch_glide_ajax_requests=false;window.NOW.isUsingPolaris=true;window.g_ck="$[gs.getSession().getSessionToken() || gs.getSessionToken()]";</script>
+  <g:requires name="scripts/doctype/functions_bootstrap14.js" />
+  <g:requires name="scripts/lib/prototype.js" />
+  <g:requires name="scripts/classes/ajax/GlideURL.js" />
+  <g:requires name="scripts/doctype/CustomEventManager.js" />
+  <g:requires name="scripts/classes/ajax/GlideAjax.js" />
+  <g:requires name="scripts/classes/GlideUser.js" />
+  <g2:client_script type="user" />
+  <style>
+    *{margin:0;padding:0;box-sizing:border-box}
+    body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:#f0f2f8;min-height:100vh}
+    .topbar{background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);padding:20px 32px;display:flex;justify-content:space-between;align-items:center}
+    .topbar-brand{color:#fff;font-size:1.1rem;font-weight:700}
+    .topbar-nav{display:flex;gap:12px}
+    .topbar-nav a{color:rgba(255,255,255,.85);text-decoration:none;font-size:.85rem;padding:6px 14px;border-radius:20px;border:1px solid rgba(255,255,255,.35)}
+    .topbar-nav a:hover{background:rgba(255,255,255,.15)}
+    .hero{background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);padding:32px 32px 48px;color:#fff}
+    .hero h1{font-size:2rem;margin-bottom:6px}
+    .hero p{opacity:.8}
+    .stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;max-width:1280px;margin:-28px auto 0;padding:0 24px}
+    .stat-card{background:#fff;border-radius:12px;padding:20px 24px;box-shadow:0 4px 16px rgba(0,0,0,.1);text-align:center}
+    .stat-num{font-size:2.2rem;font-weight:800;color:#667eea}
+    .stat-label{font-size:.85rem;color:#718096;margin-top:4px}
+    .container{max-width:1280px;margin:40px auto;padding:0 24px}
+    .section{margin-bottom:40px}
+    .section-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px}
+    .section-title{font-size:1.3rem;font-weight:700;color:#2d3748}
+    .see-all{font-size:.85rem;color:#667eea;text-decoration:none;font-weight:600}
+    .see-all:hover{text-decoration:underline}
+    .enrollment-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:16px}
+    .enroll-card{background:#fff;border-radius:12px;padding:20px;box-shadow:0 2px 8px rgba(0,0,0,.06);border:2px solid transparent;transition:all .2s}
+    .enroll-card:hover{border-color:#667eea;transform:translateY(-2px);box-shadow:0 6px 20px rgba(0,0,0,.1)}
+    .enroll-title{font-size:1rem;font-weight:700;color:#2d3748;margin-bottom:4px}
+    .enroll-meta{font-size:.8rem;color:#a0aec0;margin-bottom:14px}
+    .progress-bar-wrap{background:#e2e8f0;border-radius:99px;height:8px;margin-bottom:8px;overflow:hidden}
+    .progress-bar{height:100%;border-radius:99px;background:linear-gradient(90deg,#667eea,#764ba2);transition:width .4s}
+    .progress-label{display:flex;justify-content:space-between;font-size:.8rem;color:#718096;margin-bottom:14px}
+    .btn{padding:8px 16px;border:none;border-radius:8px;cursor:pointer;font-size:.85rem;font-weight:600;transition:all .2s;display:inline-flex;align-items:center;gap:6px;text-decoration:none}
+    .btn-primary{background:linear-gradient(135deg,#667eea,#764ba2);color:#fff}
+    .btn-primary:hover{transform:translateY(-1px);box-shadow:0 3px 10px rgba(102,126,234,.4)}
+    .btn-secondary{background:#f7fafc;color:#4a5568;border:2px solid #e2e8f0}
+    .badge{padding:3px 10px;border-radius:20px;font-size:.75rem;font-weight:700}
+    .badge-active{background:#bee3f8;color:#2b6cb0}
+    .badge-completed{background:#c6f6d5;color:#22543d}
+    .badge-paused{background:#fbd38d;color:#c05621}
+    .badge-beginner{background:#bee3f8;color:#2b6cb0}
+    .badge-intermediate{background:#fbb6ce;color:#b83280}
+    .badge-advanced{background:#fbd38d;color:#c05621}
+    .cert-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:16px}
+    .cert-card{background:linear-gradient(135deg,#fff9f0,#fff);border:2px solid #fbd38d;border-radius:12px;padding:20px;text-align:center;box-shadow:0 2px 8px rgba(0,0,0,.06)}
+    .cert-icon{font-size:2.5rem;margin-bottom:10px}
+    .cert-title{font-size:1rem;font-weight:700;color:#2d3748;margin-bottom:4px}
+    .cert-meta{font-size:.8rem;color:#a0aec0;margin-bottom:12px}
+    .cert-num{font-size:.75rem;color:#c05621;font-family:monospace;background:#fef3c7;padding:4px 8px;border-radius:4px}
+    .activity-list{background:#fff;border-radius:12px;padding:20px;box-shadow:0 2px 8px rgba(0,0,0,.06)}
+    .activity-item{display:flex;align-items:center;gap:14px;padding:12px 0;border-bottom:1px solid #f0f0f0}
+    .activity-item:last-child{border-bottom:none}
+    .activity-icon{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.1rem;flex-shrink:0}
+    .ai-blue{background:#ebf4ff}
+    .ai-green{background:#f0fff4}
+    .ai-yellow{background:#fefcbf}
+    .activity-text{flex:1}
+    .activity-title{font-size:.9rem;font-weight:600;color:#2d3748}
+    .activity-sub{font-size:.8rem;color:#a0aec0}
+    .activity-time{font-size:.75rem;color:#a0aec0;white-space:nowrap}
+    .loading{text-align:center;padding:40px;color:#718096}
+    .spinner{border:3px solid #e2e8f0;border-top:3px solid #667eea;border-radius:50%;width:32px;height:32px;animation:spin .8s linear infinite;margin:0 auto 12px}
+    @keyframes spin{to{transform:rotate(360deg)}}
+    .empty-state{text-align:center;padding:40px;color:#a0aec0;background:#fff;border-radius:12px}
+    .empty-state .icon{font-size:3rem;margin-bottom:12px}
+    .two-col{display:grid;grid-template-columns:2fr 1fr;gap:24px}
+    @media(max-width:768px){.stats-row{grid-template-columns:1fr 1fr}.two-col{grid-template-columns:1fr}}
+  </style>
+</head>
+<body>
+<div class="topbar">
+  <div class="topbar-brand">Learning Management System</div>
+  <div class="topbar-nav">
+    <a href="x_1879300_learning_catalog.do">Course Catalog</a>
+    <a href="x_1879300_learning_instructor_dashboard.do">Instructor</a>
+  </div>
+</div>
+
+<div class="hero">
+  <h1 id="welcome-msg">Welcome back!</h1>
+  <p>Track your learning progress and discover new courses</p>
+</div>
+
+<div class="stats-row">
+  <div class="stat-card">
+    <div class="stat-num" id="stat-enrolled">-</div>
+    <div class="stat-label">Enrolled Courses</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-num" id="stat-completed">-</div>
+    <div class="stat-label">Completed</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-num" id="stat-inprogress">-</div>
+    <div class="stat-label">In Progress</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-num" id="stat-certs">-</div>
+    <div class="stat-label">Certificates</div>
+  </div>
+</div>
+
+<div class="container">
+  <div class="two-col">
+    <div>
+      <!-- In Progress -->
+      <div class="section">
+        <div class="section-header">
+          <h2 class="section-title">&#9654; Continue Learning</h2>
+          <a href="x_1879300_learning_catalog.do" class="see-all">Browse All</a>
+        </div>
+        <div id="inprogress-list">
+          <div class="loading"><div class="spinner"></div>Loading...</div>
+        </div>
+      </div>
+
+      <!-- Completed -->
+      <div class="section">
+        <div class="section-header">
+          <h2 class="section-title">&#10003; Completed Courses</h2>
+        </div>
+        <div id="completed-list">
+          <div class="loading"><div class="spinner"></div>Loading...</div>
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <!-- Certificates -->
+      <div class="section">
+        <h2 class="section-title" style="margin-bottom:16px">&#127942; Certificates</h2>
+        <div id="certs-list">
+          <div class="loading"><div class="spinner"></div>Loading...</div>
+        </div>
+      </div>
+
+      <!-- Recent Activity -->
+      <div class="section">
+        <h2 class="section-title" style="margin-bottom:16px">&#128336; Recent Activity</h2>
+        <div id="activity-list">
+          <div class="loading"><div class="spinner"></div>Loading...</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+var API = '/api/now/table';
+var SCOPE = 'x_1879300_learning';
+var currentUser = '';
+
+function hdrs() {
+  return { 'Accept': 'application/json', 'Content-Type': 'application/json', 'X-UserToken': window.g_ck };
+}
+
+function getVal(obj, field) {
+  if (!obj) return '';
+  var v = obj[field];
+  if (v && typeof v === 'object') return v.display_value || v.value || '';
+  return v || '';
+}
+
+function getRawVal(obj, field) {
+  if (!obj) return '';
+  var v = obj[field];
+  if (v && typeof v === 'object') return v.value || '';
+  return v || '';
+}
+
+function init() {
+  if (window.g_user) {
+    currentUser = window.g_user.userID;
+    var name = window.g_user.firstName || window.g_user.userName || 'Student';
+    document.getElementById('welcome-msg').textContent = 'Welcome back, ' + name + '!';
+  }
+  loadEnrollments();
+  loadCertificates();
+  loadActivity();
+}
+
+function loadEnrollments() {
+  fetch(API + '/' + SCOPE + '_student_enrollments?sysparm_query=student=' + currentUser + '&sysparm_display_value=all&sysparm_limit=100&sysparm_fields=sys_id,course,status,progress_percentage,enrollment_date,completion_date', { headers: hdrs() })
+    .then(function(r){ return r.json(); })
+    .then(function(data) {
+      var enrollments = data.result || [];
+      var inprog = enrollments.filter(function(e){ return getVal(e,'status') === 'active'; });
+      var completed = enrollments.filter(function(e){ return getVal(e,'status') === 'completed'; });
+      var total = enrollments.length;
+
+      document.getElementById('stat-enrolled').textContent = total;
+      document.getElementById('stat-completed').textContent = completed.length;
+      document.getElementById('stat-inprogress').textContent = inprog.length;
+
+      renderEnrollments('inprogress-list', inprog, true);
+      renderEnrollments('completed-list', completed, false);
+    })
+    .catch(function(){
+      document.getElementById('inprogress-list').innerHTML = '<div class="empty-state"><div class="icon">&#128218;</div><p>Failed to load enrollments.</p></div>';
+      document.getElementById('completed-list').innerHTML = '';
+    });
+}
+
+function renderEnrollments(containerId, enrollments, showContinue) {
+  var el = document.getElementById(containerId);
+  if (!enrollments.length) {
+    el.innerHTML = '<div class="empty-state"><div class="icon">&#128218;</div><p>' + (showContinue ? 'No courses in progress. <a href="x_1879300_learning_catalog.do" style="color:#667eea">Browse catalog</a>!' : 'No completed courses yet.') + '</p></div>';
+    return;
+  }
+  var grid = document.createElement('div');
+  grid.className = 'enrollment-grid';
+  enrollments.slice(0, showContinue ? 6 : 4).forEach(function(e) {
+    var courseName = getVal(e,'course');
+    var courseId = getRawVal(e,'course');
+    var pct = parseFloat(getVal(e,'progress_percentage')) || 0;
+    var status = getVal(e,'status');
+    var enrollId = getRawVal(e,'sys_id') || getVal(e,'sys_id');
+
+    var card = document.createElement('div');
+    card.className = 'enroll-card';
+    card.innerHTML =
+      '<div class="enroll-title">' + courseName + '</div>' +
+      '<div class="enroll-meta">Enrolled: ' + (getVal(e,'enrollment_date') || '').split(' ')[0] +
+        (status === 'completed' && getVal(e,'completion_date') ? ' | Completed: ' + getVal(e,'completion_date').split(' ')[0] : '') + '</div>' +
+      '<div class="progress-bar-wrap"><div class="progress-bar" style="width:' + pct + '%"></div></div>' +
+      '<div class="progress-label"><span>' + Math.round(pct) + '% complete</span><span class="badge badge-' + status + '">' + status + '</span></div>' +
+      (showContinue ? '<a href="x_1879300_learning_lms.do?course=' + courseId + '&enrollment=' + enrollId + '" class="btn btn-primary">Continue</a>' :
+        '<a href="x_1879300_learning_lms.do?course=' + courseId + '&enrollment=' + enrollId + '" class="btn btn-secondary">Review</a>');
+    grid.appendChild(card);
+  });
+  el.innerHTML = '';
+  el.appendChild(grid);
+}
+
+function loadCertificates() {
+  fetch(API + '/' + SCOPE + '_certificates?sysparm_query=student=' + currentUser + '&sysparm_display_value=all&sysparm_limit=20', { headers: hdrs() })
+    .then(function(r){ return r.json(); })
+    .then(function(data) {
+      var certs = data.result || [];
+      document.getElementById('stat-certs').textContent = certs.length;
+      var el = document.getElementById('certs-list');
+      if (!certs.length) {
+        el.innerHTML = '<div class="empty-state"><div class="icon">&#127942;</div><p>Complete courses to earn certificates!</p></div>';
+        return;
+      }
+      var html = '';
+      certs.forEach(function(c) {
+        html += '<div class="cert-card">' +
+          '<div class="cert-icon">&#127942;</div>' +
+          '<div class="cert-title">' + getVal(c,'title') + '</div>' +
+          '<div class="cert-meta">Issued: ' + (getVal(c,'issue_date') || '').split(' ')[0] + '</div>' +
+          (getVal(c,'certificate_number') ? '<div class="cert-num">' + getVal(c,'certificate_number') + '</div>' : '') +
+          '</div>';
+      });
+      el.innerHTML = '<div class="cert-grid">' + html + '</div>';
+    })
+    .catch(function(){ document.getElementById('certs-list').innerHTML = ''; });
+}
+
+function loadActivity() {
+  fetch(API + '/' + SCOPE + '_lesson_progress?sysparm_query=student=' + currentUser + '^ORDERBYDESCstarted_at&sysparm_display_value=all&sysparm_limit=8', { headers: hdrs() })
+    .then(function(r){ return r.json(); })
+    .then(function(data) {
+      var items = data.result || [];
+      var el = document.getElementById('activity-list');
+      if (!items.length) {
+        el.innerHTML = '<div class="empty-state"><div class="icon">&#128336;</div><p>No activity yet.</p></div>';
+        return;
+      }
+      var html = '<div class="activity-list">';
+      items.forEach(function(item) {
+        var st = getVal(item,'status');
+        var icon = st === 'completed' ? '&#10003;' : '&#9654;';
+        var iconClass = st === 'completed' ? 'ai-green' : 'ai-blue';
+        var timeStr = (getVal(item,'started_at') || '').split(' ')[0];
+        html += '<div class="activity-item">' +
+          '<div class="activity-icon ' + iconClass + '">' + icon + '</div>' +
+          '<div class="activity-text">' +
+            '<div class="activity-title">' + (st === 'completed' ? 'Completed: ' : 'Viewed: ') + getVal(item,'lesson') + '</div>' +
+          '</div>' +
+          '<div class="activity-time">' + timeStr + '</div>' +
+          '</div>';
+      });
+      el.innerHTML = html + '</div>';
+    })
+    .catch(function(){ document.getElementById('activity-list').innerHTML = ''; });
+}
+
+document.addEventListener('DOMContentLoaded', init);
+</script>
+</body>
 </html>]]></html>
         <name>student_dashboard</name>
         <processing_script/>
@@ -46,13 +313,13 @@ window.g_ck = "$[gs.getSession().getSessionToken() || gs.getSessionToken()]";</s
         <sys_created_by>admin</sys_created_by>
         <sys_created_on>2025-12-15 20:06:12</sys_created_on>
         <sys_id>0ff0bad747a24d538d5b98a1de3d5004</sys_id>
-        <sys_mod_count>1</sys_mod_count>
+        <sys_mod_count>2</sys_mod_count>
         <sys_name>student_dashboard</sys_name>
         <sys_package display_value="Learning Man" source="x_1879300_learning">95470fa283a5f21071a1ba96feaad3cb</sys_package>
         <sys_policy/>
         <sys_scope display_value="Learning Man">95470fa283a5f21071a1ba96feaad3cb</sys_scope>
         <sys_update_name>sys_ui_page_0ff0bad747a24d538d5b98a1de3d5004</sys_update_name>
         <sys_updated_by>admin</sys_updated_by>
-        <sys_updated_on>2026-02-14 18:28:46</sys_updated_on>
+        <sys_updated_on>2026-04-28 00:00:00</sys_updated_on>
     </sys_ui_page>
 </record_update>

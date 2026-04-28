@@ -1,0 +1,425 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sys_ui_page">
+    <sys_ui_page action="INSERT_OR_UPDATE">
+        <category>general</category>
+        <client_script/>
+        <description>Course catalog for browsing, searching, and enrolling in courses and learning tracks</description>
+        <direct>true</direct>
+        <endpoint>x_1879300_learning_catalog.do</endpoint>
+        <html><![CDATA[<html>
+<head>
+  <title>Course Catalog - LMS</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <script>window.NOW={};window.NOW.user={};window.NOW.batch_glide_ajax_requests=false;window.NOW.isUsingPolaris=true;window.g_ck="$[gs.getSession().getSessionToken() || gs.getSessionToken()]";</script>
+  <g:requires name="scripts/doctype/functions_bootstrap14.js" />
+  <g:requires name="scripts/lib/prototype.js" />
+  <g:requires name="scripts/classes/ajax/GlideURL.js" />
+  <g:requires name="scripts/doctype/CustomEventManager.js" />
+  <g:requires name="scripts/classes/ajax/GlideAjax.js" />
+  <g:requires name="scripts/classes/GlideUser.js" />
+  <g2:client_script type="user" />
+  <style>
+    *{margin:0;padding:0;box-sizing:border-box}
+    body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:#f0f2f8;min-height:100vh}
+    .hero{background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);padding:48px 24px;text-align:center;color:#fff}
+    .hero h1{font-size:2.4rem;margin-bottom:10px}
+    .hero p{opacity:.85;font-size:1.1rem;margin-bottom:24px}
+    .search-bar{display:flex;max-width:600px;margin:0 auto;gap:0;background:#fff;border-radius:12px;overflow:hidden;box-shadow:0 4px 20px rgba(0,0,0,.15)}
+    .search-bar input{flex:1;padding:14px 20px;border:none;font-size:1rem;outline:none;color:#2d3748}
+    .search-bar button{padding:14px 24px;background:#667eea;color:#fff;border:none;cursor:pointer;font-size:.95rem;font-weight:600;transition:background .2s}
+    .search-bar button:hover{background:#5a67d8}
+    .nav-links{margin-top:16px;display:flex;justify-content:center;gap:16px}
+    .nav-links a{color:rgba(255,255,255,.85);text-decoration:none;font-size:.9rem;padding:4px 12px;border-radius:20px;border:1px solid rgba(255,255,255,.4)}
+    .nav-links a:hover{background:rgba(255,255,255,.15)}
+    .container{max-width:1280px;margin:0 auto;padding:32px 24px}
+    .filters{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:28px;align-items:center}
+    .filter-group{display:flex;align-items:center;gap:8px}
+    .filter-group label{font-size:.85rem;font-weight:600;color:#4a5568;white-space:nowrap}
+    .filter-group select{padding:8px 12px;border:2px solid #e2e8f0;border-radius:8px;font-size:.9rem;color:#2d3748;background:#fff;cursor:pointer}
+    .filter-group select:focus{outline:none;border-color:#667eea}
+    .results-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px}
+    .results-header h2{font-size:1.3rem;color:#2d3748}
+    .results-count{color:#718096;font-size:.9rem}
+    .course-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:20px}
+    .course-card{background:#fff;border-radius:14px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,.06);transition:all .25s;border:2px solid transparent}
+    .course-card:hover{transform:translateY(-4px);box-shadow:0 8px 24px rgba(0,0,0,.12);border-color:#667eea}
+    .card-header{height:8px;background:linear-gradient(135deg,#667eea,#764ba2)}
+    .card-body{padding:20px}
+    .card-category{font-size:.75rem;font-weight:700;color:#667eea;text-transform:uppercase;letter-spacing:.05em;margin-bottom:8px}
+    .card-title{font-size:1.1rem;font-weight:700;color:#2d3748;margin-bottom:8px;line-height:1.3}
+    .card-desc{font-size:.85rem;color:#718096;line-height:1.5;margin-bottom:14px;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+    .card-meta{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px}
+    .badge{padding:3px 10px;border-radius:20px;font-size:.75rem;font-weight:700}
+    .badge-beginner{background:#bee3f8;color:#2b6cb0}
+    .badge-intermediate{background:#fbb6ce;color:#b83280}
+    .badge-advanced{background:#fbd38d;color:#c05621}
+    .card-stats{display:flex;gap:16px;font-size:.8rem;color:#a0aec0;margin-bottom:14px}
+    .card-stats span{display:flex;align-items:center;gap:4px}
+    .btn{padding:10px 20px;border:none;border-radius:8px;cursor:pointer;font-size:.9rem;font-weight:600;transition:all .2s;width:100%;text-align:center}
+    .btn-enroll{background:linear-gradient(135deg,#667eea,#764ba2);color:#fff}
+    .btn-enroll:hover{transform:translateY(-1px);box-shadow:0 4px 12px rgba(102,126,234,.4)}
+    .btn-enrolled{background:#c6f6d5;color:#22543d;cursor:default}
+    .btn-prereq{background:#fed7d7;color:#c53030;cursor:not-allowed}
+    .track-section{margin-top:48px}
+    .section-title{font-size:1.5rem;font-weight:700;color:#2d3748;margin-bottom:20px;display:flex;align-items:center;gap:10px}
+    .track-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:20px}
+    .track-card{background:#fff;border-radius:14px;padding:20px;box-shadow:0 2px 8px rgba(0,0,0,.06);border-left:5px solid #764ba2;transition:all .2s}
+    .track-card:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(0,0,0,.1)}
+    .track-title{font-size:1.1rem;font-weight:700;color:#2d3748;margin-bottom:6px}
+    .track-desc{font-size:.85rem;color:#718096;line-height:1.5;margin-bottom:12px}
+    .track-meta{font-size:.8rem;color:#a0aec0;margin-bottom:12px}
+    .btn-track{background:#f0ebff;color:#553c9a;border:none;border-radius:8px;padding:8px 16px;cursor:pointer;font-weight:600;font-size:.85rem;transition:all .2s}
+    .btn-track:hover{background:#e9d8fd}
+    .alert{padding:12px 16px;border-radius:8px;margin-bottom:16px;font-size:.9rem}
+    .alert-success{background:#c6f6d5;color:#22543d}
+    .alert-error{background:#fed7d7;color:#c53030}
+    .hidden{display:none!important}
+    .loading{text-align:center;padding:40px;color:#718096}
+    .spinner{border:3px solid #e2e8f0;border-top:3px solid #667eea;border-radius:50%;width:32px;height:32px;animation:spin .8s linear infinite;margin:0 auto 12px}
+    @keyframes spin{to{transform:rotate(360deg)}}
+    .empty-state{text-align:center;padding:60px;color:#a0aec0}
+    .empty-state .icon{font-size:3.5rem;margin-bottom:16px}
+    .prereq-list{font-size:.8rem;color:#c05621;margin-top:6px}
+    #msg-global{position:fixed;top:20px;right:20px;z-index:999;max-width:360px}
+    .modal-backdrop{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:100;display:flex;align-items:center;justify-content:center}
+    .modal{background:#fff;border-radius:16px;padding:28px;max-width:480px;width:90%;max-height:80vh;overflow-y:auto}
+    .modal h3{font-size:1.3rem;color:#2d3748;margin-bottom:16px}
+    .modal-close{float:right;background:none;border:none;font-size:1.4rem;cursor:pointer;color:#718096}
+  </style>
+</head>
+<body>
+<div id="msg-global"></div>
+
+<div class="hero">
+  <h1>Course Catalog</h1>
+  <p>Explore courses and learning tracks to advance your skills</p>
+  <div class="search-bar">
+    <input type="text" id="search-input" placeholder="Search courses by title, category, or keyword..." />
+    <button onclick="applyFilters()">Search</button>
+  </div>
+  <div class="nav-links">
+    <a href="x_1879300_learning_student_dashboard.do">My Dashboard</a>
+    <a href="x_1879300_learning_instructor_dashboard.do">Instructor Dashboard</a>
+  </div>
+</div>
+
+<div class="container">
+  <div class="filters">
+    <div class="filter-group">
+      <label>Category:</label>
+      <select id="filter-category" onchange="applyFilters()">
+        <option value="">All Categories</option>
+        <option value="programming">Programming</option>
+        <option value="web_development">Web Development</option>
+        <option value="data_science">Data Science</option>
+        <option value="devops">DevOps</option>
+        <option value="mobile">Mobile</option>
+        <option value="cybersecurity">Cybersecurity</option>
+        <option value="cloud">Cloud Computing</option>
+        <option value="other">Other</option>
+      </select>
+    </div>
+    <div class="filter-group">
+      <label>Difficulty:</label>
+      <select id="filter-difficulty" onchange="applyFilters()">
+        <option value="">All Levels</option>
+        <option value="beginner">Beginner</option>
+        <option value="intermediate">Intermediate</option>
+        <option value="advanced">Advanced</option>
+      </select>
+    </div>
+    <div class="filter-group">
+      <label>Show:</label>
+      <select id="filter-enrolled" onchange="applyFilters()">
+        <option value="">All Courses</option>
+        <option value="not_enrolled">Not Enrolled</option>
+        <option value="enrolled">My Enrollments</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="results-header">
+    <h2 id="results-title">All Courses</h2>
+    <span class="results-count" id="results-count"></span>
+  </div>
+
+  <div id="courses-container">
+    <div class="loading"><div class="spinner"></div>Loading courses...</div>
+  </div>
+
+  <div class="track-section">
+    <h2 class="section-title">&#127891; Learning Tracks</h2>
+    <div id="tracks-container">
+      <div class="loading"><div class="spinner"></div>Loading tracks...</div>
+    </div>
+  </div>
+</div>
+
+<!-- Prereq modal -->
+<div id="prereq-modal" class="modal-backdrop hidden">
+  <div class="modal">
+    <button class="modal-close" onclick="closePrereqModal()">&#215;</button>
+    <h3 id="prereq-modal-title">Prerequisites Required</h3>
+    <p style="color:#718096;margin-bottom:16px">You must complete these courses before enrolling:</p>
+    <div id="prereq-modal-list"></div>
+    <button class="btn btn-enroll" style="margin-top:16px" onclick="closePrereqModal()">OK</button>
+  </div>
+</div>
+
+<script>
+var API = '/api/now/table';
+var SCOPE = 'x_1879300_learning';
+var currentUser = '';
+var allCourses = [];
+var enrolledCourseIds = new Set();
+var prereqMap = {};
+
+function hdrs() {
+  return { 'Accept': 'application/json', 'Content-Type': 'application/json', 'X-UserToken': window.g_ck };
+}
+
+function showMsg(msg, type) {
+  var el = document.getElementById('msg-global');
+  el.innerHTML = '<div class="alert alert-' + type + '">' + msg + '</div>';
+  setTimeout(function(){ el.innerHTML = ''; }, 5000);
+}
+
+function getVal(obj, field) {
+  if (!obj) return '';
+  var v = obj[field];
+  if (v && typeof v === 'object') return v.display_value || v.value || '';
+  return v || '';
+}
+
+function getRawVal(obj, field) {
+  if (!obj) return '';
+  var v = obj[field];
+  if (v && typeof v === 'object') return v.value || '';
+  return v || '';
+}
+
+function init() {
+  currentUser = window.g_user ? window.g_user.userID : '';
+  Promise.all([loadEnrollments(), loadPrereqs()])
+    .then(function(){ loadCourses(); });
+  loadTracks();
+
+  document.getElementById('search-input').addEventListener('keypress', function(e) {
+    if (e.key === 'Enter') applyFilters();
+  });
+}
+
+function loadEnrollments() {
+  return fetch(API + '/' + SCOPE + '_student_enrollments?sysparm_query=student=' + currentUser + '&sysparm_fields=course,status&sysparm_limit=200', { headers: hdrs() })
+    .then(function(r){ return r.json(); })
+    .then(function(data) {
+      (data.result || []).forEach(function(e) {
+        var cid = getRawVal(e, 'course');
+        if (cid) enrolledCourseIds.add(cid);
+      });
+    })
+    .catch(function(){});
+}
+
+function loadPrereqs() {
+  return fetch(API + '/' + SCOPE + '_course_prerequisites?sysparm_display_value=all&sysparm_limit=200', { headers: hdrs() })
+    .then(function(r){ return r.json(); })
+    .then(function(data) {
+      (data.result || []).forEach(function(p) {
+        var cid = getRawVal(p,'course');
+        var pid = getRawVal(p,'prerequisite_course');
+        if (!prereqMap[cid]) prereqMap[cid] = [];
+        prereqMap[cid].push({ id: pid, title: getVal(p,'prerequisite_course') });
+      });
+    })
+    .catch(function(){});
+}
+
+function loadCourses() {
+  fetch(API + '/' + SCOPE + '_courses?sysparm_query=published=true^active=true^ORDERBYtitle&sysparm_display_value=all&sysparm_limit=200', { headers: hdrs() })
+    .then(function(r){ return r.json(); })
+    .then(function(data) {
+      allCourses = data.result || [];
+      applyFilters();
+    })
+    .catch(function() {
+      document.getElementById('courses-container').innerHTML = '<div class="alert alert-error">Failed to load courses.</div>';
+    });
+}
+
+function applyFilters() {
+  var search = document.getElementById('search-input').value.toLowerCase().trim();
+  var cat = document.getElementById('filter-category').value;
+  var diff = document.getElementById('filter-difficulty').value;
+  var enrolled = document.getElementById('filter-enrolled').value;
+
+  var filtered = allCourses.filter(function(c) {
+    var title = getVal(c,'title').toLowerCase();
+    var desc = getVal(c,'description').toLowerCase();
+    var ccat = getVal(c,'category');
+    var cdiff = getVal(c,'difficulty_level');
+    var cid = getRawVal(c,'sys_id') || getVal(c,'sys_id');
+    var isEnrolled = enrolledCourseIds.has(cid);
+
+    if (search && title.indexOf(search) === -1 && desc.indexOf(search) === -1 && ccat.indexOf(search) === -1) return false;
+    if (cat && ccat !== cat) return false;
+    if (diff && cdiff !== diff) return false;
+    if (enrolled === 'enrolled' && !isEnrolled) return false;
+    if (enrolled === 'not_enrolled' && isEnrolled) return false;
+    return true;
+  });
+
+  renderCourses(filtered);
+}
+
+function renderCourses(courses) {
+  var el = document.getElementById('courses-container');
+  document.getElementById('results-count').textContent = courses.length + ' course' + (courses.length !== 1 ? 's' : '');
+
+  if (!courses.length) {
+    el.innerHTML = '<div class="empty-state"><div class="icon">&#128214;</div><p>No courses match your filters.</p></div>';
+    return;
+  }
+
+  var grid = document.createElement('div');
+  grid.className = 'course-grid';
+
+  courses.forEach(function(c) {
+    var cid = getRawVal(c,'sys_id') || getVal(c,'sys_id');
+    var isEnrolled = enrolledCourseIds.has(cid);
+    var prereqs = prereqMap[cid] || [];
+    var unmetPrereqs = prereqs.filter(function(p){ return !enrolledCourseIds.has(p.id); });
+    var diff = getVal(c,'difficulty_level');
+    var dur = getVal(c,'estimated_duration_hours');
+    var cat = getVal(c,'category') || 'General';
+
+    var card = document.createElement('div');
+    card.className = 'course-card';
+
+    var btnHtml;
+    if (isEnrolled) {
+      btnHtml = '<button class="btn btn-enrolled" disabled>Already Enrolled</button>';
+    } else if (unmetPrereqs.length > 0) {
+      var prereqNames = unmetPrereqs.map(function(p){ return p.title; }).join(', ');
+      btnHtml = '<button class="btn btn-prereq" onclick="showPrereqModal(\'' + escQ(getVal(c,'title')) + '\',\'' + escQ(prereqNames) + '\')">Prerequisites Required</button>';
+    } else {
+      btnHtml = '<button class="btn btn-enroll" onclick="enroll(\'' + cid + '\',\'' + escQ(getVal(c,'title')) + '\')">Enroll Now</button>';
+    }
+
+    card.innerHTML =
+      '<div class="card-header"></div>' +
+      '<div class="card-body">' +
+        '<div class="card-category">' + cat.replace('_',' ') + '</div>' +
+        '<div class="card-title">' + getVal(c,'title') + '</div>' +
+        '<div class="card-desc">' + getVal(c,'description') + '</div>' +
+        '<div class="card-meta"><span class="badge badge-' + diff + '">' + diff + '</span></div>' +
+        '<div class="card-stats">' +
+          (dur ? '<span>&#9200; ' + dur + 'h</span>' : '') +
+          (prereqs.length ? '<span>&#128274; ' + prereqs.length + ' prerequisite(s)</span>' : '') +
+        '</div>' +
+        btnHtml +
+      '</div>';
+
+    grid.appendChild(card);
+  });
+
+  el.innerHTML = '';
+  el.appendChild(grid);
+}
+
+function enroll(courseId, courseTitle) {
+  var body = {
+    student: currentUser,
+    course: courseId,
+    enrollment_date: new Date().toISOString().split('T')[0],
+    status: 'active',
+    progress_percentage: 0
+  };
+  fetch(API + '/' + SCOPE + '_student_enrollments', { method: 'POST', headers: hdrs(), body: JSON.stringify(body) })
+    .then(function(r){ if (!r.ok) throw new Error(); return r.json(); })
+    .then(function() {
+      enrolledCourseIds.add(courseId);
+      showMsg('Enrolled in "' + courseTitle + '"!', 'success');
+      applyFilters();
+    })
+    .catch(function(){ showMsg('Failed to enroll. You may already be enrolled.', 'error'); });
+}
+
+function showPrereqModal(courseTitle, prereqNames) {
+  document.getElementById('prereq-modal-title').textContent = 'Prerequisites for ' + courseTitle;
+  document.getElementById('prereq-modal-list').innerHTML = '<ul style="padding-left:20px;color:#4a5568">' + prereqNames.split(',').map(function(n){ return '<li style="margin-bottom:6px">' + n.trim() + '</li>'; }).join('') + '</ul>';
+  document.getElementById('prereq-modal').classList.remove('hidden');
+}
+
+function closePrereqModal() {
+  document.getElementById('prereq-modal').classList.add('hidden');
+}
+
+function loadTracks() {
+  fetch(API + '/' + SCOPE + '_tracks?sysparm_query=active=true^ORDERBYtitle&sysparm_display_value=all&sysparm_limit=50', { headers: hdrs() })
+    .then(function(r){ return r.json(); })
+    .then(function(data) {
+      var tracks = data.result || [];
+      var el = document.getElementById('tracks-container');
+      if (!tracks.length) {
+        el.innerHTML = '<div class="empty-state"><div class="icon">&#128218;</div><p>No learning tracks available yet.</p></div>';
+        return;
+      }
+      var grid = document.createElement('div');
+      grid.className = 'track-grid';
+      tracks.forEach(function(t) {
+        var tid = getRawVal(t,'sys_id') || getVal(t,'sys_id');
+        var card = document.createElement('div');
+        card.className = 'track-card';
+        card.innerHTML =
+          '<div class="track-title">' + getVal(t,'title') + '</div>' +
+          '<div class="track-desc">' + (getVal(t,'description') || '') + '</div>' +
+          '<div class="track-meta">' +
+            (getVal(t,'difficulty_level') ? 'Level: ' + getVal(t,'difficulty_level') + ' | ' : '') +
+            (getVal(t,'certificate_available') === 'true' ? 'Certificate Available' : '') +
+          '</div>' +
+          '<button class="btn-track" onclick="enrollTrack(\'' + tid + '\',\'' + escQ(getVal(t,'title')) + '\')">Enroll in Track</button>';
+        grid.appendChild(card);
+      });
+      el.innerHTML = '';
+      el.appendChild(grid);
+    })
+    .catch(function(){ document.getElementById('tracks-container').innerHTML = '<div class="alert alert-error">Failed to load tracks.</div>'; });
+}
+
+function enrollTrack(trackId, trackTitle) {
+  var body = {
+    student: currentUser,
+    learning_track: trackId,
+    enrollment_date: new Date().toISOString().split('T')[0],
+    status: 'active',
+    progress_percentage: 0
+  };
+  fetch(API + '/' + SCOPE + '_student_enrollments', { method: 'POST', headers: hdrs(), body: JSON.stringify(body) })
+    .then(function(r){ if (!r.ok) throw new Error(); })
+    .then(function(){ showMsg('Enrolled in track "' + trackTitle + '"!', 'success'); })
+    .catch(function(){ showMsg('Failed to enroll in track.', 'error'); });
+}
+
+function escQ(s) { return (s || '').replace(/\\/g,'\\\\').replace(/'/g,"\\'"); }
+
+document.addEventListener('DOMContentLoaded', init);
+</script>
+</body>
+</html>]]></html>
+        <name>catalog</name>
+        <processing_script/>
+        <sys_class_name>sys_ui_page</sys_class_name>
+        <sys_created_by>admin</sys_created_by>
+        <sys_created_on>2026-04-28 00:00:00</sys_created_on>
+        <sys_id>e2f3a4b5c6d708901234567890abcdef</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>catalog</sys_name>
+        <sys_package display_value="Learning Man" source="x_1879300_learning">95470fa283a5f21071a1ba96feaad3cb</sys_package>
+        <sys_policy/>
+        <sys_scope display_value="Learning Man">95470fa283a5f21071a1ba96feaad3cb</sys_scope>
+        <sys_update_name>sys_ui_page_e2f3a4b5c6d708901234567890abcdef</sys_update_name>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2026-04-28 00:00:00</sys_updated_on>
+    </sys_ui_page>
+</record_update>
