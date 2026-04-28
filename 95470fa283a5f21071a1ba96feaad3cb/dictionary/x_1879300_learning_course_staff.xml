@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?><database>
+    <element db_object_id="86542dd7aed6984aeadc154d0efa1072" label="Course Staff" max_length="40" name="x_1879300_learning_course_staff" type="collection">
+        <element attributes="encode_utf8=false" display="true" label="Course" mandatory="true" max_length="32" name="course" reference="x_1879300_learning_courses" type="reference"/>
+        <element attributes="encode_utf8=false" label="User" mandatory="true" max_length="32" name="user" reference="sys_user" type="reference"/>
+        <element attributes="edge_encryption_enabled=true" choice="1" default="ta" label="Staff Role" mandatory="true" max_length="20" name="staff_role" type="string">
+            <choice>
+                <element inactive_on_update="false" label="Instructor" sequence="0" value="instructor"/>
+                <element inactive_on_update="false" label="Teaching Assistant" sequence="1" value="ta"/>
+                <element inactive_on_update="false" label="Co-Instructor" sequence="2" value="co_instructor"/>
+            </choice>
+        </element>
+        <element default="true" label="Active" max_length="40" name="active" type="boolean"/>
+        <element attributes="edge_encryption_enabled=true" label="Added Date" max_length="40" name="added_date" type="glide_date_time"/>
+        <element attributes="encode_utf8=false" label="Added By" max_length="32" name="added_by" reference="sys_user" type="reference"/>
+        <index name="index">
+            <element name="course"/>
+        </index>
+        <index name="index2">
+            <element name="user"/>
+        </index>
+    </element>
+</database>

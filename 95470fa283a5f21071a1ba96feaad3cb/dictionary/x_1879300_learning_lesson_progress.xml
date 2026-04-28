@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?><database>
+    <element db_object_id="624f8a1c435b1e512704c5e7175ff132" label="Lesson Progress" max_length="40" name="x_1879300_learning_lesson_progress" type="collection">
+        <element attributes="encode_utf8=false" label="Student" mandatory="true" max_length="32" name="student" reference="sys_user" type="reference"/>
+        <element attributes="encode_utf8=false" display="true" label="Lesson" mandatory="true" max_length="32" name="lesson" reference="x_1879300_learning_lessons" type="reference"/>
+        <element attributes="encode_utf8=false" label="Enrollment" mandatory="true" max_length="32" name="enrollment" reference="x_1879300_learning_student_enrollments" type="reference"/>
+        <element attributes="edge_encryption_enabled=true" choice="1" default="not_started" label="Status" max_length="20" name="status" type="string">
+            <choice>
+                <element inactive_on_update="false" label="Not Started" sequence="0" value="not_started"/>
+                <element inactive_on_update="false" label="In Progress" sequence="1" value="in_progress"/>
+                <element inactive_on_update="false" label="Completed" sequence="2" value="completed"/>
+            </choice>
+        </element>
+        <element attributes="edge_encryption_enabled=true" label="Started At" max_length="40" name="started_at" type="glide_date_time"/>
+        <element attributes="edge_encryption_enabled=true" label="Completed At" max_length="40" name="completed_at" type="glide_date_time"/>
+        <element label="Time Spent (Minutes)" max_length="40" name="time_spent_minutes" type="integer"/>
+        <element label="Last Position (seconds into video)" max_length="40" name="video_position_seconds" type="integer"/>
+        <index name="index">
+            <element name="enrollment"/>
+        </index>
+        <index name="index2">
+            <element name="lesson"/>
+        </index>
+        <index name="index3">
+            <element name="student"/>
+        </index>
+    </element>
+</database>
