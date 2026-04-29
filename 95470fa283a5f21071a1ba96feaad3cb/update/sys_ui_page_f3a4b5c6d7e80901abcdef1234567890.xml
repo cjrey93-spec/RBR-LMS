@@ -10,7 +10,7 @@
   <title>Assessment - LMS</title>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <script>window.NOW={};window.NOW.user={};window.NOW.batch_glide_ajax_requests=false;window.NOW.isUsingPolaris=true;window.g_ck="$[gs.getSession().getSessionToken() || gs.getSessionToken()]";</script>
+  <script>window.NOW={};window.NOW.user={};</script>
   <g:requires name="scripts/doctype/functions_bootstrap14.js" />
   <g:requires name="scripts/lib/prototype.js" />
   <g:requires name="scripts/classes/ajax/GlideURL.js" />
@@ -119,7 +119,8 @@ var timeLeft = 0;
 var submitted = false;
 
 function hdrs() {
-  return { 'Accept': 'application/json', 'Content-Type': 'application/json', 'X-UserToken': window.g_ck };
+  var ck = window.g_ck || (typeof g_ck !== 'undefined' ? g_ck : '');
+  return { 'Accept': 'application/json', 'Content-Type': 'application/json', 'X-UserToken': ck };
 }
 
 function getVal(obj, field) {
