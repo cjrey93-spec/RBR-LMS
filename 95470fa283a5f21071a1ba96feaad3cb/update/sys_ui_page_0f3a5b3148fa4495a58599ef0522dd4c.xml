@@ -10,7 +10,9 @@
   <title>Instructor Dashboard - LMS</title>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <script>window.NOW={};window.NOW.user={};</script>
+  <g:evaluate var="jvar_uid" expression="gs.getUserID()" />
+  <g:evaluate var="jvar_uname" expression="gs.getUserName()" />
+  <script>window.NOW={};window.NOW.user={};window.SN_USER_ID='${jvar_uid}';window.SN_USER_NAME='${jvar_uname}';</script>
   <g:requires name="scripts/doctype/functions_bootstrap14.js" />
   <g:requires name="scripts/lib/prototype.js" />
   <g:requires name="scripts/classes/ajax/GlideURL.js" />
@@ -400,8 +402,8 @@
 <script>
 var API = '/api/now/table';
 var SCOPE = 'x_1879300_learning';
-var currentUser = '';
-var currentUserName = '';
+var currentUser = window.SN_USER_ID || '';
+var currentUserName = window.SN_USER_NAME || '';
 var selectedCourse = null;
 var selectedAssessment = null;
 var myCourses = [];
@@ -857,11 +859,7 @@ function submitGrade(sid) {
     .catch(function(){ showMsg('Failed to submit grade.', 'error'); });
 }
 
-// Init
-document.addEventListener('DOMContentLoaded', function() {
-  currentUser = window.g_user ? window.g_user.userID : '';
-  currentUserName = window.g_user ? window.g_user.userName : '';
-});
+// currentUser and currentUserName are set at declaration time from server-embedded values
 </script>
 </body>
 </html>]]></html>
