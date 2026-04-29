@@ -12,7 +12,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <g:evaluate var="jvar_uid" expression="gs.getUserID()" />
   <g:evaluate var="jvar_uname" expression="gs.getUserName()" />
-  <script>window.NOW={};window.NOW.user={};window.SN_USER_ID='${jvar_uid}';window.SN_USER_NAME='${jvar_uname}';</script>
+  <g:evaluate var="jvar_token" expression="gs.getSession().getSessionToken()" />
+  <script>window.NOW={};window.NOW.user={};window.SN_USER_ID='${jvar_uid}';window.SN_USER_NAME='${jvar_uname}';window.SN_TOKEN='${jvar_token}';</script>
   <g:requires name="scripts/doctype/functions_bootstrap14.js" />
   <g:requires name="scripts/lib/prototype.js" />
   <g:requires name="scripts/classes/ajax/GlideURL.js" />
@@ -409,7 +410,8 @@ var selectedAssessment = null;
 var myCourses = [];
 
 function hdrs() {
-  var ck = window.g_ck || (typeof g_ck !== 'undefined' ? g_ck : '');
+  var ck = window.SN_TOKEN || window.g_ck || (typeof g_ck !== 'undefined' ? g_ck : '');
+  console.log('[LMS] hdrs g_ck:', ck ? ck.substring(0,8) + '...' : 'EMPTY');
   return { 'Accept': 'application/json', 'Content-Type': 'application/json', 'X-UserToken': ck };
 }
 
