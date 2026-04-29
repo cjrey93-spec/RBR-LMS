@@ -10,7 +10,10 @@
   <title>Student Dashboard - LMS</title>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <script>window.NOW={};window.NOW.user={};</script>
+  <g:evaluate var="jvar_uid" expression="gs.getUserID()" />
+  <g:evaluate var="jvar_uname" expression="gs.getUserName()" />
+  <g:evaluate var="jvar_token" expression="gs.getSession().getSessionToken()" />
+  <script>window.NOW={};window.NOW.user={};window.SN_USER_ID='${jvar_uid}';window.SN_USER_NAME='${jvar_uname}';window.SN_TOKEN='${jvar_token}';</script>
   <g:requires name="scripts/doctype/functions_bootstrap14.js" />
   <g:requires name="scripts/lib/prototype.js" />
   <g:requires name="scripts/classes/ajax/GlideURL.js" />
@@ -165,10 +168,10 @@
 <script>
 var API = '/api/now/table';
 var SCOPE = 'x_1879300_learning';
-var currentUser = '';
+var currentUser = window.SN_USER_ID || '';
 
 function hdrs() {
-  var ck = window.g_ck || (typeof g_ck !== 'undefined' ? g_ck : '');
+  var ck = window.SN_TOKEN || window.g_ck || (typeof g_ck !== 'undefined' ? g_ck : '');
   return { 'Accept': 'application/json', 'Content-Type': 'application/json', 'X-UserToken': ck };
 }
 
@@ -187,11 +190,12 @@ function getRawVal(obj, field) {
 }
 
 function init() {
-  if (window.g_user) {
+  // Prefer server-embedded user ID; fall back to g_user if Jelly substitution failed
+  if (!currentUser && window.g_user && window.g_user.userID) {
     currentUser = window.g_user.userID;
-    var name = window.g_user.firstName || window.g_user.userName || 'Student';
-    document.getElementById('welcome-msg').textContent = 'Welcome back, ' + name + '!';
   }
+  var name = (window.g_user && (window.g_user.firstName || window.g_user.userName)) || window.SN_USER_NAME || 'Student';
+  document.getElementById('welcome-msg').textContent = 'Welcome back, ' + name + '!';
   loadEnrollments();
   loadCertificates();
   loadActivity();
