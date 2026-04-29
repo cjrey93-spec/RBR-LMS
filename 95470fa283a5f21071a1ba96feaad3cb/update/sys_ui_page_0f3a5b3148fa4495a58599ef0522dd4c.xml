@@ -444,6 +444,12 @@ document.querySelectorAll('.tab-btn').forEach(function(btn) {
 // Create Course
 document.getElementById('form-course').addEventListener('submit', function(e) {
   e.preventDefault();
+  // Fallback: resolve user identity if Jelly substitution was empty
+  if (!currentUser && typeof g_user !== 'undefined' && g_user.userID) {
+    currentUser = g_user.userID;
+    currentUserName = g_user.userName;
+  }
+  console.log('[LMS] createCourse as user:', currentUser, '/', currentUserName);
   var fd = new FormData(e.target);
   var body = {
     title: fd.get('title'),
@@ -462,16 +468,23 @@ document.getElementById('form-course').addEventListener('submit', function(e) {
 
 // My Courses
 function loadMyCourses() {
+  // Fallback: at tab-click time GlideUser.js is guaranteed loaded
+  if (!currentUser && typeof g_user !== 'undefined' && g_user.userID) {
+    currentUser = g_user.userID;
+    currentUserName = g_user.userName;
+  }
   var el = document.getElementById('courses-list');
   el.innerHTML = '<div class="loading"><div class="spinner"></div>Loading...</div>';
   var q = 'instructor=' + currentUser + '^ORcreated_by=' + currentUserName;
+  console.log('[LMS] loadMyCourses user:', currentUser, '/', currentUserName, 'query:', q);
   fetch(API + '/' + SCOPE + '_courses?sysparm_query=' + encodeURIComponent(q) + '&sysparm_display_value=all&sysparm_limit=100', { headers: hdrs() })
     .then(function(r){ return r.json(); })
     .then(function(data) {
       myCourses = data.result || [];
+      console.log('[LMS] courses returned:', myCourses.length, myCourses);
       populateGradingFilter(myCourses);
       if (!myCourses.length) {
-        el.innerHTML = '<div class="empty-state"><div class="icon">&#128218;</div><p>No courses yet.</p></div>';
+        el.innerHTML = '<div class="empty-state"><div class="icon">&#128218;</div><p>No courses yet.</p><p style="font-size:.75rem;color:#a0aec0;margin-top:8px">Query: ' + q + '</p></div>';
         return;
       }
       var grid = document.createElement('div');
