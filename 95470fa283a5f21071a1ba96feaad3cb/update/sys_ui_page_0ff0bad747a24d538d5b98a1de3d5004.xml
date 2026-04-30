@@ -12,8 +12,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <g:evaluate var="jvar_uid" expression="gs.getUserID()" />
   <g:evaluate var="jvar_uname" expression="gs.getUserName()" />
-  <g:evaluate var="jvar_token" expression="gs.getSession().getSessionToken()" />
-  <script>window.NOW={};window.NOW.user={};window.SN_USER_ID='${jvar_uid}';window.SN_USER_NAME='${jvar_uname}';window.SN_TOKEN='${jvar_token}';</script>
+  <script>window.NOW={};window.NOW.user={};window.SN_USER_ID='${jvar_uid}';window.SN_USER_NAME='${jvar_uname}';</script>
   <g:requires name="scripts/doctype/functions_bootstrap14.js" />
   <g:requires name="scripts/lib/prototype.js" />
   <g:requires name="scripts/classes/ajax/GlideURL.js" />
@@ -171,7 +170,7 @@ var SCOPE = 'x_1879300_learning';
 var currentUser = window.SN_USER_ID || '';
 
 function hdrs() {
-  var ck = window.SN_TOKEN || window.g_ck || (typeof g_ck !== 'undefined' ? g_ck : '');
+  var ck = window.g_ck || (typeof g_ck !== 'undefined' ? g_ck : '');
   return { 'Accept': 'application/json', 'Content-Type': 'application/json', 'X-UserToken': ck };
 }
 
@@ -196,15 +195,23 @@ function init() {
   }
   var name = (window.g_user && (window.g_user.firstName || window.g_user.userName)) || window.SN_USER_NAME || 'Student';
   document.getElementById('welcome-msg').textContent = 'Welcome back, ' + name + '!';
+  var ck = window.g_ck || (typeof g_ck !== 'undefined' ? g_ck : '');
+  console.log('[LMS-SD] init user:', currentUser, 'token:', ck ? ck.substring(0,8)+'...' : 'EMPTY');
   loadEnrollments();
   loadCertificates();
   loadActivity();
 }
 
 function loadEnrollments() {
-  fetch(API + '/' + SCOPE + '_student_enrollments?sysparm_query=student=' + currentUser + '&sysparm_display_value=all&sysparm_limit=100&sysparm_fields=sys_id,course,status,progress_percentage,enrollment_date,completion_date', { headers: hdrs() })
-    .then(function(r){ return r.json(); })
+  var url = API + '/' + SCOPE + '_student_enrollments?sysparm_query=student=' + currentUser + '&sysparm_display_value=all&sysparm_limit=100&sysparm_fields=sys_id,course,status,progress_percentage,enrollment_date,completion_date';
+  console.log('[LMS-SD] loadEnrollments url:', url);
+  fetch(url, { headers: hdrs() })
+    .then(function(r){
+      console.log('[LMS-SD] enrollment response status:', r.status);
+      return r.json();
+    })
     .then(function(data) {
+      console.log('[LMS-SD] enrollment data:', data);
       var enrollments = data.result || [];
       var inprog = enrollments.filter(function(e){ return getVal(e,'status') === 'active'; });
       var completed = enrollments.filter(function(e){ return getVal(e,'status') === 'completed'; });
@@ -217,7 +224,8 @@ function loadEnrollments() {
       renderEnrollments('inprogress-list', inprog, true);
       renderEnrollments('completed-list', completed, false);
     })
-    .catch(function(){
+    .catch(function(err){
+      console.log('[LMS-SD] enrollment fetch error:', err);
       document.getElementById('inprogress-list').innerHTML = '<div class="empty-state"><div class="icon">&#128218;</div><p>Failed to load enrollments.</p></div>';
       document.getElementById('completed-list').innerHTML = '';
     });
