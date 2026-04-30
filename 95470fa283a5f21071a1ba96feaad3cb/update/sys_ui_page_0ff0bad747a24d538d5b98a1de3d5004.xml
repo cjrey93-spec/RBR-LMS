@@ -213,8 +213,8 @@ function loadEnrollments() {
     .then(function(data) {
       console.log('[LMS-SD] enrollment data:', data);
       var enrollments = data.result || [];
-      var inprog = enrollments.filter(function(e){ return getVal(e,'status') === 'active'; });
-      var completed = enrollments.filter(function(e){ return getVal(e,'status') === 'completed'; });
+      var inprog = enrollments.filter(function(e){ return getRawVal(e,'status') === 'active'; });
+      var completed = enrollments.filter(function(e){ return getRawVal(e,'status') === 'completed'; });
       var total = enrollments.length;
 
       document.getElementById('stat-enrolled').textContent = total;
@@ -242,8 +242,8 @@ function renderEnrollments(containerId, enrollments, showContinue) {
   enrollments.slice(0, showContinue ? 6 : 4).forEach(function(e) {
     var courseName = getVal(e,'course');
     var courseId = getRawVal(e,'course');
-    var pct = parseFloat(getVal(e,'progress_percentage')) || 0;
-    var status = getVal(e,'status');
+    var pct = parseFloat(getRawVal(e,'progress_percentage') || getVal(e,'progress_percentage')) || 0;
+    var status = getRawVal(e,'status');
     var enrollId = getRawVal(e,'sys_id') || getVal(e,'sys_id');
 
     var card = document.createElement('div');
