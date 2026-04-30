@@ -55,6 +55,8 @@
     .btn-secondary{background:#f7fafc;color:#4a5568;border:2px solid #e2e8f0}
     .badge{padding:3px 10px;border-radius:20px;font-size:.75rem;font-weight:700}
     .badge-active{background:#bee3f8;color:#2b6cb0}
+    .badge-in_progress{background:#bee3f8;color:#2b6cb0}
+    .badge-enrolled{background:#e2e8f0;color:#4a5568}
     .badge-completed{background:#c6f6d5;color:#22543d}
     .badge-paused{background:#fbd38d;color:#c05621}
     .badge-beginner{background:#bee3f8;color:#2b6cb0}
@@ -213,7 +215,7 @@ function loadEnrollments() {
     .then(function(data) {
       console.log('[LMS-SD] enrollment data:', data);
       var enrollments = data.result || [];
-      var inprog = enrollments.filter(function(e){ return getRawVal(e,'status') === 'active'; });
+      var inprog = enrollments.filter(function(e){ var s = getRawVal(e,'status'); return s === 'in_progress' || s === 'active'; });
       var completed = enrollments.filter(function(e){ return getRawVal(e,'status') === 'completed'; });
       var total = enrollments.length;
 
@@ -253,7 +255,7 @@ function renderEnrollments(containerId, enrollments, showContinue) {
       '<div class="enroll-meta">Enrolled: ' + (getVal(e,'enrollment_date') || '').split(' ')[0] +
         (status === 'completed' && getVal(e,'completion_date') ? ' | Completed: ' + getVal(e,'completion_date').split(' ')[0] : '') + '</div>' +
       '<div class="progress-bar-wrap"><div class="progress-bar" style="width:' + pct + '%"></div></div>' +
-      '<div class="progress-label"><span>' + Math.round(pct) + '% complete</span><span class="badge badge-' + status + '">' + status + '</span></div>' +
+      '<div class="progress-label"><span>' + Math.round(pct) + '% complete</span><span class="badge badge-' + status + '">' + (status === 'in_progress' ? 'In Progress' : status.charAt(0).toUpperCase() + status.slice(1)) + '</span></div>' +
       (showContinue ? '<a href="x_1879300_learning_lms.do?course=' + courseId + '&enrollment=' + enrollId + '" class="btn btn-primary">Continue</a>' :
         '<a href="x_1879300_learning_lms.do?course=' + courseId + '&enrollment=' + enrollId + '" class="btn btn-secondary">Review</a>');
     grid.appendChild(card);

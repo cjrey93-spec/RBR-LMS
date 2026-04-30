@@ -337,7 +337,7 @@ function enroll(courseId, courseTitle) {
     student: currentUser,
     course: courseId,
     enrollment_date: new Date().toISOString().split('T')[0],
-    status: 'active',
+    status: 'in_progress',
     progress_percentage: 0
   };
   fetch(API + '/' + SCOPE + '_student_enrollments', { method: 'POST', headers: hdrs(), body: JSON.stringify(body) })
@@ -397,7 +397,7 @@ function enrollTrack(trackId, trackTitle) {
     student: currentUser,
     learning_track: trackId,
     enrollment_date: new Date().toISOString().split('T')[0],
-    status: 'active',
+    status: 'in_progress',
     progress_percentage: 0
   };
   fetch(API + '/' + SCOPE + '_student_enrollments', { method: 'POST', headers: hdrs(), body: JSON.stringify(body) })
