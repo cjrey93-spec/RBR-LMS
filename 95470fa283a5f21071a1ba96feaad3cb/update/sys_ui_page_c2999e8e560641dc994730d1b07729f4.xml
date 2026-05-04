@@ -58,7 +58,12 @@
     .lesson-desc{color:#718096;font-size:.95rem;line-height:1.6}
     .section-card{background:#fff;border-radius:12px;padding:24px;margin-bottom:20px;box-shadow:0 2px 8px rgba(0,0,0,.06)}
     .section-card h3{font-size:1rem;font-weight:700;color:#2d3748;margin-bottom:16px;display:flex;align-items:center;gap:8px}
-    .lesson-content{font-size:.95rem;line-height:1.8;color:#2d3748;white-space:pre-wrap}
+    .lesson-content{font-size:.95rem;line-height:1.8;color:#2d3748}
+    .lesson-content h1{font-size:1.6rem;font-weight:700;margin:16px 0 6px;color:#1a202c}
+    .lesson-content h2{font-size:1.3rem;font-weight:700;margin:14px 0 6px;color:#1a202c}
+    .lesson-content h3{font-size:1.1rem;font-weight:700;margin:12px 0 4px;color:#1a202c}
+    .lesson-content ul,.lesson-content ol{margin:8px 0;padding-left:24px}
+    .lesson-content li{margin:3px 0}
     .lesson-content p{margin-bottom:12px}
     .lesson-content h1,.lesson-content h2,.lesson-content h3{margin:20px 0 10px;color:#1a202c}
     .lesson-content code{background:#f7fafc;padding:2px 6px;border-radius:4px;font-family:monospace;font-size:.9em}

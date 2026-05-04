@@ -88,6 +88,19 @@
     .pill{padding:6px 16px;border-radius:20px;border:2px solid #e2e8f0;background:#fff;cursor:pointer;font-size:.85rem;font-weight:500;color:#4a5568}
     .pill.active{border-color:#667eea;background:#ebf4ff;color:#553c9a}
     .two-col{display:grid;grid-template-columns:1fr 1fr;gap:24px}
+    .rte-toolbar{display:flex;flex-wrap:wrap;gap:4px;padding:6px 8px;background:#f7fafc;border:2px solid #e2e8f0;border-bottom:none;border-radius:8px 8px 0 0;align-items:center}
+    .rte-toolbar button{padding:3px 10px;border:1px solid #e2e8f0;background:#fff;border-radius:4px;cursor:pointer;font-size:.85rem;line-height:1.4}
+    .rte-toolbar button:hover{background:#ebf4ff;border-color:#667eea}
+    .rte-toolbar select{padding:3px 8px;border:1px solid #e2e8f0;border-radius:4px;font-size:.85rem;background:#fff;cursor:pointer}
+    .rte-sep{width:1px;background:#e2e8f0;align-self:stretch;margin:2px}
+    .rte-editor{min-height:150px;padding:10px 12px;border:2px solid #e2e8f0;border-radius:0 0 8px 8px;font-size:.95rem;line-height:1.6;outline:none;background:#fff;white-space:normal}
+    .rte-editor:focus{border-color:#667eea}
+    .rte-editor h1{font-size:1.5rem;font-weight:700;margin:10px 0 4px}
+    .rte-editor h2{font-size:1.2rem;font-weight:700;margin:8px 0 4px}
+    .rte-editor h3{font-size:1rem;font-weight:700;margin:6px 0 4px}
+    .rte-editor p{margin:4px 0}
+    .rte-editor ul,.rte-editor ol{margin:4px 0;padding-left:22px}
+    .rte-editor li{margin:2px 0}
   </style>
 </head>
 <body>
@@ -209,13 +222,33 @@
               </div>
               <div class="form-group" id="lesson-content-group">
                 <label>Content</label>
-                <textarea name="content" rows="5" placeholder="Write lesson content here..."></textarea>
+                <div class="rte-toolbar">
+                  <button type="button" onclick="rteCmd('bold')" title="Bold"><b>B</b></button>
+                  <button type="button" onclick="rteCmd('italic')" title="Italic"><i>I</i></button>
+                  <button type="button" onclick="rteCmd('underline')" title="Underline"><u>U</u></button>
+                  <span class="rte-sep"></span>
+                  <select onchange="rteBlock(this.value);this.value=''">
+                    <option value="">Heading</option>
+                    <option value="h1">Heading 1</option>
+                    <option value="h2">Heading 2</option>
+                    <option value="h3">Heading 3</option>
+                    <option value="p">Paragraph</option>
+                  </select>
+                  <span class="rte-sep"></span>
+                  <button type="button" onclick="rteCmd('insertUnorderedList')" title="Bullet list">&#8226; List</button>
+                  <button type="button" onclick="rteCmd('insertOrderedList')" title="Numbered list">1. List</button>
+                </div>
+                <div id="lesson-content-editor" contenteditable="true" class="rte-editor" placeholder="Write lesson content here..."></div>
+                <input type="hidden" name="content" id="lesson-content-hidden" />
               </div>
               <div class="form-group hidden" id="lesson-video-group">
                 <label>Video URL</label>
                 <input type="url" name="video_url" placeholder="https://www.youtube.com/watch?v=..." />
               </div>
-              <button type="submit" class="btn btn-primary">Add Lesson</button>
+              <div style="display:flex;gap:10px">
+                <button type="submit" class="btn btn-primary">Add Lesson</button>
+                <button type="button" id="cancel-edit-lesson" class="btn btn-secondary hidden" onclick="cancelEditLesson()">Cancel Edit</button>
+              </div>
             </form>
           </div>
           <div>
@@ -400,6 +433,75 @@
   </div>
 </div>
 
+<!-- Edit Course Modal -->
+<div id="modal-overlay" class="hidden" style="position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:1000;display:flex;align-items:center;justify-content:center" onclick="if(event.target===this)closeEditCourse()">
+  <div style="background:#fff;border-radius:16px;padding:28px;max-width:580px;width:90%;max-height:90vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,.3)">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px">
+      <h2 style="font-size:1.3rem;color:#2d3748;font-weight:700">Edit Course</h2>
+      <button onclick="closeEditCourse()" class="btn btn-secondary btn-sm">&#10005;</button>
+    </div>
+    <div id="edit-course-msg"></div>
+    <form id="form-edit-course">
+      <input type="hidden" name="sys_id" />
+      <div class="form-row">
+        <div class="form-group">
+          <label>Course Title *</label>
+          <input type="text" name="title" required="required" />
+        </div>
+        <div class="form-group">
+          <label>Category *</label>
+          <select name="category" required="required">
+            <option value="">Select...</option>
+            <option value="programming">Programming</option>
+            <option value="web_development">Web Development</option>
+            <option value="data_science">Data Science</option>
+            <option value="devops">DevOps and Infrastructure</option>
+            <option value="mobile">Mobile Development</option>
+            <option value="cybersecurity">Cybersecurity</option>
+            <option value="cloud">Cloud Computing</option>
+            <option value="other">Other</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Description *</label>
+        <textarea name="description" rows="3" required="required"></textarea>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Difficulty Level *</label>
+          <select name="difficulty_level" required="required">
+            <option value="">Select...</option>
+            <option value="beginner">Beginner</option>
+            <option value="intermediate">Intermediate</option>
+            <option value="advanced">Advanced</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Estimated Duration (hours)</label>
+          <input type="number" name="estimated_duration_hours" min="1" max="500" />
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label style="display:flex;align-items:center;gap:8px;cursor:pointer">
+            <input type="checkbox" name="published" style="width:auto" /> Published
+          </label>
+        </div>
+        <div class="form-group">
+          <label style="display:flex;align-items:center;gap:8px;cursor:pointer">
+            <input type="checkbox" name="active" style="width:auto" /> Active
+          </label>
+        </div>
+      </div>
+      <div style="display:flex;gap:10px;margin-top:8px">
+        <button type="submit" class="btn btn-primary">Save Changes</button>
+        <button type="button" class="btn btn-secondary" onclick="closeEditCourse()">Cancel</button>
+      </div>
+    </form>
+  </div>
+</div>
+
 <script>
 var API = '/api/now/table';
 var SCOPE = 'x_1879300_learning';
@@ -408,6 +510,8 @@ var currentUserName = window.SN_USER_NAME || '';
 var selectedCourse = null;
 var selectedAssessment = null;
 var myCourses = [];
+var editingLessonId = null;
+var lessonsList = [];
 
 function hdrs() {
   var ck = window.SN_TOKEN || window.g_ck || (typeof g_ck !== 'undefined' ? g_ck : '');
@@ -428,7 +532,25 @@ function getVal(obj, field) {
   return v || '';
 }
 
+function getRawVal(obj, field) {
+  if (!obj) return '';
+  var v = obj[field];
+  if (v && typeof v === 'object') return v.value || '';
+  return v || '';
+}
+
 function escQ(s) { return (s || '').replace(/'/g, "\\'"); }
+
+function rteCmd(cmd) {
+  document.getElementById('lesson-content-editor').focus();
+  document.execCommand(cmd, false, null);
+}
+
+function rteBlock(tag) {
+  if (!tag) return;
+  document.getElementById('lesson-content-editor').focus();
+  document.execCommand('formatBlock', false, tag);
+}
 
 // Tab switching
 document.querySelectorAll('.tab-btn').forEach(function(btn) {
@@ -508,6 +630,7 @@ function loadMyCourses() {
           '</div>' +
           '<div class="card-actions">' +
             '<button class="btn btn-primary btn-sm" onclick="selectCourse(\'' + cid + '\',\'' + escQ(ctitle) + '\')">Select</button>' +
+            '<button class="btn btn-secondary btn-sm" onclick="openEditCourse(\'' + cid + '\')">Edit</button>' +
             '<button class="btn btn-secondary btn-sm" onclick="togglePub(\'' + cid + '\',' + !pub + ')">' + (pub ? 'Unpublish' : 'Publish') + '</button>' +
           '</div>';
         grid.appendChild(card);
@@ -522,6 +645,44 @@ function togglePub(id, newPub) {
   fetch(API + '/' + SCOPE + '_courses/' + id, { method: 'PATCH', headers: hdrs(), body: JSON.stringify({ published: newPub }) })
     .then(function(){ loadMyCourses(); });
 }
+
+function openEditCourse(id) {
+  var course = myCourses.find(function(c){ return getRawVal(c,'sys_id') === id || getVal(c,'sys_id') === id; });
+  if (!course) return;
+  var form = document.getElementById('form-edit-course');
+  form.querySelector('[name=sys_id]').value = id;
+  form.querySelector('[name=title]').value = getVal(course,'title');
+  form.querySelector('[name=category]').value = getRawVal(course,'category');
+  form.querySelector('[name=description]').value = getVal(course,'description');
+  form.querySelector('[name=difficulty_level]').value = getRawVal(course,'difficulty_level');
+  form.querySelector('[name=estimated_duration_hours]').value = getRawVal(course,'estimated_duration_hours') || getVal(course,'estimated_duration_hours');
+  form.querySelector('[name=published]').checked = course.published === true || course.published === 'true';
+  form.querySelector('[name=active]').checked = course.active === true || course.active === 'true';
+  document.getElementById('edit-course-msg').innerHTML = '';
+  document.getElementById('modal-overlay').classList.remove('hidden');
+}
+
+function closeEditCourse() {
+  document.getElementById('modal-overlay').classList.add('hidden');
+}
+
+document.getElementById('form-edit-course').addEventListener('submit', function(e) {
+  e.preventDefault();
+  var fd = new FormData(e.target);
+  var id = fd.get('sys_id');
+  var body = {
+    title: fd.get('title'),
+    description: fd.get('description'),
+    category: fd.get('category'),
+    difficulty_level: fd.get('difficulty_level'),
+    estimated_duration_hours: fd.get('estimated_duration_hours') || 0,
+    published: fd.has('published'),
+    active: fd.has('active')
+  };
+  fetch(API + '/' + SCOPE + '_courses/' + id, { method: 'PATCH', headers: hdrs(), body: JSON.stringify(body) })
+    .then(function(r){ if (!r.ok) throw new Error(); closeEditCourse(); showMsg('Course updated!', 'success'); loadMyCourses(); })
+    .catch(function(){ document.getElementById('edit-course-msg').innerHTML = '<div class="alert alert-error">Failed to update course.</div>'; });
+});
 
 function selectCourse(id, title) {
   selectedCourse = { id: id, title: title };
@@ -559,6 +720,7 @@ document.getElementById('lesson-type-select').addEventListener('change', functio
 document.getElementById('form-lesson').addEventListener('submit', function(e) {
   e.preventDefault();
   if (!selectedCourse) return;
+  document.getElementById('lesson-content-hidden').value = document.getElementById('lesson-content-editor').innerHTML;
   var fd = new FormData(e.target);
   var body = {
     title: fd.get('title'),
@@ -569,9 +731,11 @@ document.getElementById('form-lesson').addEventListener('submit', function(e) {
     video_url: fd.get('video_url') || '',
     order_sequence: parseInt(fd.get('order_sequence')) || 1
   };
-  fetch(API + '/' + SCOPE + '_lessons', { method: 'POST', headers: hdrs(), body: JSON.stringify(body) })
-    .then(function(r){ if (!r.ok) throw new Error(); showMsg('Lesson added!', 'success'); e.target.reset(); loadLessons(); })
-    .catch(function(){ showMsg('Failed to add lesson.', 'error'); });
+  var url = editingLessonId ? API + '/' + SCOPE + '_lessons/' + editingLessonId : API + '/' + SCOPE + '_lessons';
+  var method = editingLessonId ? 'PATCH' : 'POST';
+  fetch(url, { method: method, headers: hdrs(), body: JSON.stringify(body) })
+    .then(function(r){ if (!r.ok) throw new Error(); showMsg(editingLessonId ? 'Lesson updated!' : 'Lesson added!', 'success'); cancelEditLesson(); loadLessons(); })
+    .catch(function(){ showMsg('Failed to ' + (editingLessonId ? 'update' : 'add') + ' lesson.', 'error'); });
 });
 
 function loadLessons() {
@@ -581,21 +745,52 @@ function loadLessons() {
   fetch(API + '/' + SCOPE + '_lessons?sysparm_query=course=' + selectedCourse.id + '^ORDERBYorder_sequence&sysparm_display_value=all&sysparm_limit=100', { headers: hdrs() })
     .then(function(r){ return r.json(); })
     .then(function(data) {
-      var lessons = data.result || [];
-      if (!lessons.length) {
+      lessonsList = data.result || [];
+      if (!lessonsList.length) {
         el.innerHTML = '<div class="empty-state"><div class="icon">&#128196;</div><p>No lessons yet.</p></div>';
         return;
       }
       var html = '<table class="tbl"><thead><tr><th>#</th><th>Title</th><th>Type</th><th></th></tr></thead><tbody>';
-      lessons.forEach(function(l) {
+      lessonsList.forEach(function(l) {
         var t = getVal(l,'lesson_type');
+        var lid = getVal(l,'sys_id');
         html += '<tr><td>' + getVal(l,'order_sequence') + '</td><td>' + getVal(l,'title') + '</td>' +
           '<td><span class="badge badge-' + t + '">' + t + '</span></td>' +
-          '<td><button class="btn btn-danger btn-sm" onclick="deleteLesson(\'' + getVal(l,'sys_id') + '\')">Del</button></td></tr>';
+          '<td style="white-space:nowrap">' +
+          '<button class="btn btn-secondary btn-sm" style="margin-right:4px" onclick="editLesson(\'' + lid + '\')">Edit</button>' +
+          '<button class="btn btn-danger btn-sm" onclick="deleteLesson(\'' + lid + '\')">Del</button></td></tr>';
       });
       el.innerHTML = html + '</tbody></table>';
     })
     .catch(function(){ el.innerHTML = '<div class="alert alert-error">Failed to load lessons.</div>'; });
+}
+
+function editLesson(id) {
+  var l = lessonsList.find(function(x){ return getVal(x,'sys_id') === id; });
+  if (!l) return;
+  editingLessonId = id;
+  var form = document.getElementById('form-lesson');
+  form.querySelector('[name=title]').value = getVal(l,'title');
+  var typeSelect = document.getElementById('lesson-type-select');
+  typeSelect.value = getRawVal(l,'lesson_type') || getVal(l,'lesson_type');
+  typeSelect.dispatchEvent(new Event('change'));
+  form.querySelector('[name=order_sequence]').value = getVal(l,'order_sequence');
+  form.querySelector('[name=description]').value = getVal(l,'description');
+  document.getElementById('lesson-content-editor').innerHTML = getVal(l,'content');
+  form.querySelector('[name=video_url]').value = getVal(l,'video_url') || '';
+  form.querySelector('button[type=submit]').textContent = 'Update Lesson';
+  document.getElementById('cancel-edit-lesson').classList.remove('hidden');
+  form.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+function cancelEditLesson() {
+  editingLessonId = null;
+  document.getElementById('form-lesson').reset();
+  document.getElementById('lesson-content-editor').innerHTML = '';
+  document.getElementById('form-lesson').querySelector('button[type=submit]').textContent = 'Add Lesson';
+  document.getElementById('cancel-edit-lesson').classList.add('hidden');
+  document.getElementById('lesson-content-group').classList.remove('hidden');
+  document.getElementById('lesson-video-group').classList.add('hidden');
 }
 
 function deleteLesson(id) {
