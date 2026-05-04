@@ -101,6 +101,10 @@
     .rte-editor p{margin:4px 0}
     .rte-editor ul,.rte-editor ol{margin:4px 0;padding-left:22px}
     .rte-editor li{margin:2px 0}
+    .drag-handle{cursor:grab;color:#a0aec0;font-size:1.2rem;text-align:center;user-select:none;padding:0 4px}
+    .drag-handle:active{cursor:grabbing}
+    .tbl tr.drag-over td{background:#ebf4ff;border-top:2px solid #667eea}
+    .tbl tr.dragging{opacity:.35}
   </style>
 </head>
 <body>
@@ -512,6 +516,7 @@ var selectedAssessment = null;
 var myCourses = [];
 var editingLessonId = null;
 var lessonsList = [];
+var dragSrcRow = null;
 
 function hdrs() {
   var ck = window.SN_TOKEN || window.g_ck || (typeof g_ck !== 'undefined' ? g_ck : '');
@@ -746,21 +751,26 @@ function loadLessons() {
     .then(function(r){ return r.json(); })
     .then(function(data) {
       lessonsList = data.result || [];
+      updateDefaultOrder();
       if (!lessonsList.length) {
         el.innerHTML = '<div class="empty-state"><div class="icon">&#128196;</div><p>No lessons yet.</p></div>';
         return;
       }
-      var html = '<table class="tbl"><thead><tr><th>#</th><th>Title</th><th>Type</th><th></th></tr></thead><tbody>';
+      var html = '<table class="tbl"><thead><tr><th style="width:28px"></th><th style="width:36px">#</th><th>Title</th><th>Type</th><th></th></tr></thead><tbody id="lessons-tbody">';
       lessonsList.forEach(function(l) {
         var t = getVal(l,'lesson_type');
         var lid = getVal(l,'sys_id');
-        html += '<tr><td>' + getVal(l,'order_sequence') + '</td><td>' + getVal(l,'title') + '</td>' +
+        html += '<tr draggable="true" data-lid="' + lid + '">' +
+          '<td class="drag-handle" title="Drag to reorder">&#8942;</td>' +
+          '<td class="order-cell">' + getVal(l,'order_sequence') + '</td>' +
+          '<td>' + getVal(l,'title') + '</td>' +
           '<td><span class="badge badge-' + t + '">' + t + '</span></td>' +
           '<td style="white-space:nowrap">' +
           '<button class="btn btn-secondary btn-sm" style="margin-right:4px" onclick="editLesson(\'' + lid + '\')">Edit</button>' +
           '<button class="btn btn-danger btn-sm" onclick="deleteLesson(\'' + lid + '\')">Del</button></td></tr>';
       });
       el.innerHTML = html + '</tbody></table>';
+      makeTableDraggable(document.getElementById('lessons-tbody'));
     })
     .catch(function(){ el.innerHTML = '<div class="alert alert-error">Failed to load lessons.</div>'; });
 }
@@ -791,6 +801,76 @@ function cancelEditLesson() {
   document.getElementById('cancel-edit-lesson').classList.add('hidden');
   document.getElementById('lesson-content-group').classList.remove('hidden');
   document.getElementById('lesson-video-group').classList.add('hidden');
+  updateDefaultOrder();
+}
+
+function updateDefaultOrder() {
+  if (editingLessonId) return;
+  var maxOrder = 0;
+  lessonsList.forEach(function(l) {
+    var o = parseInt(getVal(l, 'order_sequence')) || 0;
+    if (o > maxOrder) maxOrder = o;
+  });
+  var inp = document.getElementById('form-lesson').querySelector('[name=order_sequence]');
+  if (inp) inp.value = maxOrder + 1;
+}
+
+function makeTableDraggable(tbody) {
+  Array.from(tbody.querySelectorAll('tr[data-lid]')).forEach(function(row) {
+    row.addEventListener('dragstart', function(e) {
+      dragSrcRow = row;
+      e.dataTransfer.effectAllowed = 'move';
+      setTimeout(function(){ row.classList.add('dragging'); }, 0);
+    });
+    row.addEventListener('dragend', function() {
+      row.classList.remove('dragging');
+      Array.from(tbody.querySelectorAll('tr')).forEach(function(r){ r.classList.remove('drag-over'); });
+    });
+    row.addEventListener('dragover', function(e) {
+      e.preventDefault();
+      e.dataTransfer.dropEffect = 'move';
+      if (row !== dragSrcRow) {
+        Array.from(tbody.querySelectorAll('tr')).forEach(function(r){ r.classList.remove('drag-over'); });
+        row.classList.add('drag-over');
+      }
+    });
+    row.addEventListener('dragleave', function() {
+      row.classList.remove('drag-over');
+    });
+    row.addEventListener('drop', function(e) {
+      e.preventDefault();
+      if (!dragSrcRow || dragSrcRow === row) return;
+      var allRows = Array.from(tbody.querySelectorAll('tr[data-lid]'));
+      var srcIdx = allRows.indexOf(dragSrcRow);
+      var tgtIdx = allRows.indexOf(row);
+      if (srcIdx < tgtIdx) {
+        tbody.insertBefore(dragSrcRow, row.nextSibling);
+      } else {
+        tbody.insertBefore(dragSrcRow, row);
+      }
+      row.classList.remove('drag-over');
+      saveNewOrder(tbody);
+    });
+  });
+}
+
+function saveNewOrder(tbody) {
+  var allRows = Array.from(tbody.querySelectorAll('tr[data-lid]'));
+  var patches = [];
+  allRows.forEach(function(row, i) {
+    var lid = row.dataset.lid;
+    var newOrder = i + 1;
+    var orderCell = row.querySelector('.order-cell');
+    if (orderCell) orderCell.textContent = newOrder;
+    var lesson = lessonsList.find(function(l){ return getVal(l, 'sys_id') === lid; });
+    var oldOrder = lesson ? (parseInt(getVal(lesson, 'order_sequence')) || 0) : -1;
+    if (oldOrder !== newOrder) {
+      patches.push(fetch(API + '/' + SCOPE + '_lessons/' + lid, { method: 'PATCH', headers: hdrs(), body: JSON.stringify({ order_sequence: newOrder }) }));
+    }
+  });
+  if (patches.length) {
+    Promise.all(patches).then(function(){ loadLessons(); });
+  }
 }
 
 function deleteLesson(id) {
