@@ -101,8 +101,15 @@
     .rte-editor h2{font-size:1.2rem;font-weight:700;margin:8px 0 4px}
     .rte-editor h3{font-size:1rem;font-weight:700;margin:6px 0 4px}
     .rte-editor p{margin:4px 0}
-    .rte-editor ul,.rte-editor ol{margin:4px 0;padding-left:22px}
+    .rte-editor ul,.rte-editor ol{margin:4px 0;padding-left:28px}
     .rte-editor li{margin:2px 0}
+    .rte-editor ol[data-ls]{list-style:none}
+    .rte-editor ol[data-ls=dp]{counter-reset:li}.rte-editor ol[data-ls=dp]>li{counter-increment:li}.rte-editor ol[data-ls=dp]>li::marker{content:counter(li) ") "}
+    .rte-editor ol[data-ls=lap]{counter-reset:li}.rte-editor ol[data-ls=lap]>li{counter-increment:li}.rte-editor ol[data-ls=lap]>li::marker{content:counter(li,lower-alpha) ") "}
+    .rte-editor ol[data-ls=uap]{counter-reset:li}.rte-editor ol[data-ls=uap]>li{counter-increment:li}.rte-editor ol[data-ls=uap]>li::marker{content:counter(li,upper-alpha) ") "}
+    .rte-editor ol[data-ls=lrp]{counter-reset:li}.rte-editor ol[data-ls=lrp]>li{counter-increment:li}.rte-editor ol[data-ls=lrp]>li::marker{content:counter(li,lower-roman) ") "}
+    .rte-editor ol[data-ls=urp]{counter-reset:li}.rte-editor ol[data-ls=urp]>li{counter-increment:li}.rte-editor ol[data-ls=urp]>li::marker{content:counter(li,upper-roman) ") "}
+    .rte-editor ul[data-ls=h]{list-style:none}.rte-editor ul[data-ls=h]>li::marker{content:"- "}
     .rte-editor pre{background:#1a1a2e;color:#e2e8f0;padding:10px 14px;border-radius:6px;font-family:'Courier New',Consolas,monospace;font-size:.88rem;white-space:pre-wrap;margin:8px 0;display:block}
     .rte-editor img{max-width:100%;border-radius:4px;margin:4px 0;display:block}
     .drag-handle{cursor:grab;color:#a0aec0;font-size:1.2rem;text-align:center;user-select:none;padding:0 4px}
@@ -275,15 +282,21 @@
                     <option value="disc">&#8226; Disc</option>
                     <option value="circle">&#9675; Circle</option>
                     <option value="square">&#9632; Square</option>
+                    <option value="hyphen">&#8211; Hyphen</option>
                     <option value="none">&#8212; None</option>
                   </select>
                   <select onchange="rteOrderedList(this.value);this.value=''" title="Numbered List">
                     <option value="">1. List</option>
-                    <option value="decimal">1, 2, 3</option>
-                    <option value="lower-alpha">a, b, c</option>
-                    <option value="upper-alpha">A, B, C</option>
-                    <option value="lower-roman">i, ii, iii</option>
-                    <option value="upper-roman">I, II, III</option>
+                    <option value="decimal">1. 2. 3.</option>
+                    <option value="lower-alpha">a. b. c.</option>
+                    <option value="upper-alpha">A. B. C.</option>
+                    <option value="lower-roman">i. ii. iii.</option>
+                    <option value="upper-roman">I. II. III.</option>
+                    <option value="decimal-p">1) 2) 3)</option>
+                    <option value="lower-alpha-p">a) b) c)</option>
+                    <option value="upper-alpha-p">A) B) C)</option>
+                    <option value="lower-roman-p">i) ii) iii)</option>
+                    <option value="upper-roman-p">I) II) III)</option>
                   </select>
                   <span class="rte-sep"></span>
                   <button type="button" onclick="rteInsertCode()" title="Insert Code Block">&lt;/&gt;</button>
@@ -291,7 +304,7 @@
                   <span class="rte-sep"></span>
                   <button type="button" onclick="rtePopout()" title="Pop-out editor" style="margin-left:2px">&#9974;&#65038; Pop-out</button>
                 </div>
-                <div id="lesson-content-editor" contenteditable="true" class="rte-editor"></div>
+                <div id="lesson-content-editor" contenteditable="true" class="rte-editor" onkeydown="rteKeydown(event)"></div>
                 <input type="hidden" name="content" id="lesson-content-hidden" />
               </div>
               <div class="form-group hidden" id="lesson-video-group">
@@ -610,21 +623,27 @@
         <option value="disc">&#8226; Disc</option>
         <option value="circle">&#9675; Circle</option>
         <option value="square">&#9632; Square</option>
+        <option value="hyphen">&#8211; Hyphen</option>
         <option value="none">&#8212; None</option>
       </select>
       <select onchange="rteOrderedList(this.value);this.value=''" title="Numbered List">
         <option value="">1. List</option>
-        <option value="decimal">1, 2, 3</option>
-        <option value="lower-alpha">a, b, c</option>
-        <option value="upper-alpha">A, B, C</option>
-        <option value="lower-roman">i, ii, iii</option>
-        <option value="upper-roman">I, II, III</option>
+        <option value="decimal">1. 2. 3.</option>
+        <option value="lower-alpha">a. b. c.</option>
+        <option value="upper-alpha">A. B. C.</option>
+        <option value="lower-roman">i. ii. iii.</option>
+        <option value="upper-roman">I. II. III.</option>
+        <option value="decimal-p">1) 2) 3)</option>
+        <option value="lower-alpha-p">a) b) c)</option>
+        <option value="upper-alpha-p">A) B) C)</option>
+        <option value="lower-roman-p">i) ii) iii)</option>
+        <option value="upper-roman-p">I) II) III)</option>
       </select>
       <span class="rte-sep"></span>
       <button type="button" onclick="rteInsertCode()" title="Insert Code Block">&lt;/&gt;</button>
       <button type="button" onclick="rteInsertImage()" title="Insert Image">&#128247;</button>
     </div>
-    <div id="lesson-content-editor-popup" contenteditable="true" class="rte-editor" style="flex:1;border:none;border-radius:0;min-height:0;overflow-y:auto;padding:16px 20px"></div>
+    <div id="lesson-content-editor-popup" contenteditable="true" class="rte-editor" onkeydown="rteKeydown(event)" style="flex:1;border:none;border-radius:0;min-height:0;overflow-y:auto;padding:16px 20px"></div>
   </div>
 </div>
 
@@ -709,6 +728,46 @@ function rteApplyColor(cmd, color) {
   document.execCommand(cmd, false, color);
 }
 
+var OL_PAREN_MAP = { 'decimal-p':'dp','lower-alpha-p':'lap','upper-alpha-p':'uap','lower-roman-p':'lrp','upper-roman-p':'urp' };
+
+function applyOlStyle(ol, type) {
+  if (OL_PAREN_MAP[type]) {
+    ol.style.listStyleType = '';
+    ol.dataset.ls = OL_PAREN_MAP[type];
+  } else {
+    ol.style.listStyleType = type;
+    ol.removeAttribute('data-ls');
+  }
+}
+
+function applyUlStyle(ul, type) {
+  if (type === 'hyphen') {
+    ul.style.listStyleType = '';
+    ul.dataset.ls = 'h';
+  } else {
+    ul.style.listStyleType = type;
+    ul.removeAttribute('data-ls');
+  }
+}
+
+function rteKeydown(e) {
+  if (e.key === 'Tab') {
+    var sel = window.getSelection();
+    if (sel && sel.anchorNode) {
+      var n = sel.anchorNode;
+      while (n) {
+        if (n.tagName === 'LI') {
+          e.preventDefault();
+          document.execCommand(e.shiftKey ? 'outdent' : 'indent', false, null);
+          return;
+        }
+        if (n.contentEditable === 'true') break;
+        n = n.parentNode;
+      }
+    }
+  }
+}
+
 function rteOrderedList(type) {
   if (!type) return;
   var editor = getRteEditor();
@@ -720,13 +779,13 @@ function rteOrderedList(type) {
     while (n && n !== editor) { if (n.tagName === 'OL') { existingOl = n; break; } n = n.parentNode; }
   }
   if (existingOl) {
-    existingOl.style.listStyleType = type;
+    applyOlStyle(existingOl, type);
   } else {
     document.execCommand('insertOrderedList', false, null);
     sel = window.getSelection();
     if (sel && sel.anchorNode) {
       var n2 = sel.anchorNode;
-      while (n2 && n2 !== editor) { if (n2.tagName === 'OL') { n2.style.listStyleType = type; break; } n2 = n2.parentNode; }
+      while (n2 && n2 !== editor) { if (n2.tagName === 'OL') { applyOlStyle(n2, type); break; } n2 = n2.parentNode; }
     }
   }
 }
@@ -742,13 +801,13 @@ function rteUnorderedList(type) {
     while (n && n !== editor) { if (n.tagName === 'UL') { existingUl = n; break; } n = n.parentNode; }
   }
   if (existingUl) {
-    existingUl.style.listStyleType = type;
+    applyUlStyle(existingUl, type);
   } else {
     document.execCommand('insertUnorderedList', false, null);
     sel = window.getSelection();
     if (sel && sel.anchorNode) {
       var n2 = sel.anchorNode;
-      while (n2 && n2 !== editor) { if (n2.tagName === 'UL') { n2.style.listStyleType = type; break; } n2 = n2.parentNode; }
+      while (n2 && n2 !== editor) { if (n2.tagName === 'UL') { applyUlStyle(n2, type); break; } n2 = n2.parentNode; }
     }
   }
 }
