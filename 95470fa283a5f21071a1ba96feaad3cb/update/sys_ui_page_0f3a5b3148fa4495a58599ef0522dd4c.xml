@@ -112,6 +112,15 @@
     @counter-style list-hyphen{system:cyclic;symbols:"-";suffix:" "}
     .rte-editor pre{background:#1a1a2e;color:#e2e8f0;padding:10px 14px;border-radius:6px;font-family:'Courier New',Consolas,monospace;font-size:.88rem;white-space:pre-wrap;margin:8px 0;display:block}
     .rte-editor img{max-width:100%;border-radius:4px;margin:4px 0;display:block}
+    .rte-editor table{border-collapse:collapse;margin:8px 0;width:100%}
+    .rte-editor table td,.rte-editor table th{border:1px solid #cbd5e0;padding:6px 10px;min-width:60px;vertical-align:top}
+    .rte-editor table th{background:#f7fafc;font-weight:700}
+    .rte-toolbar button.rte-active{background:#dbeafe!important;border-color:#667eea!important;color:#3730a3!important;font-weight:700}
+    .rte-ol-start{display:none;align-items:center;gap:4px;font-size:.8rem;color:#4a5568;white-space:nowrap}
+    .rte-ol-start.visible{display:inline-flex}
+    .rte-ol-start input{width:44px;padding:2px 5px;border:1px solid #e2e8f0;border-radius:4px;font-size:.8rem;background:#fff}
+    .rte-tbl-ctx{display:none;align-items:center;gap:2px}
+    .rte-tbl-ctx.visible{display:inline-flex}
     .drag-handle{cursor:grab;color:#a0aec0;font-size:1.2rem;text-align:center;user-select:none;padding:0 4px}
     .drag-handle:active{cursor:grabbing}
     .tbl tr.drag-over td{background:#ebf4ff;border-top:2px solid #667eea}
@@ -149,6 +158,13 @@
     html[data-theme=dark] #rte-popout-overlay>div{background:#1a1d27!important}
     html[data-theme=dark] #rte-popout-overlay>div>div:first-child{background:#14172a!important;border-bottom-color:#2d3748!important}
     html[data-theme=dark] #rte-popout-overlay>div>div:first-child span{color:#e2e8f0!important}
+    html[data-theme=dark] .rte-toolbar button.rte-active{background:#1e2a4a!important;border-color:#667eea!important;color:#93c5fd!important}
+    html[data-theme=dark] .rte-editor table td,html[data-theme=dark] .rte-editor table th{border-color:#4a5568}
+    html[data-theme=dark] .rte-editor table th{background:#14172a}
+    html[data-theme=dark] .rte-ol-start{color:#a0aec0}
+    html[data-theme=dark] .rte-ol-start input{background:#252837;color:#e2e8f0;border-color:#4a5568}
+    #rte-tbl-grid-picker{position:fixed;z-index:9999;background:#fff;border:2px solid #e2e8f0;border-radius:10px;padding:10px;box-shadow:0 4px 20px rgba(0,0,0,.25)}
+    html[data-theme=dark] #rte-tbl-grid-picker{background:#1a1d27;border-color:#4a5568}
   </style>
 </head>
 <body>
@@ -280,7 +296,7 @@
                   <button type="button" onclick="rteCmd('undo')" title="Undo">&#8617;</button>
                   <button type="button" onclick="rteCmd('redo')" title="Redo">&#8618;</button>
                   <span class="rte-sep"></span>
-                  <select onchange="rteFontSize(this.value);this.value=''" title="Font Size">
+                  <select onclick="this.value=''" onchange="rteFontSize(this.value)" data-rte-select="fontSize" title="Font Size">
                     <option value="">Size</option>
                     <option value="1">Tiny</option>
                     <option value="2">Small</option>
@@ -291,10 +307,10 @@
                     <option value="7">Huge</option>
                   </select>
                   <span class="rte-sep"></span>
-                  <button type="button" onclick="rteCmd('bold')" title="Bold"><b>B</b></button>
-                  <button type="button" onclick="rteCmd('italic')" title="Italic"><i>I</i></button>
-                  <button type="button" onclick="rteCmd('underline')" title="Underline"><u>U</u></button>
-                  <button type="button" onclick="rteCmd('strikeThrough')" title="Strikethrough"><s>S</s></button>
+                  <button type="button" data-rte-cmd="bold" onclick="rteCmd('bold')" title="Bold"><b>B</b></button>
+                  <button type="button" data-rte-cmd="italic" onclick="rteCmd('italic')" title="Italic"><i>I</i></button>
+                  <button type="button" data-rte-cmd="underline" onclick="rteCmd('underline')" title="Underline"><u>U</u></button>
+                  <button type="button" data-rte-cmd="strikeThrough" onclick="rteCmd('strikeThrough')" title="Strikethrough"><s>S</s></button>
                   <span class="rte-sep"></span>
                   <label class="rte-color-pick" title="Text Color" onmousedown="rteSaveSelection()">
                     A<input type="color" value="#000000" oninput="rteApplyColor('foreColor',this.value)" />
@@ -303,12 +319,12 @@
                     H<input type="color" value="#ffff00" oninput="rteApplyColor('hiliteColor',this.value)" />
                   </label>
                   <span class="rte-sep"></span>
-                  <button type="button" onclick="rteCmd('justifyLeft')" title="Align Left">&#8592;</button>
-                  <button type="button" onclick="rteCmd('justifyCenter')" title="Center">&#8596;</button>
-                  <button type="button" onclick="rteCmd('justifyRight')" title="Align Right">&#8594;</button>
-                  <button type="button" onclick="rteCmd('justifyFull')" title="Justify">&#8644;</button>
+                  <button type="button" data-rte-cmd="justifyLeft" onclick="rteCmd('justifyLeft')" title="Align Left">&#8592;</button>
+                  <button type="button" data-rte-cmd="justifyCenter" onclick="rteCmd('justifyCenter')" title="Center">&#8596;</button>
+                  <button type="button" data-rte-cmd="justifyRight" onclick="rteCmd('justifyRight')" title="Align Right">&#8594;</button>
+                  <button type="button" data-rte-cmd="justifyFull" onclick="rteCmd('justifyFull')" title="Justify">&#8644;</button>
                   <span class="rte-sep"></span>
-                  <select onchange="rteBlock(this.value);this.value=''" title="Text Style">
+                  <select onclick="this.value=''" onchange="rteBlock(this.value)" data-rte-select="block" title="Text Style">
                     <option value="">Style</option>
                     <option value="h1">H1</option>
                     <option value="h2">H2</option>
@@ -338,12 +354,26 @@
                     <option value="upper-roman-p">I) II) III)</option>
                   </select>
                   <span class="rte-sep"></span>
+                  <button type="button" onclick="rteCmd('outdent')" title="Decrease Indent">&#8647;</button>
+                  <button type="button" onclick="rteCmd('indent')" title="Increase Indent">&#8649;</button>
+                  <span class="rte-ol-start" onmousedown="rteSaveSelection()">Start:<input type="number" min="0" value="1" onmousedown="event.stopPropagation();rteSaveSelection()" onchange="rteRestoreSelection();rteSetOlStart(this)" title="Ordered list start number" /></span>
+                  <span class="rte-sep"></span>
                   <button type="button" onclick="rteInsertCode()" title="Insert Code Block">&lt;/&gt;</button>
                   <button type="button" onclick="rteInsertImage()" title="Insert Image">&#128247;</button>
+                  <button type="button" onclick="rteShowTableGrid(this)" title="Insert Table">&#9707; Tbl</button>
+                  <span class="rte-tbl-ctx">
+                    <button type="button" onclick="rteTableAddRow('before')" title="Insert row above">&#8593;Row+</button>
+                    <button type="button" onclick="rteTableAddRow('after')" title="Insert row below">&#8595;Row+</button>
+                    <button type="button" onclick="rteTableAddCol('before')" title="Insert column left">&#8592;Col+</button>
+                    <button type="button" onclick="rteTableAddCol('after')" title="Insert column right">&#8594;Col+</button>
+                    <button type="button" onclick="rteTableDelRow()" title="Delete row">Row&#215;</button>
+                    <button type="button" onclick="rteTableDelCol()" title="Delete column">Col&#215;</button>
+                    <button type="button" onclick="rteTableDel()" title="Delete table">Tbl&#215;</button>
+                  </span>
                   <span class="rte-sep"></span>
                   <button type="button" onclick="rtePopout()" title="Pop-out editor" style="margin-left:2px">&#9974;&#65038; Pop-out</button>
                 </div>
-                <div id="lesson-content-editor" contenteditable="true" class="rte-editor" onkeydown="rteKeydown(event)"></div>
+                <div id="lesson-content-editor" contenteditable="true" class="rte-editor" onkeydown="rteKeydown(event)" onkeyup="rteUpdateToolbar()" onmouseup="rteUpdateToolbar()"></div>
                 <input type="hidden" name="content" id="lesson-content-hidden" />
               </div>
               <div class="form-group hidden" id="lesson-video-group">
@@ -621,7 +651,7 @@
       <button type="button" onclick="rteCmd('undo')" title="Undo">&#8617;</button>
       <button type="button" onclick="rteCmd('redo')" title="Redo">&#8618;</button>
       <span class="rte-sep"></span>
-      <select onchange="rteFontSize(this.value);this.value=''" title="Font Size">
+      <select onclick="this.value=''" onchange="rteFontSize(this.value)" data-rte-select="fontSize" title="Font Size">
         <option value="">Size</option>
         <option value="1">Tiny</option>
         <option value="2">Small</option>
@@ -632,10 +662,10 @@
         <option value="7">Huge</option>
       </select>
       <span class="rte-sep"></span>
-      <button type="button" onclick="rteCmd('bold')" title="Bold"><b>B</b></button>
-      <button type="button" onclick="rteCmd('italic')" title="Italic"><i>I</i></button>
-      <button type="button" onclick="rteCmd('underline')" title="Underline"><u>U</u></button>
-      <button type="button" onclick="rteCmd('strikeThrough')" title="Strikethrough"><s>S</s></button>
+      <button type="button" data-rte-cmd="bold" onclick="rteCmd('bold')" title="Bold"><b>B</b></button>
+      <button type="button" data-rte-cmd="italic" onclick="rteCmd('italic')" title="Italic"><i>I</i></button>
+      <button type="button" data-rte-cmd="underline" onclick="rteCmd('underline')" title="Underline"><u>U</u></button>
+      <button type="button" data-rte-cmd="strikeThrough" onclick="rteCmd('strikeThrough')" title="Strikethrough"><s>S</s></button>
       <span class="rte-sep"></span>
       <label class="rte-color-pick" title="Text Color" onmousedown="rteSaveSelection()">
         A<input type="color" value="#000000" oninput="rteApplyColor('foreColor',this.value)" />
@@ -644,12 +674,12 @@
         H<input type="color" value="#ffff00" oninput="rteApplyColor('hiliteColor',this.value)" />
       </label>
       <span class="rte-sep"></span>
-      <button type="button" onclick="rteCmd('justifyLeft')" title="Align Left">&#8592;</button>
-      <button type="button" onclick="rteCmd('justifyCenter')" title="Center">&#8596;</button>
-      <button type="button" onclick="rteCmd('justifyRight')" title="Align Right">&#8594;</button>
-      <button type="button" onclick="rteCmd('justifyFull')" title="Justify">&#8644;</button>
+      <button type="button" data-rte-cmd="justifyLeft" onclick="rteCmd('justifyLeft')" title="Align Left">&#8592;</button>
+      <button type="button" data-rte-cmd="justifyCenter" onclick="rteCmd('justifyCenter')" title="Center">&#8596;</button>
+      <button type="button" data-rte-cmd="justifyRight" onclick="rteCmd('justifyRight')" title="Align Right">&#8594;</button>
+      <button type="button" data-rte-cmd="justifyFull" onclick="rteCmd('justifyFull')" title="Justify">&#8644;</button>
       <span class="rte-sep"></span>
-      <select onchange="rteBlock(this.value);this.value=''" title="Text Style">
+      <select onclick="this.value=''" onchange="rteBlock(this.value)" data-rte-select="block" title="Text Style">
         <option value="">Style</option>
         <option value="h1">H1</option>
         <option value="h2">H2</option>
@@ -679,10 +709,24 @@
         <option value="upper-roman-p">I) II) III)</option>
       </select>
       <span class="rte-sep"></span>
+      <button type="button" onclick="rteCmd('outdent')" title="Decrease Indent">&#8647;</button>
+      <button type="button" onclick="rteCmd('indent')" title="Increase Indent">&#8649;</button>
+      <span class="rte-ol-start" onmousedown="rteSaveSelection()">Start:<input type="number" min="0" value="1" onmousedown="event.stopPropagation();rteSaveSelection()" onchange="rteRestoreSelection();rteSetOlStart(this)" title="Ordered list start number" /></span>
+      <span class="rte-sep"></span>
       <button type="button" onclick="rteInsertCode()" title="Insert Code Block">&lt;/&gt;</button>
       <button type="button" onclick="rteInsertImage()" title="Insert Image">&#128247;</button>
+      <button type="button" onclick="rteShowTableGrid(this)" title="Insert Table">&#9707; Tbl</button>
+      <span class="rte-tbl-ctx">
+        <button type="button" onclick="rteTableAddRow('before')" title="Insert row above">&#8593;Row+</button>
+        <button type="button" onclick="rteTableAddRow('after')" title="Insert row below">&#8595;Row+</button>
+        <button type="button" onclick="rteTableAddCol('before')" title="Insert column left">&#8592;Col+</button>
+        <button type="button" onclick="rteTableAddCol('after')" title="Insert column right">&#8594;Col+</button>
+        <button type="button" onclick="rteTableDelRow()" title="Delete row">Row&#215;</button>
+        <button type="button" onclick="rteTableDelCol()" title="Delete column">Col&#215;</button>
+        <button type="button" onclick="rteTableDel()" title="Delete table">Tbl&#215;</button>
+      </span>
     </div>
-    <div id="lesson-content-editor-popup" contenteditable="true" class="rte-editor" onkeydown="rteKeydown(event)" style="flex:1;border:none;border-radius:0;min-height:0;overflow-y:auto;padding:16px 20px"></div>
+    <div id="lesson-content-editor-popup" contenteditable="true" class="rte-editor" onkeydown="rteKeydown(event)" onkeyup="rteUpdateToolbar()" onmouseup="rteUpdateToolbar()" style="flex:1;border:none;border-radius:0;min-height:0;overflow-y:auto;padding:16px 20px"></div>
   </div>
 </div>
 
@@ -869,6 +913,218 @@ function rteInsertImage() {
   var editor = getRteEditor();
   editor.focus();
   document.execCommand('insertHTML', false, '<img src="' + url.replace(/"/g, '&quot;') + '" style="max-width:100%;border-radius:4px;margin:4px 0" /><p><br></p>');
+}
+
+// ── Toolbar state sync ────────────────────────────────────────────────
+function rteGetAncestor(tag) {
+  var sel = window.getSelection();
+  if (!sel || !sel.anchorNode) return null;
+  var editor = getRteEditor();
+  var n = sel.anchorNode;
+  if (n.nodeType === 3) n = n.parentNode;
+  while (n && n !== editor) {
+    if (n.tagName === tag) return n;
+    n = n.parentNode;
+  }
+  return null;
+}
+
+function rteUpdateToolbar() {
+  // Button active states
+  ['bold','italic','underline','strikeThrough','justifyLeft','justifyCenter','justifyRight','justifyFull'].forEach(function(cmd) {
+    var active = false;
+    try { active = !!document.queryCommandState(cmd); } catch(e) {}
+    document.querySelectorAll('[data-rte-cmd="' + cmd + '"]').forEach(function(b) {
+      b.classList.toggle('rte-active', active);
+    });
+  });
+  // Block style
+  var blockVal = '';
+  try { blockVal = (document.queryCommandValue('formatBlock') || '').toLowerCase(); } catch(e) {}
+  document.querySelectorAll('[data-rte-select="block"]').forEach(function(s) { s.value = blockVal; });
+  // Font size
+  var szVal = '';
+  try { szVal = document.queryCommandValue('fontSize') || ''; } catch(e) {}
+  document.querySelectorAll('[data-rte-select="fontSize"]').forEach(function(s) { s.value = szVal; });
+  // Table context controls — visible only when cursor is inside a table cell
+  var inTbl = !!(rteGetAncestor('TD') || rteGetAncestor('TH'));
+  document.querySelectorAll('.rte-tbl-ctx').forEach(function(el) { el.classList.toggle('visible', inTbl); });
+  // OL start control — visible only when cursor is inside an ordered list
+  var ol = rteGetAncestor('OL');
+  document.querySelectorAll('.rte-ol-start').forEach(function(el) {
+    el.classList.toggle('visible', !!ol);
+    if (ol) { var inp = el.querySelector('input'); if (inp) inp.value = ol.getAttribute('start') || '1'; }
+  });
+}
+
+// Sync toolbar state on every selection change in either editor
+document.addEventListener('selectionchange', function() {
+  var ae = document.activeElement;
+  if (ae && ae.classList && ae.classList.contains('rte-editor')) rteUpdateToolbar();
+});
+
+// ── Table grid picker ─────────────────────────────────────────────────
+function rteShowTableGrid(btn) {
+  var overlay = document.getElementById('rte-tbl-grid-overlay');
+  if (!overlay) {
+    overlay = document.createElement('div');
+    overlay.id = 'rte-tbl-grid-overlay';
+    overlay.style.cssText = 'position:fixed;inset:0;z-index:9998;display:none';
+    overlay.addEventListener('click', function(e) { if (e.target === overlay) rteHideTableGrid(); });
+    var picker = document.createElement('div');
+    picker.id = 'rte-tbl-grid-picker';
+    var cells = document.createElement('div');
+    cells.id = 'rte-tbl-grid-cells';
+    for (var r = 1; r <= 8; r++) {
+      var row = document.createElement('div');
+      row.style.cssText = 'display:flex;gap:3px;margin-bottom:3px';
+      for (var c = 1; c <= 8; c++) {
+        (function(rr, cc) {
+          var cell = document.createElement('div');
+          cell.style.cssText = 'width:16px;height:16px;border:1px solid #e2e8f0;border-radius:2px;cursor:pointer;background:#f7fafc;flex-shrink:0;transition:background .08s';
+          cell.addEventListener('mouseover', function() { rteTableGridHover(rr, cc); });
+          cell.addEventListener('click', function(e) { e.stopPropagation(); rteHideTableGrid(); rteInsertTable(rr, cc); });
+          row.appendChild(cell);
+        })(r, c);
+      }
+      cells.appendChild(row);
+    }
+    var lbl = document.createElement('div');
+    lbl.id = 'rte-tbl-grid-lbl';
+    lbl.style.cssText = 'font-size:.75rem;text-align:center;margin-top:6px;color:#718096';
+    lbl.textContent = 'Click to insert table';
+    picker.appendChild(cells);
+    picker.appendChild(lbl);
+    overlay.appendChild(picker);
+    document.body.appendChild(overlay);
+  }
+  var rect = btn.getBoundingClientRect();
+  var picker2 = document.getElementById('rte-tbl-grid-picker');
+  picker2.style.top = (rect.bottom + 4) + 'px';
+  picker2.style.left = rect.left + 'px';
+  overlay.style.display = 'block';
+  rteTableGridHover(1, 1);
+}
+
+function rteHideTableGrid() {
+  var overlay = document.getElementById('rte-tbl-grid-overlay');
+  if (overlay) overlay.style.display = 'none';
+}
+
+function rteTableGridHover(rows, cols) {
+  var cells = document.getElementById('rte-tbl-grid-cells');
+  if (!cells) return;
+  Array.from(cells.children).forEach(function(row, r) {
+    Array.from(row.children).forEach(function(cell, c) {
+      var on = r < rows && c < cols;
+      cell.style.background = on ? '#667eea' : '#f7fafc';
+      cell.style.borderColor = on ? '#667eea' : '#e2e8f0';
+    });
+  });
+  var lbl = document.getElementById('rte-tbl-grid-lbl');
+  if (lbl) lbl.textContent = rows + ' \u00d7 ' + cols;
+}
+
+// ── Table insertion ───────────────────────────────────────────────────
+function rteInsertTable(rows, cols) {
+  var editor = getRteEditor();
+  editor.focus();
+  var cellStyle = 'border:1px solid #cbd5e0;padding:6px 10px;min-width:60px;vertical-align:top';
+  var html = '<table style="border-collapse:collapse;width:100%;margin:8px 0"><tbody>';
+  for (var r = 0; r < rows; r++) {
+    html += '<tr>';
+    for (var c = 0; c < cols; c++) {
+      var tag = r === 0 ? 'th' : 'td';
+      var extra = r === 0 ? ';background:#f7fafc;font-weight:700' : '';
+      html += '<' + tag + ' style="' + cellStyle + extra + '"><br></' + tag + '>';
+    }
+    html += '</tr>';
+  }
+  html += '</tbody></table><p><br></p>';
+  document.execCommand('insertHTML', false, html);
+}
+
+// ── Table row / column operations ─────────────────────────────────────
+function rteTableAddRow(dir) {
+  var td = rteGetAncestor('TD') || rteGetAncestor('TH');
+  if (!td) return;
+  var row = td.parentElement;
+  var colCount = row.cells.length;
+  var newRow = row.cloneNode(false);
+  var cs = 'border:1px solid #cbd5e0;padding:6px 10px;min-width:60px;vertical-align:top';
+  for (var i = 0; i < colCount; i++) {
+    var cell = document.createElement('td');
+    cell.setAttribute('style', cs);
+    cell.innerHTML = '<br>';
+    newRow.appendChild(cell);
+  }
+  row.parentNode.insertBefore(newRow, dir === 'before' ? row : row.nextSibling);
+}
+
+function rteTableAddCol(dir) {
+  var td = rteGetAncestor('TD') || rteGetAncestor('TH');
+  if (!td) return;
+  var colIdx = td.cellIndex;
+  var table = td.closest ? td.closest('table') : (function(n){ while(n && n.tagName !== 'TABLE') n = n.parentNode; return n; })(td);
+  if (!table) return;
+  var insertIdx = dir === 'before' ? colIdx : colIdx + 1;
+  var cs = 'border:1px solid #cbd5e0;padding:6px 10px;min-width:60px;vertical-align:top';
+  Array.from(table.rows).forEach(function(r) {
+    var isHeader = r.cells[0] && r.cells[0].tagName === 'TH';
+    var newCell = document.createElement(isHeader ? 'th' : 'td');
+    newCell.setAttribute('style', cs + (isHeader ? ';background:#f7fafc;font-weight:700' : ''));
+    newCell.innerHTML = '<br>';
+    if (insertIdx >= r.cells.length) r.appendChild(newCell);
+    else r.insertBefore(newCell, r.cells[insertIdx]);
+  });
+}
+
+function rteTableDelRow() {
+  var td = rteGetAncestor('TD') || rteGetAncestor('TH');
+  if (!td) return;
+  var row = td.parentElement;
+  var table = td.closest ? td.closest('table') : (function(n){ while(n && n.tagName !== 'TABLE') n = n.parentNode; return n; })(td);
+  if (!table || table.rows.length <= 1) return;
+  row.parentNode.removeChild(row);
+}
+
+function rteTableDelCol() {
+  var td = rteGetAncestor('TD') || rteGetAncestor('TH');
+  if (!td) return;
+  var colIdx = td.cellIndex;
+  var table = td.closest ? td.closest('table') : (function(n){ while(n && n.tagName !== 'TABLE') n = n.parentNode; return n; })(td);
+  if (!table || (table.rows[0] && table.rows[0].cells.length <= 1)) return;
+  Array.from(table.rows).forEach(function(r) { if (r.cells[colIdx]) r.deleteCell(colIdx); });
+}
+
+function rteTableDel() {
+  var editor = getRteEditor();
+  var sel = window.getSelection();
+  if (!sel || !sel.anchorNode) return;
+  var n = sel.anchorNode;
+  if (n.nodeType === 3) n = n.parentNode;
+  while (n && n !== editor) {
+    if (n.tagName === 'TABLE') { n.parentNode.removeChild(n); return; }
+    n = n.parentNode;
+  }
+}
+
+// ── Ordered list custom start ─────────────────────────────────────────
+function rteSetOlStart(input) {
+  // Try current selection first, then fall back to the saved range
+  var ol = rteGetAncestor('OL');
+  if (!ol && savedRteRange) {
+    var n = savedRteRange.startContainer;
+    if (n.nodeType === 3) n = n.parentNode;
+    var editor = getRteEditor();
+    while (n && n !== editor) {
+      if (n.tagName === 'OL') { ol = n; break; }
+      n = n.parentNode;
+    }
+  }
+  if (!ol) return;
+  var val = parseInt(input.value, 10);
+  if (!isNaN(val) && val >= 0) ol.setAttribute('start', val);
 }
 
 function rtePopout() {
