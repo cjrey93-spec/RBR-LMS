@@ -332,7 +332,7 @@
                     <option value="p">&#182; Normal</option>
                   </select>
                   <span class="rte-sep"></span>
-                  <select onchange="rteUnorderedList(this.value);this.value=''" title="Bullet List">
+                  <select onclick="this.value=''" onchange="rteUnorderedList(this.value)" title="Bullet List" data-rte-select="ulStyle">
                     <option value="">&#8226; List</option>
                     <option value="disc">&#8226; Disc</option>
                     <option value="circle">&#9675; Circle</option>
@@ -340,7 +340,7 @@
                     <option value="hyphen">&#8211; Hyphen</option>
                     <option value="none">&#8212; None</option>
                   </select>
-                  <select onchange="rteOrderedList(this.value);this.value=''" title="Numbered List">
+                  <select onclick="this.value=''" onchange="rteOrderedList(this.value)" title="Numbered List" data-rte-select="olStyle">
                     <option value="">1. List</option>
                     <option value="decimal">1. 2. 3.</option>
                     <option value="lower-alpha">a. b. c.</option>
@@ -687,7 +687,7 @@
         <option value="p">&#182; Normal</option>
       </select>
       <span class="rte-sep"></span>
-      <select onchange="rteUnorderedList(this.value);this.value=''" title="Bullet List">
+      <select onclick="this.value=''" onchange="rteUnorderedList(this.value)" title="Bullet List" data-rte-select="ulStyle">
         <option value="">&#8226; List</option>
         <option value="disc">&#8226; Disc</option>
         <option value="circle">&#9675; Circle</option>
@@ -695,7 +695,7 @@
         <option value="hyphen">&#8211; Hyphen</option>
         <option value="none">&#8212; None</option>
       </select>
-      <select onchange="rteOrderedList(this.value);this.value=''" title="Numbered List">
+      <select onclick="this.value=''" onchange="rteOrderedList(this.value)" title="Numbered List" data-rte-select="olStyle">
         <option value="">1. List</option>
         <option value="decimal">1. 2. 3.</option>
         <option value="lower-alpha">a. b. c.</option>
@@ -955,6 +955,15 @@ function rteUpdateToolbar() {
     el.classList.toggle('visible', !!ol);
     if (ol) { var inp = el.querySelector('input'); if (inp) inp.value = ol.getAttribute('start') || '1'; }
   });
+  // UL / OL list-style-type select sync
+  var ul = rteGetAncestor('UL');
+  var ulSelVal = '';
+  if (ul) { var ust = ul.style.listStyleType || ''; ulSelVal = ust === 'list-hyphen' ? 'hyphen' : (ust || 'disc'); }
+  document.querySelectorAll('[data-rte-select="ulStyle"]').forEach(function(s) { s.value = ulSelVal; });
+  var OL_PAREN_REV = {'decimal-paren':'decimal-p','lower-alpha-paren':'lower-alpha-p','upper-alpha-paren':'upper-alpha-p','lower-roman-paren':'lower-roman-p','upper-roman-paren':'upper-roman-p'};
+  var olSelVal = '';
+  if (ol) { var olst = ol.style.listStyleType || ''; olSelVal = OL_PAREN_REV[olst] || (olst || 'decimal'); }
+  document.querySelectorAll('[data-rte-select="olStyle"]').forEach(function(s) { s.value = olSelVal; });
 }
 
 // Sync toolbar state on every selection change in either editor
@@ -998,6 +1007,7 @@ function rteShowTableGrid(btn) {
     overlay.appendChild(picker);
     document.body.appendChild(overlay);
   }
+  rteSaveSelection();
   var rect = btn.getBoundingClientRect();
   var picker2 = document.getElementById('rte-tbl-grid-picker');
   picker2.style.top = (rect.bottom + 4) + 'px';
@@ -1027,8 +1037,7 @@ function rteTableGridHover(rows, cols) {
 
 // ── Table insertion ───────────────────────────────────────────────────
 function rteInsertTable(rows, cols) {
-  var editor = getRteEditor();
-  editor.focus();
+  rteRestoreSelection();
   var cellStyle = 'border:1px solid #cbd5e0;padding:6px 10px;min-width:60px;vertical-align:top';
   var html = '<table style="border-collapse:collapse;width:100%;margin:8px 0"><tbody>';
   for (var r = 0; r < rows; r++) {
