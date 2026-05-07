@@ -11,6 +11,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <script>window.NOW={};window.NOW.user={};</script>
+  <script>(function(){if(localStorage.getItem('lms-theme')==='dark')document.documentElement.setAttribute('data-theme','dark')})()</script>
   <g:requires name="scripts/doctype/functions_bootstrap14.js" />
   <g:requires name="scripts/lib/prototype.js" />
   <g:requires name="scripts/classes/ajax/GlideURL.js" />
@@ -86,11 +87,45 @@
     .alert{padding:12px 16px;border-radius:8px;margin-bottom:16px;font-size:.9rem}
     .alert-error{background:#fed7d7;color:#c53030}
     .hidden{display:none}
+    .dm-toggle{background:transparent;border:1px solid rgba(255,255,255,.4);color:#fff;border-radius:20px;padding:5px 12px;cursor:pointer;font-size:.9rem;line-height:1;transition:background .2s;white-space:nowrap}
+    .dm-toggle:hover{background:rgba(255,255,255,.15)}
+    html[data-theme=dark] body{background:#0f1117;color:#e2e8f0}
+    html[data-theme=dark] .topbar{background:linear-gradient(135deg,#3d4a6b 0%,#4a3560 100%)}
+    html[data-theme=dark] .assessment-header{background:#1a1d27;box-shadow:0 2px 8px rgba(0,0,0,.4)}
+    html[data-theme=dark] .assessment-title{color:#e2e8f0}
+    html[data-theme=dark] .assessment-meta{color:#a0aec0}
+    html[data-theme=dark] .progress-row{color:#a0aec0}
+    html[data-theme=dark] .progress-bar-wrap{background:#2d3748}
+    html[data-theme=dark] .question-card{background:#1a1d27;box-shadow:0 2px 8px rgba(0,0,0,.4)}
+    html[data-theme=dark] .question-card.answered{border-color:#276749}
+    html[data-theme=dark] .question-text{color:#e2e8f0}
+    html[data-theme=dark] .question-points{color:#718096}
+    html[data-theme=dark] .hint-box{background:#2d1f00;color:#fbd38d}
+    html[data-theme=dark] .choice-label{border-color:#4a5568}
+    html[data-theme=dark] .choice-label:hover{border-color:#667eea;background:#1e2348}
+    html[data-theme=dark] .choice-label.selected{border-color:#667eea;background:#1e2348}
+    html[data-theme=dark] .choice-text-val{color:#e2e8f0}
+    html[data-theme=dark] .tf-btn{background:#252837;border-color:#4a5568;color:#e2e8f0}
+    html[data-theme=dark] .tf-btn:hover{border-color:#667eea}
+    html[data-theme=dark] .tf-btn.selected{background:#1e2348;color:#b794f4;border-color:#667eea}
+    html[data-theme=dark] .text-answer{background:#252837;color:#e2e8f0;border-color:#4a5568}
+    html[data-theme=dark] .text-answer:focus{border-color:#667eea}
+    html[data-theme=dark] .submit-bar{background:#1a1d27;border-top-color:#2d3748;box-shadow:0 -4px 16px rgba(0,0,0,.4)}
+    html[data-theme=dark] .submit-status{color:#a0aec0}
+    html[data-theme=dark] .btn-secondary{background:#252837;color:#e2e8f0;border-color:#4a5568}
+    html[data-theme=dark] .results-card{background:#1a1d27;box-shadow:0 4px 20px rgba(0,0,0,.4)}
+    html[data-theme=dark] .results-label{color:#a0aec0}
+    html[data-theme=dark] .result-box{background:#252837}
+    html[data-theme=dark] .result-box-num{color:#e2e8f0}
+    html[data-theme=dark] .result-box-label{color:#718096}
+    html[data-theme=dark] .answer-item{background:#1a1d27}
+    html[data-theme=dark] .alert-error{background:#3a1a1a;color:#fc8181}
   </style>
 </head>
 <body>
 <div class="topbar">
   <div class="topbar-title" id="topbar-title">Assessment</div>
+  <button id="dm-toggle" class="dm-toggle" onclick="toggleDark()" title="Toggle dark mode">&#127769;</button>
   <div class="timer-box hidden" id="timer-display">00:00</div>
 </div>
 
@@ -104,6 +139,9 @@
 </div>
 
 <script>
+function initDark(){var d=document.documentElement.getAttribute('data-theme')==='dark';var b=document.getElementById('dm-toggle');if(b)b.textContent=d?'\u2600\uFE0F':'\uD83C\uDF19';}
+function toggleDark(){var d=document.documentElement.getAttribute('data-theme')==='dark';document.documentElement.setAttribute('data-theme',d?'light':'dark');localStorage.setItem('lms-theme',d?'light':'dark');var b=document.getElementById('dm-toggle');if(b)b.textContent=d?'\uD83C\uDF19':'\u2600\uFE0F';}
+initDark();
 var API = '/api/now/table';
 var SCOPE = 'x_1879300_learning';
 var currentUser = '';

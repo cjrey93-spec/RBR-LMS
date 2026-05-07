@@ -13,6 +13,7 @@
   <g:evaluate var="jvar_uid" expression="gs.getUserID()" />
   <g:evaluate var="jvar_uname" expression="gs.getUserName()" />
   <script>window.NOW={};window.NOW.user={};window.SN_USER_ID='${jvar_uid}';window.SN_USER_NAME='${jvar_uname}';</script>
+  <script>(function(){if(localStorage.getItem('lms-theme')==='dark')document.documentElement.setAttribute('data-theme','dark')})()</script>
   <g:requires name="scripts/doctype/functions_bootstrap14.js" />
   <g:requires name="scripts/lib/prototype.js" />
   <g:requires name="scripts/classes/ajax/GlideURL.js" />
@@ -87,6 +88,36 @@
     .modal{background:#fff;border-radius:16px;padding:28px;max-width:480px;width:90%;max-height:80vh;overflow-y:auto}
     .modal h3{font-size:1.3rem;color:#2d3748;margin-bottom:16px}
     .modal-close{float:right;background:none;border:none;font-size:1.4rem;cursor:pointer;color:#718096}
+    .dm-toggle{background:transparent;border:1px solid rgba(255,255,255,.4);color:#fff;border-radius:20px;padding:5px 12px;cursor:pointer;font-size:.9rem;line-height:1;transition:background .2s;white-space:nowrap}
+    .dm-toggle:hover{background:rgba(255,255,255,.15)}
+    html[data-theme=dark] body{background:#0f1117;color:#e2e8f0}
+    html[data-theme=dark] .hero{background:linear-gradient(135deg,#3d4a6b 0%,#4a3560 100%)}
+    html[data-theme=dark] .search-bar{background:#252837}
+    html[data-theme=dark] .search-bar input{background:#252837;color:#e2e8f0}
+    html[data-theme=dark] .filter-group label{color:#a0aec0}
+    html[data-theme=dark] .filter-group select{background:#252837;color:#e2e8f0;border-color:#4a5568}
+    html[data-theme=dark] .results-header h2{color:#e2e8f0}
+    html[data-theme=dark] .results-count{color:#718096}
+    html[data-theme=dark] .course-card{background:#1a1d27}
+    html[data-theme=dark] .course-card:hover{border-color:#667eea}
+    html[data-theme=dark] .card-title{color:#e2e8f0}
+    html[data-theme=dark] .card-desc{color:#a0aec0}
+    html[data-theme=dark] .card-stats{color:#718096}
+    html[data-theme=dark] .section-title{color:#e2e8f0}
+    html[data-theme=dark] .track-card{background:#1a1d27}
+    html[data-theme=dark] .track-title{color:#e2e8f0}
+    html[data-theme=dark] .track-desc{color:#a0aec0}
+    html[data-theme=dark] .track-meta{color:#718096}
+    html[data-theme=dark] .btn-track{background:#2d2060;color:#b794f4}
+    html[data-theme=dark] .btn-track:hover{background:#3d2d80}
+    html[data-theme=dark] .btn-secondary{background:#252837;color:#e2e8f0;border-color:#4a5568}
+    html[data-theme=dark] .alert-success{background:#1a3a23;color:#68d391}
+    html[data-theme=dark] .alert-error{background:#3a1a1a;color:#fc8181}
+    html[data-theme=dark] .modal-backdrop{background:rgba(0,0,0,.75)}
+    html[data-theme=dark] .modal{background:#1a1d27}
+    html[data-theme=dark] .modal h3{color:#e2e8f0}
+    html[data-theme=dark] .modal-close{color:#a0aec0}
+    html[data-theme=dark] .prereq-list{color:#fc8181}
   </style>
 </head>
 <body>
@@ -102,6 +133,7 @@
   <div class="nav-links">
     <a href="x_1879300_learning_student_dashboard.do">My Dashboard</a>
     <a href="x_1879300_learning_instructor_dashboard.do">Instructor Dashboard</a>
+    <button id="dm-toggle" class="dm-toggle" onclick="toggleDark()" title="Toggle dark mode">&#127769;</button>
   </div>
 </div>
 
@@ -169,6 +201,9 @@
 </div>
 
 <script>
+function initDark(){var d=document.documentElement.getAttribute('data-theme')==='dark';var b=document.getElementById('dm-toggle');if(b)b.textContent=d?'\u2600\uFE0F':'\uD83C\uDF19';}
+function toggleDark(){var d=document.documentElement.getAttribute('data-theme')==='dark';document.documentElement.setAttribute('data-theme',d?'light':'dark');localStorage.setItem('lms-theme',d?'light':'dark');var b=document.getElementById('dm-toggle');if(b)b.textContent=d?'\uD83C\uDF19':'\u2600\uFE0F';}
+initDark();
 var API = '/api/now/table';
 var SCOPE = 'x_1879300_learning';
 var currentUser = window.SN_USER_ID || '';

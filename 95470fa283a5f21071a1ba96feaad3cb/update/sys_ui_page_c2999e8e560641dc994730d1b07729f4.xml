@@ -13,6 +13,7 @@
   <g:evaluate var="jvar_uid" expression="gs.getUserID()" />
   <g:evaluate var="jvar_uname" expression="gs.getUserName()" />
   <script>window.NOW={};window.NOW.user={};window.SN_USER_ID='${jvar_uid}';window.SN_USER_NAME='${jvar_uname}';</script>
+  <script>(function(){if(localStorage.getItem('lms-theme')==='dark')document.documentElement.setAttribute('data-theme','dark')})()</script>
   <g:requires name="scripts/doctype/functions_bootstrap14.js" />
   <g:requires name="scripts/lib/prototype.js" />
   <g:requires name="scripts/classes/ajax/GlideURL.js" />
@@ -116,6 +117,45 @@
     .sub-comment{margin-left:42px;border-left:2px solid #e2e8f0;padding-left:12px;margin-top:10px}
     .nav-buttons{display:flex;justify-content:space-between;align-items:center;margin-top:28px;padding-top:20px;border-top:2px solid #e2e8f0}
     .complete-check{display:flex;align-items:center;gap:8px;font-size:.9rem;color:#4a5568}
+    .dm-toggle{background:transparent;border:1px solid rgba(255,255,255,.4);color:#fff;border-radius:20px;padding:5px 12px;cursor:pointer;font-size:.9rem;line-height:1;transition:background .2s;white-space:nowrap}
+    .dm-toggle:hover{background:rgba(255,255,255,.15)}
+    html[data-theme=dark] body{background:#0f1117;color:#e2e8f0}
+    html[data-theme=dark] .topbar{background:linear-gradient(135deg,#3d4a6b 0%,#4a3560 100%)}
+    html[data-theme=dark] .sidebar{background:#1a1d27;border-right-color:#2d3748}
+    html[data-theme=dark] .sidebar-header{background:#14172a;border-bottom-color:#2d3748}
+    html[data-theme=dark] .sidebar-title{color:#e2e8f0}
+    html[data-theme=dark] .sidebar-progress{color:#a0aec0}
+    html[data-theme=dark] .progress-bar-wrap{background:#2d3748}
+    html[data-theme=dark] .lesson-item:hover{background:#252837;border-left-color:#4a5568}
+    html[data-theme=dark] .lesson-item.active{background:#1e2348;border-left-color:#667eea}
+    html[data-theme=dark] .lesson-item-title{color:#e2e8f0}
+    html[data-theme=dark] .lesson-item-num{color:#718096}
+    html[data-theme=dark] .lesson-item-type{color:#718096}
+    html[data-theme=dark] .section-card{background:#1a1d27;box-shadow:0 2px 8px rgba(0,0,0,.4)}
+    html[data-theme=dark] .section-card h3{color:#e2e8f0}
+    html[data-theme=dark] .lesson-header{border-bottom-color:#2d3748}
+    html[data-theme=dark] .lesson-title{color:#e2e8f0}
+    html[data-theme=dark] .lesson-desc{color:#a0aec0}
+    html[data-theme=dark] .lesson-content{color:#e2e8f0}
+    html[data-theme=dark] .lesson-content h1,html[data-theme=dark] .lesson-content h2,html[data-theme=dark] .lesson-content h3{color:#f7fafc}
+    html[data-theme=dark] .lesson-content code{background:#252837;color:#e2e8f0}
+    html[data-theme=dark] .material-item{border-bottom-color:#2d3748}
+    html[data-theme=dark] .material-icon{background:#1e2348}
+    html[data-theme=dark] .material-title{color:#e2e8f0}
+    html[data-theme=dark] .material-meta{color:#718096}
+    html[data-theme=dark] .form-group label{color:#a0aec0}
+    html[data-theme=dark] .form-group input,html[data-theme=dark] .form-group textarea,html[data-theme=dark] .form-group select{background:#252837;color:#e2e8f0;border-color:#4a5568}
+    html[data-theme=dark] .btn-secondary{background:#252837;color:#e2e8f0;border-color:#4a5568}
+    html[data-theme=dark] .btn-success{background:#1a3a23;color:#68d391;border-color:#276749}
+    html[data-theme=dark] .alert-success{background:#1a3a23;color:#68d391}
+    html[data-theme=dark] .alert-error{background:#3a1a1a;color:#fc8181}
+    html[data-theme=dark] .alert-info{background:#1a2540;color:#90cdf4}
+    html[data-theme=dark] .comment{border-bottom-color:#2d3748}
+    html[data-theme=dark] .comment-author{color:#e2e8f0}
+    html[data-theme=dark] .comment-text{color:#a0aec0}
+    html[data-theme=dark] .sub-comment{border-left-color:#2d3748}
+    html[data-theme=dark] .nav-buttons{border-top-color:#2d3748}
+    html[data-theme=dark] .complete-check{color:#a0aec0}
   </style>
 </head>
 <body>
@@ -127,6 +167,7 @@
   <div class="topbar-nav">
     <a href="x_1879300_learning_student_dashboard.do">My Dashboard</a>
     <a href="x_1879300_learning_catalog.do">Catalog</a>
+    <button id="dm-toggle" class="dm-toggle" onclick="toggleDark()" title="Toggle dark mode">&#127769;</button>
   </div>
 </div>
 
@@ -150,6 +191,9 @@
 </div>
 
 <script>
+function initDark(){var d=document.documentElement.getAttribute('data-theme')==='dark';var b=document.getElementById('dm-toggle');if(b)b.textContent=d?'\u2600\uFE0F':'\uD83C\uDF19';}
+function toggleDark(){var d=document.documentElement.getAttribute('data-theme')==='dark';document.documentElement.setAttribute('data-theme',d?'light':'dark');localStorage.setItem('lms-theme',d?'light':'dark');var b=document.getElementById('dm-toggle');if(b)b.textContent=d?'\uD83C\uDF19':'\u2600\uFE0F';}
+initDark();
 var API = '/api/now/table';
 var SCOPE = 'x_1879300_learning';
 var currentUser = window.SN_USER_ID || '';
