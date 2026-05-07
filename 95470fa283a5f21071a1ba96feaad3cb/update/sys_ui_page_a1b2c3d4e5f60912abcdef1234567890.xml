@@ -432,6 +432,7 @@
 </div>
 
 <script>
+console.log('[AdminDash] script start');
 var API = '/api/now/table';
 var SCOPE = 'x_1879300_learning_';
 var currentUser = window.SN_USER_ID || '';
@@ -449,7 +450,6 @@ function getRawVal(obj,field){if(!obj)return'';var v=obj[field];if(v&&typeof v==
 function esc(s){return(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
 function escQ(s){return(s||'').replace(/'/g,"\\'");}
 function closeModal(id){document.getElementById(id).classList.add('hidden');}
-function debounce(fn,delay){return function(){clearTimeout(arguments.callee._t);arguments.callee._t=setTimeout(fn,delay);};}
 function debounceLoadCourses(){clearTimeout(courseTimer);courseTimer=setTimeout(loadCourses,350);}
 function debounceLoadLessons(){clearTimeout(lessonTimer);lessonTimer=setTimeout(loadLessons,350);}
 function debounceLoadEnrollments(){clearTimeout(enrollTimer);enrollTimer=setTimeout(loadEnrollments,350);}
@@ -547,7 +547,7 @@ function loadCourses(page){
       renderPager('courses-pager',coursePage,coursePageSize,courseTotal,loadCourses);
       allCourses=[];// refresh cache on next filter use
     })
-    .catch(function(){el.innerHTML='<div class="alert alert-error" style="margin:16px">Failed to load courses.</div>';});
+    .catch(function(err){console.error('[AdminDash] loadCourses error',err);el.innerHTML='<div class="alert alert-error" style="margin:16px">Failed to load courses.</div>';});
 }
 
 function toggleCoursePub(id,newPub){
@@ -914,12 +914,13 @@ function renderPager(containerId,page,pageSize,total,loadFn){
 }
 
 // Initial load
+console.log('[AdminDash] init complete, loading courses');
 loadCourses();
 </script>
 </body>
 </html>]]></html>
         <name>admin_dashboard</name>
-        <processing_script/>
+        <processing_script><![CDATA[if(!gs.hasRole('x_1879300_learning.admin')&&!gs.hasRole('admin')){gs.addInfoMessage('Admin role required to access this page.');response.sendRedirect('/x_1879300_learning_student_dashboard.do');}]]></processing_script>
         <sys_class_name>sys_ui_page</sys_class_name>
         <sys_created_by>admin</sys_created_by>
         <sys_created_on>2026-05-07 00:00:00</sys_created_on>
