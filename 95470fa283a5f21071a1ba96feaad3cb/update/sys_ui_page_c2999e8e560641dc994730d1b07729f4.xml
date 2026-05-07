@@ -202,6 +202,7 @@ var enrollmentId = '';
 var lessons = [];
 var currentLesson = null;
 var lessonProgress = {};
+var lessonProgressIds = {};
 
 function hdrs() {
   var ck = window.g_ck || (typeof g_ck !== 'undefined' ? g_ck : '');
@@ -280,7 +281,13 @@ function loadProgress() {
     .then(function(data) {
       (data.result || []).forEach(function(p) {
         var lid = getRawVal(p,'lesson');
-        lessonProgress[lid] = getVal(p,'status');
+        var pid = getRawVal(p,'sys_id') || getVal(p,'sys_id');
+        var status = getRawVal(p,'status') || getVal(p,'status');
+        // Prefer completed over in_progress when duplicates exist
+        if (lessonProgress[lid] !== 'completed') {
+          lessonProgress[lid] = status;
+          lessonProgressIds[lid] = pid;
+        }
       });
     })
     .catch(function(){});
@@ -506,20 +513,33 @@ function postReply(lid, parentId) {
 
 function markInProgress(lid) {
   if (!enrollmentId || lessonProgress[lid] === 'completed') return;
-  var existing = lessonProgress[lid];
-  if (existing === 'in_progress') return;
+  if (lessonProgress[lid] === 'in_progress') return;
   var body = { student: currentUser, lesson: lid, enrollment: enrollmentId, status: 'in_progress', started_at: new Date().toISOString().replace('T',' ').split('.')[0] };
-  fetch(API + '/' + SCOPE + '_lesson_progress', { method: 'POST', headers: hdrs(), body: JSON.stringify(body) })
-    .then(function(){ lessonProgress[lid] = 'in_progress'; })
+  var pid = lessonProgressIds[lid];
+  var url = pid ? API + '/' + SCOPE + '_lesson_progress/' + pid : API + '/' + SCOPE + '_lesson_progress';
+  var method = pid ? 'PATCH' : 'POST';
+  fetch(url, { method: method, headers: hdrs(), body: JSON.stringify(body) })
+    .then(function(r){ return r.json(); })
+    .then(function(data) {
+      lessonProgress[lid] = 'in_progress';
+      var rec = data.result;
+      if (rec) lessonProgressIds[lid] = getRawVal(rec,'sys_id') || getVal(rec,'sys_id');
+    })
     .catch(function(){});
 }
 
 function markComplete(lid) {
   if (!enrollmentId) return;
   var body = { student: currentUser, lesson: lid, enrollment: enrollmentId, status: 'completed', completed_at: new Date().toISOString().replace('T',' ').split('.')[0] };
-  fetch(API + '/' + SCOPE + '_lesson_progress', { method: 'POST', headers: hdrs(), body: JSON.stringify(body) })
-    .then(function(){
+  var pid = lessonProgressIds[lid];
+  var url = pid ? API + '/' + SCOPE + '_lesson_progress/' + pid : API + '/' + SCOPE + '_lesson_progress';
+  var method = pid ? 'PATCH' : 'POST';
+  fetch(url, { method: method, headers: hdrs(), body: JSON.stringify(body) })
+    .then(function(r){ return r.json(); })
+    .then(function(data) {
       lessonProgress[lid] = 'completed';
+      var rec = data.result;
+      if (rec) lessonProgressIds[lid] = getRawVal(rec,'sys_id') || getVal(rec,'sys_id');
       var btn = document.getElementById('complete-btn');
       if (btn) { btn.textContent = 'Completed'; btn.disabled = true; }
       updateSidebar();
