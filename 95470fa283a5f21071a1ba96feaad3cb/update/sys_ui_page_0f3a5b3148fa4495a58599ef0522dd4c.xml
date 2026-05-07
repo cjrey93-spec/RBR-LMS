@@ -153,6 +153,11 @@
 </head>
 <body>
 <div class="wrap">
+  <div style="display:flex;justify-content:flex-end;gap:10px;margin-bottom:10px">
+    <a href="x_1879300_learning_student_dashboard.do" style="color:rgba(255,255,255,.85);text-decoration:none;font-size:.82rem;padding:5px 13px;border-radius:20px;border:1px solid rgba(255,255,255,.35)">Student Dashboard</a>
+    <a href="x_1879300_learning_catalog.do" style="color:rgba(255,255,255,.85);text-decoration:none;font-size:.82rem;padding:5px 13px;border-radius:20px;border:1px solid rgba(255,255,255,.35)">Catalog</a>
+    <a href="x_1879300_learning_admin_dashboard.do" style="color:rgba(255,255,255,.85);text-decoration:none;font-size:.82rem;padding:5px 13px;border-radius:20px;border:1px solid rgba(255,255,255,.35)">&#9881; Admin</a>
+  </div>
   <div class="hdr" style="position:relative">
     <button id="dm-toggle" class="dm-toggle" onclick="toggleDark()" title="Toggle dark mode">&#127769;</button>
     <h1>Instructor Dashboard</h1>
@@ -961,6 +966,7 @@ function loadMyCourses() {
             '<button class="btn btn-primary btn-sm" onclick="selectCourse(\'' + cid + '\',\'' + escQ(ctitle) + '\')">Select</button>' +
             '<button class="btn btn-secondary btn-sm" onclick="openEditCourse(\'' + cid + '\')">Edit</button>' +
             '<button class="btn btn-secondary btn-sm" onclick="togglePub(\'' + cid + '\',' + !pub + ')">' + (pub ? 'Unpublish' : 'Publish') + '</button>' +
+            '<a class="btn btn-secondary btn-sm" href="x_1879300_learning_lms.do?course=' + cid + '" target="_blank" style="text-decoration:none">&#128065; View in LMS</a>' +
           '</div>';
         grid.appendChild(card);
       });

@@ -133,6 +133,7 @@
   <div class="nav-links">
     <a href="x_1879300_learning_student_dashboard.do">My Dashboard</a>
     <a href="x_1879300_learning_instructor_dashboard.do">Instructor Dashboard</a>
+    <a href="x_1879300_learning_admin_dashboard.do">&#9881; Admin</a>
     <button id="dm-toggle" class="dm-toggle" onclick="toggleDark()" title="Toggle dark mode">&#127769;</button>
   </div>
 </div>
