@@ -27,7 +27,8 @@
         <rest_service_text/>
         <rest_variables/>
         <role_conditions/>
-        <script><![CDATA[        // Import the progress tracking function
+        <script><![CDATA[
+        // Import the progress tracking function
         const { updateCourseProgress } = require('../../server/progress-tracking.js');
         
         // Find the student's enrollment for this course

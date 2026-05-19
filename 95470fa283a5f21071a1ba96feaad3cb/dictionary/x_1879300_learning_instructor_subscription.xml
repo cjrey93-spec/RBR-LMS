@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?><database>
     <element db_object_id="c8e6138272f0aa2e13c032e79c75c312" label="Instructor Subscriptions" max_length="40" name="x_1879300_learning_instructor_subscription" type="collection">
         <element attributes="encode_utf8=false" display="true" label="Subscriber" mandatory="true" max_length="32" name="subscriber" reference="sys_user" type="reference"/>
-        <element attributes="encode_utf8=false" label="Instructor" mandatory="true" max_length="32" name="instructor" reference="sys_user" type="reference"/>
         <element attributes="edge_encryption_enabled=true" label="Subscribed At" mandatory="true" max_length="40" name="subscribed_at" type="glide_date_time"/>
         <element default="true" label="Active" max_length="40" name="active" type="boolean"/>
+        <element attributes="encode_utf8=false" label="Instructor" mandatory="true" max_length="32" name="instructor" reference="sys_user" type="reference"/>
         <index name="index">
             <element name="instructor"/>
         </index>

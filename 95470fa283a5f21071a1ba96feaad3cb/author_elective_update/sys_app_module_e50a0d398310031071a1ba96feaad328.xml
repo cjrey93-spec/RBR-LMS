@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update sys_domain="global" table="sys_app_module">
+    <sys_app_module action="DELETE">
+        <active>true</active>
+        <application display_value="Retakes">650a0d398310031071a1ba96feaad320</application>
+        <assessment/>
+        <device_type/>
+        <filter/>
+        <hint/>
+        <homepage/>
+        <image/>
+        <link_type>LIST</link_type>
+        <map_page/>
+        <mobile_title>Retakes</mobile_title>
+        <mobile_view_name>Mobile</mobile_view_name>
+        <name>x_1879300_learning_retakes</name>
+        <order/>
+        <override_menu_roles>false</override_menu_roles>
+        <query/>
+        <report/>
+        <require_confirmation>true</require_confirmation>
+        <roles>x_1879300_learning.retakes_user</roles>
+        <sys_class_name>sys_app_module</sys_class_name>
+        <sys_created_by>admin</sys_created_by>
+        <sys_created_on>2026-04-17 15:20:47</sys_created_on>
+        <sys_domain>global</sys_domain>
+        <sys_domain_path>/</sys_domain_path>
+        <sys_id>e50a0d398310031071a1ba96feaad328</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>Retakes</sys_name>
+        <sys_overrides/>
+        <sys_package display_value="Learning Man" source="x_1879300_learning">95470fa283a5f21071a1ba96feaad3cb</sys_package>
+        <sys_policy/>
+        <sys_scope display_value="Learning Man">95470fa283a5f21071a1ba96feaad3cb</sys_scope>
+        <sys_update_name>sys_app_module_e50a0d398310031071a1ba96feaad328</sys_update_name>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2026-04-17 15:20:47</sys_updated_on>
+        <timeline_page/>
+        <title>Retakes</title>
+        <uncancelable>false</uncancelable>
+        <view_name/>
+        <window_name/>
+    </sys_app_module>
+<sys_update_version action="INSERT_OR_UPDATE">
+        <action>DELETE</action>
+        <application display_value="Learning Man">95470fa283a5f21071a1ba96feaad3cb</application>
+        <file_path/>
+        <instance_id>6b7c8dc51b823d98699443f4bd4bcb40</instance_id>
+        <instance_name>dev191656</instance_name>
+        <name>sys_app_module_e50a0d398310031071a1ba96feaad328</name>
+        <payload><![CDATA[<?xml version="1.0" encoding="UTF-8"?><record_update sys_domain="global" table="sys_app_module">
+    <sys_app_module action="INSERT_OR_UPDATE">
+        <active>true</active>
+        <application display_value="Retakes">650a0d398310031071a1ba96feaad320</application>
+        <assessment/>
+        <device_type/>
+        <filter/>
+        <hint/>
+        <homepage/>
+        <image/>
+        <link_type>LIST</link_type>
+        <map_page/>
+        <mobile_title>Retakes</mobile_title>
+        <mobile_view_name>Mobile</mobile_view_name>
+        <name>x_1879300_learning_retakes</name>
+        <order/>
+        <override_menu_roles>false</override_menu_roles>
+        <query/>
+        <report/>
+        <require_confirmation>true</require_confirmation>
+        <roles>x_1879300_learning.retakes_user</roles>
+        <sys_class_name>sys_app_module</sys_class_name>
+        <sys_created_by>admin</sys_created_by>
+        <sys_created_on>2026-04-17 15:20:47</sys_created_on>
+        <sys_domain>global</sys_domain>
+        <sys_domain_path>/</sys_domain_path>
+        <sys_id>e50a0d398310031071a1ba96feaad328</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>Retakes</sys_name>
+        <sys_overrides/>
+        <sys_package display_value="Learning Man" source="x_1879300_learning">95470fa283a5f21071a1ba96feaad3cb</sys_package>
+        <sys_policy/>
+        <sys_scope display_value="Learning Man">95470fa283a5f21071a1ba96feaad3cb</sys_scope>
+        <sys_update_name>sys_app_module_e50a0d398310031071a1ba96feaad328</sys_update_name>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2026-04-17 15:20:47</sys_updated_on>
+        <timeline_page/>
+        <title>Retakes</title>
+        <uncancelable>false</uncancelable>
+        <view_name/>
+        <window_name/>
+    </sys_app_module>
+</record_update>]]></payload>
+        <payload_hash>881548641</payload_hash>
+        <record_name>Retakes</record_name>
+        <reverted_from/>
+        <source>f0771b4e8330031071a1ba96feaad3db</source>
+        <source_table>sys_upgrade_history</source_table>
+        <state>previous</state>
+        <sys_created_by>admin</sys_created_by>
+        <sys_created_on>2026-05-13 16:48:40</sys_created_on>
+        <sys_id>aa771f4e8330031071a1ba96feaad32c</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_recorded_at>19e223d8f540000001</sys_recorded_at>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2026-05-13 16:48:40</sys_updated_on>
+        <type>Module</type>
+        <update_guid>e2771f4ec33003100e8161e7a21f4c2c</update_guid>
+        <update_guid_history>e2771f4ec33003100e8161e7a21f4c2c:0,4b37134e6630031033d89b363b8b24be:-600833469,e50a0d3908100310c01bdf6318eeac47:-258377833</update_guid_history>
+    </sys_update_version>
+    <sys_metadata_delete action="INSERT_OR_UPDATE">
+        <sys_audit_delete display_value="Retakes">921936bf83704f1071a1ba96feaad3ab</sys_audit_delete>
+        <sys_class_name>sys_metadata_delete</sys_class_name>
+        <sys_created_by>admin</sys_created_by>
+        <sys_created_on>2026-05-19 01:05:18</sys_created_on>
+        <sys_db_object display_value="" name="sys_app_module">sys_app_module</sys_db_object>
+        <sys_id>57643efc9d5749a0a4125f79c9942400</sys_id>
+        <sys_metadata>e50a0d398310031071a1ba96feaad328</sys_metadata>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>Retakes</sys_name>
+        <sys_package display_value="Learning Man" source="x_1879300_learning">95470fa283a5f21071a1ba96feaad3cb</sys_package>
+        <sys_parent/>
+        <sys_policy/>
+        <sys_scope display_value="Learning Man">95470fa283a5f21071a1ba96feaad3cb</sys_scope>
+        <sys_scope_delete display_value="">59844fb1c47f42549ff8d66a22f7c090</sys_scope_delete>
+        <sys_update_name>sys_app_module_e50a0d398310031071a1ba96feaad328</sys_update_name>
+        <sys_update_version display_value="sys_app_module_e50a0d398310031071a1ba96feaad328">aa771f4e8330031071a1ba96feaad32c</sys_update_version>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2026-05-19 01:05:18</sys_updated_on>
+    </sys_metadata_delete>
+</record_update>

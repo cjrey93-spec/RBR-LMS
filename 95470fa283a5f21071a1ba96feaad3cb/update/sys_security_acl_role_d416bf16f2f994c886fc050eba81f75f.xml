@@ -13,6 +13,6 @@
         <sys_update_name>sys_security_acl_role_d416bf16f2f994c886fc050eba81f75f</sys_update_name>
         <sys_updated_by>admin</sys_updated_by>
         <sys_updated_on>2026-04-27 00:00:00</sys_updated_on>
-        <sys_user_role display_value="x_1879300_learning.instructor" name="x_1879300_learning.instructor">fc4b0902f6bb97c3f454ec969d3b9430</sys_user_role>
+        <sys_user_role display_value="x_1879300_learning.instructor" name="x_1879300_learning.instructor">ef540baea35b42a18f35373ac8de22c5</sys_user_role>
     </sys_security_acl_role>
 </record_update>

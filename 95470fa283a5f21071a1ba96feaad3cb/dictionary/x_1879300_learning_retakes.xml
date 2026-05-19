@@ -1,5 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?><database>
-    <element db_object_id="a1d9cdb58310031071a1ba96feaad321" label="Retakes" max_length="40" name="x_1879300_learning_retakes" type="collection">
-        <element label="AssignmentNo" max_length="40" name="assignmentno" type="string"/>
-    </element>
-</database>

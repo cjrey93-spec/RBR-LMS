@@ -1,28 +1,31 @@
 <?xml version="1.0" encoding="UTF-8"?><database>
     <element db_object_id="3f59ac5fe82bddf27e9b77c994b39e3c" label="Lesson Comments" max_length="40" name="x_1879300_learning_lesson_comment" type="collection">
-        <element attributes="encode_utf8=false" label="Lesson" mandatory="true" max_length="32" name="lesson" reference="x_1879300_learning_lessons" type="reference"/>
-        <element attributes="encode_utf8=false" label="Enrollment" max_length="32" name="enrollment" reference="x_1879300_learning_student_enrollments" type="reference"/>
-        <element attributes="encode_utf8=false" display="true" label="Author" mandatory="true" max_length="32" name="author" reference="sys_user" type="reference"/>
-        <element attributes="edge_encryption_enabled=true" label="Comment Text" mandatory="true" max_length="8000" name="comment_text" type="string"/>
         <element attributes="encode_utf8=false" label="Parent Comment" max_length="32" name="parent_comment" reference="x_1879300_learning_lesson_comment" type="reference"/>
+        <element label="Resolved" max_length="40" name="resolved" type="boolean"/>
+        <element attributes="encode_utf8=false" label="Enrollment" max_length="32" name="enrollment" reference="x_1879300_learning_student_enrollments" type="reference"/>
+        <element attributes="encode_utf8=false" label="Lesson" mandatory="true" max_length="32" name="lesson" reference="x_1879300_learning_lessons" type="reference"/>
         <element attributes="edge_encryption_enabled=true" label="Posted At" mandatory="true" max_length="40" name="posted_at" type="glide_date_time"/>
-        <element attributes="edge_encryption_enabled=true" label="Edited At" max_length="40" name="edited_at" type="glide_date_time"/>
-        <element default="false" label="Pinned" max_length="40" name="pinned" type="boolean"/>
-        <element default="false" label="Resolved" max_length="40" name="resolved" type="boolean"/>
         <element attributes="edge_encryption_enabled=true" choice="1" default="comment" label="Comment Type" max_length="20" name="comment_type" type="string">
             <choice>
+                <element inactive_on_update="false" label="Announcement" sequence="2" value="announcement"/>
                 <element inactive_on_update="false" label="Comment" sequence="0" value="comment"/>
                 <element inactive_on_update="false" label="Question" sequence="1" value="question"/>
-                <element inactive_on_update="false" label="Announcement" sequence="2" value="announcement"/>
             </choice>
         </element>
+        <element attributes="encode_utf8=false" display="true" label="Author" mandatory="true" max_length="32" name="author" reference="sys_user" type="reference"/>
+        <element attributes="edge_encryption_enabled=true" label="Edited At" max_length="40" name="edited_at" type="glide_date_time"/>
+        <element attributes="edge_encryption_enabled=true" label="Comment Text" mandatory="true" max_length="8000" name="comment_text" type="string"/>
+        <element label="Pinned" max_length="40" name="pinned" type="boolean"/>
         <index name="index">
-            <element name="enrollment"/>
+            <element name="author"/>
         </index>
         <index name="index2">
-            <element name="lesson"/>
+            <element name="enrollment"/>
         </index>
         <index name="index3">
+            <element name="lesson"/>
+        </index>
+        <index name="index4">
             <element name="parent_comment"/>
         </index>
     </element>

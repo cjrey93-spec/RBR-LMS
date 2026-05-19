@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?><record_update table="sys_user_role">
     <sys_user_role action="INSERT_OR_UPDATE">
         <assignable_by/>
-        <can_delegate>false</can_delegate>
-        <description>Instructors can create courses, lessons, assessments, grade submissions, and manage student progress</description>
+        <can_delegate>true</can_delegate>
+        <description>Instructor role: create and manage courses, lessons, assessments, and grade student work</description>
         <elevated_privilege>false</elevated_privilege>
         <grantable>true</grantable>
         <includes_roles/>
@@ -11,7 +11,7 @@
         <suffix>instructor</suffix>
         <sys_class_name>sys_user_role</sys_class_name>
         <sys_created_by>admin</sys_created_by>
-        <sys_created_on>2025-12-04 15:49:50</sys_created_on>
+        <sys_created_on>2026-04-27 00:00:00</sys_created_on>
         <sys_id>ef540baea35b42a18f35373ac8de22c5</sys_id>
         <sys_mod_count>0</sys_mod_count>
         <sys_name>x_1879300_learning.instructor</sys_name>
@@ -20,6 +20,6 @@
         <sys_scope display_value="Learning Man">95470fa283a5f21071a1ba96feaad3cb</sys_scope>
         <sys_update_name>sys_user_role_ef540baea35b42a18f35373ac8de22c5</sys_update_name>
         <sys_updated_by>admin</sys_updated_by>
-        <sys_updated_on>2025-12-04 15:49:50</sys_updated_on>
+        <sys_updated_on>2026-04-27 00:00:00</sys_updated_on>
     </sys_user_role>
 </record_update>

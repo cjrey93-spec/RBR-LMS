@@ -1,31 +1,34 @@
 <?xml version="1.0" encoding="UTF-8"?><database>
     <element db_object_id="75cdfca86778efb1301c39a5bbb533a8" label="Student Submissions" max_length="40" name="x_1879300_learning_student_submission" type="collection">
-        <element attributes="encode_utf8=false" display="true" label="Student" mandatory="true" max_length="32" name="student" reference="sys_user" type="reference"/>
         <element attributes="encode_utf8=false" label="Lesson" mandatory="true" max_length="32" name="lesson" reference="x_1879300_learning_lessons" type="reference"/>
-        <element attributes="encode_utf8=false" label="Enrollment" mandatory="true" max_length="32" name="enrollment" reference="x_1879300_learning_student_enrollments" type="reference"/>
-        <element attributes="edge_encryption_enabled=true" label="Submitted At" max_length="40" name="submitted_at" type="glide_date_time"/>
-        <element attributes="edge_encryption_enabled=true" label="Student Notes" max_length="4000" name="student_notes" type="string"/>
-        <element attributes="edge_encryption_enabled=true" choice="1" default="submitted" label="Status" max_length="20" name="status" type="string">
-            <choice>
-                <element inactive_on_update="false" label="Draft" sequence="0" value="draft"/>
-                <element inactive_on_update="false" label="Submitted" sequence="1" value="submitted"/>
-                <element inactive_on_update="false" label="Graded" sequence="2" value="graded"/>
-                <element inactive_on_update="false" label="Returned for Revision" sequence="3" value="returned"/>
-            </choice>
-        </element>
         <element label="Grade (%)" max_length="20" name="grade" type="decimal"/>
-        <element attributes="encode_utf8=false" label="Graded By" max_length="32" name="graded_by" reference="sys_user" type="reference"/>
-        <element attributes="edge_encryption_enabled=true" label="Graded At" max_length="40" name="graded_at" type="glide_date_time"/>
-        <element attributes="edge_encryption_enabled=true" label="Instructor Feedback" max_length="4000" name="instructor_feedback" type="string"/>
         <element attributes="edge_encryption_enabled=true" label="File Name" max_length="255" name="file_name" type="string"/>
         <element label="File Size (KB)" max_length="40" name="file_size_kb" type="integer"/>
+        <element attributes="encode_utf8=false" label="Enrollment" mandatory="true" max_length="32" name="enrollment" reference="x_1879300_learning_student_enrollments" type="reference"/>
+        <element attributes="encode_utf8=false" label="Graded By" max_length="32" name="graded_by" reference="sys_user" type="reference"/>
+        <element attributes="edge_encryption_enabled=true" label="Submitted At" max_length="40" name="submitted_at" type="glide_date_time"/>
+        <element attributes="edge_encryption_enabled=true" label="Graded At" max_length="40" name="graded_at" type="glide_date_time"/>
+        <element attributes="encode_utf8=false" display="true" label="Student" mandatory="true" max_length="32" name="student" reference="sys_user" type="reference"/>
+        <element attributes="edge_encryption_enabled=true" choice="1" default="submitted" label="Status" max_length="20" name="status" type="string">
+            <choice>
+                <element inactive_on_update="false" label="Graded" sequence="2" value="graded"/>
+                <element inactive_on_update="false" label="Returned for Revision" sequence="3" value="returned"/>
+                <element inactive_on_update="false" label="Draft" sequence="0" value="draft"/>
+                <element inactive_on_update="false" label="Submitted" sequence="1" value="submitted"/>
+            </choice>
+        </element>
+        <element attributes="edge_encryption_enabled=true" label="Student Notes" max_length="4000" name="student_notes" type="string"/>
+        <element attributes="edge_encryption_enabled=true" label="Instructor Feedback" max_length="4000" name="instructor_feedback" type="string"/>
         <index name="index">
             <element name="enrollment"/>
         </index>
         <index name="index2">
-            <element name="lesson"/>
+            <element name="graded_by"/>
         </index>
         <index name="index3">
+            <element name="lesson"/>
+        </index>
+        <index name="index4">
             <element name="student"/>
         </index>
     </element>

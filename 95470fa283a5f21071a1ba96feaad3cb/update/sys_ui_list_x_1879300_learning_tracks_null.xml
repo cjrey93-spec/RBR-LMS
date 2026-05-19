@@ -3,107 +3,107 @@
         <sys_ui_list_element action="INSERT_OR_UPDATE">
             <average_value>false</average_value>
             <element>title</element>
-            <list_id display_value="x_1879300_learning_tracks" element="NULL" name="x_1879300_learning_tracks" parent="NULL" relationship="NULL" sys_domain="global" view="Default view">b252e6f58387721071a1ba96feaad302</list_id>
+            <list_id display_value="x_1879300_learning_tracks" element="NULL" name="x_1879300_learning_tracks" parent="NULL" relationship="NULL" sys_domain="global" view="Default view">6f88d4fd5e8943d68e7d97f06dd52bd2</list_id>
             <max_value>false</max_value>
             <min_value>false</min_value>
             <position>0</position>
             <sum>false</sum>
             <sys_created_by>admin</sys_created_by>
-            <sys_created_on>2026-02-14 18:28:13</sys_created_on>
-            <sys_id>f252e6f58387721071a1ba96feaad303</sys_id>
+            <sys_created_on>2026-04-26 03:46:23</sys_created_on>
+            <sys_id>6c6ed91cbef04d8da534ba7fd469698f</sys_id>
             <sys_mod_count>0</sys_mod_count>
             <sys_updated_by>admin</sys_updated_by>
-            <sys_updated_on>2026-02-14 18:28:13</sys_updated_on>
+            <sys_updated_on>2026-04-26 03:46:23</sys_updated_on>
         </sys_ui_list_element>
         <sys_ui_list_element action="INSERT_OR_UPDATE">
             <average_value>false</average_value>
             <element>category</element>
-            <list_id display_value="x_1879300_learning_tracks" element="NULL" name="x_1879300_learning_tracks" parent="NULL" relationship="NULL" sys_domain="global" view="Default view">b252e6f58387721071a1ba96feaad302</list_id>
+            <list_id display_value="x_1879300_learning_tracks" element="NULL" name="x_1879300_learning_tracks" parent="NULL" relationship="NULL" sys_domain="global" view="Default view">6f88d4fd5e8943d68e7d97f06dd52bd2</list_id>
             <max_value>false</max_value>
             <min_value>false</min_value>
             <position>1</position>
             <sum>false</sum>
             <sys_created_by>admin</sys_created_by>
-            <sys_created_on>2026-02-14 18:28:13</sys_created_on>
-            <sys_id>7a52e6f58387721071a1ba96feaad303</sys_id>
+            <sys_created_on>2026-04-26 03:46:23</sys_created_on>
+            <sys_id>df0b2cd949ac4e5a8c8a797287545e17</sys_id>
             <sys_mod_count>0</sys_mod_count>
             <sys_updated_by>admin</sys_updated_by>
-            <sys_updated_on>2026-02-14 18:28:13</sys_updated_on>
+            <sys_updated_on>2026-04-26 03:46:23</sys_updated_on>
         </sys_ui_list_element>
         <sys_ui_list_element action="INSERT_OR_UPDATE">
             <average_value>false</average_value>
             <element>difficulty_level</element>
-            <list_id display_value="x_1879300_learning_tracks" element="NULL" name="x_1879300_learning_tracks" parent="NULL" relationship="NULL" sys_domain="global" view="Default view">b252e6f58387721071a1ba96feaad302</list_id>
+            <list_id display_value="x_1879300_learning_tracks" element="NULL" name="x_1879300_learning_tracks" parent="NULL" relationship="NULL" sys_domain="global" view="Default view">6f88d4fd5e8943d68e7d97f06dd52bd2</list_id>
             <max_value>false</max_value>
             <min_value>false</min_value>
             <position>2</position>
             <sum>false</sum>
             <sys_created_by>admin</sys_created_by>
-            <sys_created_on>2026-02-14 18:28:13</sys_created_on>
-            <sys_id>fe52e6f58387721071a1ba96feaad303</sys_id>
+            <sys_created_on>2026-04-26 03:46:23</sys_created_on>
+            <sys_id>5d837e1f3de5415bb450fa187325e3dc</sys_id>
             <sys_mod_count>0</sys_mod_count>
             <sys_updated_by>admin</sys_updated_by>
-            <sys_updated_on>2026-02-14 18:28:13</sys_updated_on>
+            <sys_updated_on>2026-04-26 03:46:23</sys_updated_on>
         </sys_ui_list_element>
         <sys_ui_list_element action="INSERT_OR_UPDATE">
             <average_value>false</average_value>
             <element>created_by</element>
-            <list_id display_value="x_1879300_learning_tracks" element="NULL" name="x_1879300_learning_tracks" parent="NULL" relationship="NULL" sys_domain="global" view="Default view">b252e6f58387721071a1ba96feaad302</list_id>
+            <list_id display_value="x_1879300_learning_tracks" element="NULL" name="x_1879300_learning_tracks" parent="NULL" relationship="NULL" sys_domain="global" view="Default view">6f88d4fd5e8943d68e7d97f06dd52bd2</list_id>
             <max_value>false</max_value>
             <min_value>false</min_value>
             <position>3</position>
             <sum>false</sum>
             <sys_created_by>admin</sys_created_by>
-            <sys_created_on>2026-02-14 18:28:13</sys_created_on>
-            <sys_id>7652e6f58387721071a1ba96feaad304</sys_id>
+            <sys_created_on>2026-04-26 03:46:23</sys_created_on>
+            <sys_id>972281f795354ab5bdaa9c5a969848ab</sys_id>
             <sys_mod_count>0</sys_mod_count>
             <sys_updated_by>admin</sys_updated_by>
-            <sys_updated_on>2026-02-14 18:28:13</sys_updated_on>
+            <sys_updated_on>2026-04-26 03:46:23</sys_updated_on>
         </sys_ui_list_element>
         <sys_ui_list_element action="INSERT_OR_UPDATE">
             <average_value>false</average_value>
             <element>estimated_total_hours</element>
-            <list_id display_value="x_1879300_learning_tracks" element="NULL" name="x_1879300_learning_tracks" parent="NULL" relationship="NULL" sys_domain="global" view="Default view">b252e6f58387721071a1ba96feaad302</list_id>
+            <list_id display_value="x_1879300_learning_tracks" element="NULL" name="x_1879300_learning_tracks" parent="NULL" relationship="NULL" sys_domain="global" view="Default view">6f88d4fd5e8943d68e7d97f06dd52bd2</list_id>
             <max_value>false</max_value>
             <min_value>false</min_value>
             <position>4</position>
             <sum>false</sum>
             <sys_created_by>admin</sys_created_by>
-            <sys_created_on>2026-02-14 18:28:13</sys_created_on>
-            <sys_id>fa52e6f58387721071a1ba96feaad304</sys_id>
+            <sys_created_on>2026-04-26 03:46:23</sys_created_on>
+            <sys_id>d999fadd47c441deac8868d74fd93f50</sys_id>
             <sys_mod_count>0</sys_mod_count>
             <sys_updated_by>admin</sys_updated_by>
-            <sys_updated_on>2026-02-14 18:28:13</sys_updated_on>
+            <sys_updated_on>2026-04-26 03:46:23</sys_updated_on>
         </sys_ui_list_element>
         <sys_ui_list_element action="INSERT_OR_UPDATE">
             <average_value>false</average_value>
             <element>published</element>
-            <list_id display_value="x_1879300_learning_tracks" element="NULL" name="x_1879300_learning_tracks" parent="NULL" relationship="NULL" sys_domain="global" view="Default view">b252e6f58387721071a1ba96feaad302</list_id>
+            <list_id display_value="x_1879300_learning_tracks" element="NULL" name="x_1879300_learning_tracks" parent="NULL" relationship="NULL" sys_domain="global" view="Default view">6f88d4fd5e8943d68e7d97f06dd52bd2</list_id>
             <max_value>false</max_value>
             <min_value>false</min_value>
             <position>5</position>
             <sum>false</sum>
             <sys_created_by>admin</sys_created_by>
-            <sys_created_on>2026-02-14 18:28:13</sys_created_on>
-            <sys_id>7252e6f58387721071a1ba96feaad305</sys_id>
+            <sys_created_on>2026-04-26 03:46:23</sys_created_on>
+            <sys_id>bb7f29827f0042198005c4ba1e9197fe</sys_id>
             <sys_mod_count>0</sys_mod_count>
             <sys_updated_by>admin</sys_updated_by>
-            <sys_updated_on>2026-02-14 18:28:13</sys_updated_on>
+            <sys_updated_on>2026-04-26 03:46:23</sys_updated_on>
         </sys_ui_list_element>
         <sys_ui_list_element action="INSERT_OR_UPDATE">
             <average_value>false</average_value>
             <element>active</element>
-            <list_id display_value="x_1879300_learning_tracks" element="NULL" name="x_1879300_learning_tracks" parent="NULL" relationship="NULL" sys_domain="global" view="Default view">b252e6f58387721071a1ba96feaad302</list_id>
+            <list_id display_value="x_1879300_learning_tracks" element="NULL" name="x_1879300_learning_tracks" parent="NULL" relationship="NULL" sys_domain="global" view="Default view">6f88d4fd5e8943d68e7d97f06dd52bd2</list_id>
             <max_value>false</max_value>
             <min_value>false</min_value>
             <position>6</position>
             <sum>false</sum>
             <sys_created_by>admin</sys_created_by>
-            <sys_created_on>2026-02-14 18:28:13</sys_created_on>
-            <sys_id>f652e6f58387721071a1ba96feaad305</sys_id>
+            <sys_created_on>2026-04-26 03:46:23</sys_created_on>
+            <sys_id>5b90a4cd4bc9492498e55ec809400643</sys_id>
             <sys_mod_count>0</sys_mod_count>
             <sys_updated_by>admin</sys_updated_by>
-            <sys_updated_on>2026-02-14 18:28:13</sys_updated_on>
+            <sys_updated_on>2026-04-26 03:46:23</sys_updated_on>
         </sys_ui_list_element>
         <sys_ui_list action="INSERT_OR_UPDATE">
             <average_value>false</average_value>
@@ -117,10 +117,10 @@
             <sum>false</sum>
             <sys_class_name>sys_ui_list</sys_class_name>
             <sys_created_by>admin</sys_created_by>
-            <sys_created_on>2026-02-14 18:28:13</sys_created_on>
+            <sys_created_on>2026-04-26 03:46:23</sys_created_on>
             <sys_domain>global</sys_domain>
             <sys_domain_path>/</sys_domain_path>
-            <sys_id>b252e6f58387721071a1ba96feaad302</sys_id>
+            <sys_id>6f88d4fd5e8943d68e7d97f06dd52bd2</sys_id>
             <sys_mod_count>0</sys_mod_count>
             <sys_name>x_1879300_learning_tracks</sys_name>
             <sys_package display_value="Learning Man" source="x_1879300_learning">95470fa283a5f21071a1ba96feaad3cb</sys_package>
@@ -128,7 +128,7 @@
             <sys_scope display_value="Learning Man">95470fa283a5f21071a1ba96feaad3cb</sys_scope>
             <sys_update_name>sys_ui_list_x_1879300_learning_tracks_null</sys_update_name>
             <sys_updated_by>admin</sys_updated_by>
-            <sys_updated_on>2026-02-14 18:28:13</sys_updated_on>
+            <sys_updated_on>2026-04-26 03:46:23</sys_updated_on>
             <sys_user/>
             <view display_value="Default view" name="NULL">Default view</view>
             <view_name/>

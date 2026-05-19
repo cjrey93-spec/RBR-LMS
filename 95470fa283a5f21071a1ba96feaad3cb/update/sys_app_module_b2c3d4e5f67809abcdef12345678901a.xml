@@ -26,7 +26,7 @@
         <sys_domain_path>/</sys_domain_path>
         <sys_id>b2c3d4e5f67809abcdef12345678901a</sys_id>
         <sys_mod_count>0</sys_mod_count>
-        <sys_name>&#9881; Admin Dashboard</sys_name>
+        <sys_name>⚙ Admin Dashboard</sys_name>
         <sys_overrides/>
         <sys_package display_value="Learning Man" source="x_1879300_learning">95470fa283a5f21071a1ba96feaad3cb</sys_package>
         <sys_policy/>
@@ -35,7 +35,7 @@
         <sys_updated_by>admin</sys_updated_by>
         <sys_updated_on>2026-05-07 00:00:00</sys_updated_on>
         <timeline_page/>
-        <title>&#9881; Admin Dashboard</title>
+        <title>⚙ Admin Dashboard</title>
         <uncancelable>false</uncancelable>
         <view_name/>
         <window_name/>
