@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update sys_domain="global" table="sys_app_application">
+    <sys_app_application action="INSERT_OR_UPDATE">
+        <active>true</active>
+        <category display_value="Custom Applications">e0355b31ef303000a61d5a3615c0fb78</category>
+        <description/>
+        <device_type>browser</device_type>
+        <hint/>
+        <name>Newsletter</name>
+        <order>100</order>
+        <roles>x_1879300_learning.newsletter_user</roles>
+        <sys_class_name>sys_app_application</sys_class_name>
+        <sys_created_by>admin</sys_created_by>
+        <sys_created_on>2026-05-25 04:14:24</sys_created_on>
+        <sys_domain>global</sys_domain>
+        <sys_domain_path>/</sys_domain_path>
+        <sys_id>baed523583410f5071a1ba96feaad3c0</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>Newsletter</sys_name>
+        <sys_overrides/>
+        <sys_package display_value="Learning Man" source="x_1879300_learning">95470fa283a5f21071a1ba96feaad3cb</sys_package>
+        <sys_policy/>
+        <sys_scope display_value="Learning Man">95470fa283a5f21071a1ba96feaad3cb</sys_scope>
+        <sys_update_name>sys_app_application_baed523583410f5071a1ba96feaad3c0</sys_update_name>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2026-05-25 04:14:24</sys_updated_on>
+        <title>Newsletter</title>
+        <view_name/>
+    </sys_app_application>
+</record_update>
