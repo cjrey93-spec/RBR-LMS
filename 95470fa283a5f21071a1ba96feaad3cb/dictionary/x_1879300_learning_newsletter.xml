@@ -1,5 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?><database>
-    <element db_object_id="57cddaf183410f5071a1ba96feaad350" label="Newsletter" max_length="40" name="x_1879300_learning_newsletter" type="collection">
-        <element label="Title" max_length="40" name="title" type="string"/>
-    </element>
-</database>
